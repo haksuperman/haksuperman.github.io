@@ -2,3 +2,13 @@
 @forward 'components';
 @forward 'layout';
 @forward 'pages';
+
+/* 여기서부터 추가한 내용입니다 */
+:root {
+  --font-family-sans: 'Noto Sans KR', sans-serif !important;
+  --font-family-heading: 'Noto Sans KR', sans-serif !important;
+}
+
+body {
+  font-family: 'Noto Sans KR', sans-serif !important;
+}
