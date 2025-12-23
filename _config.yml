@@ -16,7 +16,7 @@ timezone: Asia/Seoul
 
 title: 뭉게뭉게 학수의 클라우드 세상 # the main title
 
-tagline: 공부용으로 기록하는 곳입니다 :D # it will display as the subtitle
+tagline: “Ever tried, Ever failed, No metter. Try again, Fail again, Fail better” # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   A minimal, responsive and feature-rich Jekyll theme for technical writing.
@@ -35,7 +35,7 @@ social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
   name: haksuperman
-  email: tky6012e@gmail.com # change to your email address
+  email: tky6012@gmail.com # change to your email address
   links:
     # The first element serves as the copyright owner's link
     - https://twitter.com # change to your Twitter homepage

@@ -3,12 +3,18 @@
 @forward 'layout';
 @forward 'pages';
 
-/* 여기서부터 추가한 내용입니다 */
+/* 폰트 설정 (Pretendard + JetBrains Mono) */
 :root {
-  --font-family-sans: 'Noto Sans KR', sans-serif !important;
-  --font-family-heading: 'Noto Sans KR', sans-serif !important;
+  --font-family-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif !important;
+  --font-family-heading: 'Pretendard', sans-serif !important;
+  --font-family-monospace: 'JetBrains Mono', 'D2Coding', monospace !important; /* 코드용 폰트 */
 }
 
 body {
-  font-family: 'Noto Sans KR', sans-serif !important;
+  font-family: var(--font-family-sans);
+}
+
+/* 코드 블럭(pre, code)에만 모노스페이스 적용 */
+code, pre, .highlighter-rouge {
+  font-family: var(--font-family-monospace);
 }
