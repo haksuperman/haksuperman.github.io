@@ -1,4 +1,6 @@
-<!-- The Side Bar -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
 
 <aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
   <header class="profile-wrapper">
@@ -11,31 +13,98 @@
       {%- endif -%}
     </a>
 
-    <a class="site-title d-block" href="{{ '/' | relative_url }}">{{ site.title }}</a>
-    <p class="site-subtitle fst-italic mb-0">{{ site.tagline }}</p>
+    <a class="site-title d-block" href="{{ '/' | relative_url }}" 
+       style="font-family: 'Nanum Gothic', sans-serif !important; 
+              font-weight: 700; 
+              letter-spacing: -0.5px; 
+              font-size: 1.7rem;"> {{ site.title }}
+    </a>
+    <p class="site-subtitle fst-italic mb-0" style="font-size: 0.9rem; opacity: 0.8;">
+      {{ site.tagline }}
+    </p>
   </header>
-  <!-- .profile-wrapper -->
 
   <nav class="flex-column flex-grow-1 w-100 ps-0">
     <ul class="nav">
-      <!-- home -->
       <li class="nav-item{% if page.layout == 'home' %}{{ " active" }}{% endif %}">
         <a href="{{ '/' | relative_url }}" class="nav-link">
           <i class="fa-fw fas fa-home"></i>
           <span>{{ site.data.locales[include.lang].tabs.home | upcase }}</span>
         </a>
       </li>
-      <!-- the real tabs -->
+
+      {% assign parent_categories = "" | split: "" %}
+      {% for post in site.posts %}
+        {% if post.categories.size > 0 %}
+          {% assign parent = post.categories[0] %}
+          {% unless parent_categories contains parent %}
+            {% assign parent_categories = parent_categories | push: parent %}
+          {% endunless %}
+        {% endif %}
+      {% endfor %}
+      {% assign parent_categories = parent_categories | sort %}
+
+      {% for parent in parent_categories %}
+        <li class="nav-item mb-0">
+          <a href="{{ site.baseurl }}/categories/{{ parent | slugify | url_encode }}/" 
+             class="nav-link d-flex justify-content-between align-items-center">
+            
+            <div class="d-flex align-items-center">
+              <i class="fa-fw fas fa-folder ml-xl-3 mr-xl-3 unloaded"></i>
+              <span>{{ parent | upcase }}</span>
+            </div>
+
+            <span class="badge flex-shrink-0" 
+                  style="background-color: rgba(128, 128, 128, 0.2); color: inherit; font-weight: normal; border-radius: 10px; padding: 2px 8px; font-size: 0.75rem;">
+              {{ site.categories[parent].size }}
+            </span>
+          </a>
+        </li>
+
+        {% assign sub_categories = "" | split: "" %}
+        {% for post in site.posts %}
+          {% if post.categories[0] == parent and post.categories[1] %}
+            {% assign child = post.categories[1] %}
+            {% unless sub_categories contains child %}
+              {% assign sub_categories = sub_categories | push: child %}
+            {% endunless %}
+          {% endif %}
+        {% endfor %}
+        {% assign sub_categories = sub_categories | sort %}
+
+        {% for child in sub_categories %}
+          <li class="nav-item mt-0">
+            <a href="{{ site.baseurl }}/categories/{{ child | slugify | url_encode }}/" 
+               class="nav-link d-flex justify-content-between align-items-center"
+               style="padding-left: 2.2rem;"> 
+               
+               <div class="d-flex align-items-center">
+                <i class="fa-fw fas fa-angle-right small ml-xl-3 mr-xl-3" style="font-size: 0.8em; opacity: 0.6;"></i>
+                <span style="font-size: 0.9em;">{{ child | upcase }}</span>
+              </div>
+
+              <span class="badge flex-shrink-0" 
+                    style="background-color: rgba(128, 128, 128, 0.15); color: inherit; font-weight: normal; border-radius: 10px; padding: 2px 8px; font-size: 0.75rem;">
+                {{ site.categories[child].size }}
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+
+      {% endfor %}
+
       {% for tab in site.tabs %}
+        {% if tab.url contains 'categories' %}
+          {% continue %}
+        {% endif %}
+
         <li class="nav-item{% if tab.url == page.url %}{{ " active" }}{% endif %}">
           <a href="{{ tab.url | relative_url }}" class="nav-link">
             <i class="fa-fw {{ tab.icon }}"></i>
             {% capture tab_name %}{{ tab.url | split: '/' }}{% endcapture %}
-
             <span>{{ site.data.locales[include.lang].tabs.[tab_name] | default: tab.title | upcase }}</span>
           </a>
         </li>
-        <!-- .nav-item -->
       {% endfor %}
     </ul>
   </nav>
@@ -100,6 +169,4 @@
       {% endif %}
     {% endfor %}
   </div>
-  <!-- .sidebar-bottom -->
 </aside>
-<!-- #sidebar -->
