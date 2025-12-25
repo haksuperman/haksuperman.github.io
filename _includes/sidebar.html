@@ -2,6 +2,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
 
+<style>
+  html[data-mode='dark'] .site-title { color: #f2f2f2 !important; }
+  html[data-mode='dark'] .site-title:hover { color: #ffffff !important; text-decoration: none; }
+</style>
+
 <aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
   <header class="profile-wrapper">
     <a href="{{ '/' | relative_url }}" id="avatar" class="rounded-circle">
@@ -19,6 +24,7 @@
               letter-spacing: -0.5px; 
               font-size: 1.7rem;"> {{ site.title }}
     </a>
+
     <p class="site-subtitle fst-italic mb-0" style="font-size: 0.9rem; opacity: 0.8;">
       {{ site.tagline }}
     </p>
@@ -34,6 +40,7 @@
       </li>
 
       {% assign parent_categories = "" | split: "" %}
+      
       {% for post in site.posts %}
         {% if post.categories.size > 0 %}
           {% assign parent = post.categories[0] %}
@@ -42,6 +49,7 @@
           {% endunless %}
         {% endif %}
       {% endfor %}
+      
       {% assign parent_categories = parent_categories | sort %}
 
       {% for parent in parent_categories %}
@@ -110,6 +118,7 @@
   </nav>
 
   <div class="sidebar-bottom d-flex flex-wrap  align-items-center w-100">
+    
     {% unless site.theme_mode %}
       <button type="button" class="btn btn-link nav-link" aria-label="Switch Mode" id="mode-toggle">
         <i class="fas fa-adjust"></i>
@@ -122,23 +131,24 @@
 
     {% for entry in site.data.contact %}
       {%- assign url = null -%}
-
       {% case entry.type %}
-        {% when 'github', 'twitter' %}
+        {% when 'github', 'twitter', 'linkedin' %}
           {%- unless site[entry.type].username -%}
-            {%- continue -%}
+             {%- unless entry.url -%}
+               {%- continue -%}
+             {%- endunless -%}
           {%- endunless -%}
-          {%- capture url -%}
-            https://{{ entry.type }}.com/{{ site[entry.type].username }}
-          {%- endcapture -%}
+          {% if entry.url %}
+            {% assign url = entry.url %}
+          {% else %}
+            {% capture url %}https://{{ entry.type }}.com/{{ site[entry.type].username }}{% endcapture %}
+          {% endif %}
         {% when 'email' %}
           {%- unless site.social.email -%}
             {%- continue -%}
           {%- endunless -%}
           {%- assign email = site.social.email | split: '@' -%}
-          {%- capture url -%}
-            javascript:location.href = 'mailto:' + ['{{ email[0] }}','{{ email[1] }}'].join('@')
-          {%- endcapture -%}
+          {%- capture url -%}javascript:location.href = 'mailto:' + ['{{ email[0] }}','{{ email[1] }}'].join('@'){%- endcapture -%}
         {% when 'rss' %}
           {% assign url = '/feed.xml' | relative_url %}
         {% else %}
@@ -146,24 +156,7 @@
       {% endcase %}
 
       {% if url %}
-        <a
-          href="{{ url }}"
-          aria-label="{{ entry.type }}"
-          {% assign link_types = '' %}
-
-          {% unless entry.noblank %}
-            target="_blank"
-            {% assign link_types = 'noopener noreferrer' %}
-          {% endunless %}
-
-          {% if entry.type == 'mastodon' %}
-            {% assign link_types = link_types | append: ' me' | strip %}
-          {% endif %}
-
-          {% unless link_types == empty %}
-            rel="{{ link_types }}"
-          {% endunless %}
-        >
+        <a href="{{ url }}" aria-label="{{ entry.type }}" target="_blank" rel="noopener noreferrer">
           <i class="{{ entry.icon }}"></i>
         </a>
       {% endif %}
