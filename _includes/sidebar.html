@@ -3,8 +3,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
 
 <style>
+  /* 다크 모드 제목 색상 */
   html[data-mode='dark'] .site-title { color: #f2f2f2 !important; }
   html[data-mode='dark'] .site-title:hover { color: #ffffff !important; text-decoration: none; }
+
+  /* [핵심] 사이드바 메뉴 강제 표시 (JS 충돌 방지) */
+  #sidebar .nav-item {
+    display: block !important; /* 무조건 보이게 설정 */
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* 링크 스타일 */
+  #sidebar .nav-link {
+    display: flex !important;
+    align-items: center;
+  }
 </style>
 
 <aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
@@ -118,7 +132,6 @@
   </nav>
 
   <div class="sidebar-bottom d-flex flex-wrap  align-items-center w-100">
-    
     {% unless site.theme_mode %}
       <button type="button" class="btn btn-link nav-link" aria-label="Switch Mode" id="mode-toggle">
         <i class="fas fa-adjust"></i>
