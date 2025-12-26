@@ -3,18 +3,43 @@
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
 
 <style>
-  /* 다크 모드 제목 색상 */
-  html[data-mode='dark'] .site-title { color: #f2f2f2 !important; }
-  html[data-mode='dark'] .site-title:hover { color: #ffffff !important; text-decoration: none; }
+  /* --------------------------------------- */
+  /* 공통 애니메이션 설정 (부드러운 전환) */
+  /* --------------------------------------- */
+  .site-title {
+    transition: color 0.2s ease-in-out !important;
+  }
 
-  /* [핵심] 사이드바 메뉴 강제 표시 (JS 충돌 방지) */
+  /* --------------------------------------- */
+  /* 1. 화이트 모드 (Light Mode) */
+  /* --------------------------------------- */
+  html:not([data-mode='dark']) .site-title { 
+    color: #000000 !important; 
+  }
+  html:not([data-mode='dark']) .site-title:hover { 
+    color: #888888 !important; 
+    text-decoration: none; 
+  }
+
+  /* --------------------------------------- */
+  /* 2. 다크 모드 (Dark Mode) */
+  /* --------------------------------------- */
+  html[data-mode='dark'] .site-title { 
+    color: #ffffff !important; 
+  }
+  html[data-mode='dark'] .site-title:hover { 
+    color: #999999 !important; 
+    text-decoration: none; 
+  }
+
+  /* --------------------------------------- */
+  /* 3. 사이드바 필수 설정 */
+  /* --------------------------------------- */
   #sidebar .nav-item {
-    display: block !important; /* 무조건 보이게 설정 */
+    display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
   }
-  
-  /* 링크 스타일 */
   #sidebar .nav-link {
     display: flex !important;
     align-items: center;
@@ -54,7 +79,6 @@
       </li>
 
       {% assign parent_categories = "" | split: "" %}
-      
       {% for post in site.posts %}
         {% if post.categories.size > 0 %}
           {% assign parent = post.categories[0] %}
@@ -63,10 +87,26 @@
           {% endunless %}
         {% endif %}
       {% endfor %}
-      
       {% assign parent_categories = parent_categories | sort %}
+      
+      {% assign ordered_parents = "" | split: "" %}
+      {% assign defined_order = site.data.category_order %}
+
+      {% if defined_order %}
+        {% for item in defined_order %}
+          {% if parent_categories contains item.name %}
+            {% assign ordered_parents = ordered_parents | push: item.name %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
 
       {% for parent in parent_categories %}
+        {% unless ordered_parents contains parent %}
+          {% assign ordered_parents = ordered_parents | push: parent %}
+        {% endunless %}
+      {% endfor %}
+
+      {% for parent in ordered_parents %}
         <li class="nav-item mb-0">
           <a href="{{ site.baseurl }}/categories/{{ parent | slugify | url_encode }}/" 
              class="nav-link d-flex justify-content-between align-items-center">
@@ -94,7 +134,33 @@
         {% endfor %}
         {% assign sub_categories = sub_categories | sort %}
 
-        {% for child in sub_categories %}
+        {% assign ordered_subs = "" | split: "" %}
+        
+        {% assign current_def = nil %}
+        {% if defined_order %}
+            {% for item in defined_order %}
+                {% if item.name == parent %}
+                    {% assign current_def = item %}
+                    {% break %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {% if current_def and current_def.subcategories %}
+            {% for sub_def in current_def.subcategories %}
+                {% if sub_categories contains sub_def %}
+                    {% assign ordered_subs = ordered_subs | push: sub_def %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {% for sub in sub_categories %}
+            {% unless ordered_subs contains sub %}
+                {% assign ordered_subs = ordered_subs | push: sub %}
+            {% endunless %}
+        {% endfor %}
+
+        {% for child in ordered_subs %}
           <li class="nav-item mt-0">
             <a href="{{ site.baseurl }}/categories/{{ child | slugify | url_encode }}/" 
                class="nav-link d-flex justify-content-between align-items-center"
@@ -147,9 +213,9 @@
       {% case entry.type %}
         {% when 'github', 'twitter', 'linkedin' %}
           {%- unless site[entry.type].username -%}
-             {%- unless entry.url -%}
-               {%- continue -%}
-             {%- endunless -%}
+              {%- unless entry.url -%}
+                {%- continue -%}
+              {%- endunless -%}
           {%- endunless -%}
           {% if entry.url %}
             {% assign url = entry.url %}
