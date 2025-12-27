@@ -1,13 +1,16 @@
-navigation:
-  - name: CLOUD
-    children:
-      - name: AWS
-      - name: OCI
-  - name: DEVOPS
-    children:
-      - name: KUBERNETES
-      - name: TERRAFORM
-  - name: ON-PREMISE
-    children:
-      - name: LINUX
-      - name: NETWORK
+# _data/navigation.yml
+# 중요: 포스트의 categories: [대분류, 소분류]와 대소문자가 정확히 일치해야 숫자가 나옵니다.
+- name: CLOUD
+  subcategories:
+    - AWS
+    - OCI
+
+- name: DEVOPS
+  subcategories:
+    - KUBERNETES
+    - TERRAFORM
+
+- name: ON-PREMISE
+  subcategories:
+    - LINUX
+    - NETWORK
