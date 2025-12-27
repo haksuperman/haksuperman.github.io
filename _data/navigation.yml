@@ -13,7 +13,6 @@
 - name: SECURITY
   subcategories:
     - NETWORK SECURITY
-    - WEB SECURITY
 
 - name: ON-PREMISE
   subcategories:
