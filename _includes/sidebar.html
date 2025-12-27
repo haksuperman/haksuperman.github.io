@@ -1,50 +1,4 @@
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
-
-<style>
-  /* --------------------------------------- */
-  /* 공통 애니메이션 설정 (부드러운 전환) */
-  /* --------------------------------------- */
-  .site-title {
-    transition: color 0.2s ease-in-out !important;
-  }
-
-  /* --------------------------------------- */
-  /* 1. 화이트 모드 (Light Mode) */
-  /* --------------------------------------- */
-  html:not([data-mode='dark']) .site-title { 
-    color: #000000 !important; 
-  }
-  html:not([data-mode='dark']) .site-title:hover { 
-    color: #888888 !important; 
-    text-decoration: none; 
-  }
-
-  /* --------------------------------------- */
-  /* 2. 다크 모드 (Dark Mode) */
-  /* --------------------------------------- */
-  html[data-mode='dark'] .site-title { 
-    color: #ffffff !important; 
-  }
-  html[data-mode='dark'] .site-title:hover { 
-    color: #999999 !important; 
-    text-decoration: none; 
-  }
-
-  /* --------------------------------------- */
-  /* 3. 사이드바 필수 설정 */
-  /* --------------------------------------- */
-  #sidebar .nav-item {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-  #sidebar .nav-link {
-    display: flex !important;
-    align-items: center;
-  }
-</style>
+<!-- The Side Bar -->
 
 <aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
   <header class="profile-wrapper">
@@ -57,142 +11,31 @@
       {%- endif -%}
     </a>
 
-    <a class="site-title d-block" href="{{ '/' | relative_url }}" 
-       style="font-family: 'Nanum Gothic', sans-serif !important; 
-              font-weight: 700; 
-              letter-spacing: -0.5px; 
-              font-size: 1.7rem;"> {{ site.title }}
-    </a>
-
-    <p class="site-subtitle fst-italic mb-0" style="font-size: 0.9rem; opacity: 0.8;">
-      {{ site.tagline }}
-    </p>
+    <a class="site-title d-block" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+    <p class="site-subtitle fst-italic mb-0">{{ site.tagline }}</p>
   </header>
+  <!-- .profile-wrapper -->
 
   <nav class="flex-column flex-grow-1 w-100 ps-0">
     <ul class="nav">
+      <!-- home -->
       <li class="nav-item{% if page.layout == 'home' %}{{ " active" }}{% endif %}">
         <a href="{{ '/' | relative_url }}" class="nav-link">
           <i class="fa-fw fas fa-home"></i>
           <span>{{ site.data.locales[include.lang].tabs.home | upcase }}</span>
         </a>
       </li>
-
-      {% assign parent_categories = "" | split: "" %}
-      {% for post in site.posts %}
-        {% if post.categories.size > 0 %}
-          {% assign parent = post.categories[0] %}
-          {% unless parent_categories contains parent %}
-            {% assign parent_categories = parent_categories | push: parent %}
-          {% endunless %}
-        {% endif %}
-      {% endfor %}
-      {% assign parent_categories = parent_categories | sort %}
-      
-      {% assign ordered_parents = "" | split: "" %}
-      {% assign defined_order = site.data.category_order %}
-
-      {% if defined_order %}
-        {% for item in defined_order %}
-          {% if parent_categories contains item.name %}
-            {% assign ordered_parents = ordered_parents | push: item.name %}
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-
-      {% for parent in parent_categories %}
-        {% unless ordered_parents contains parent %}
-          {% assign ordered_parents = ordered_parents | push: parent %}
-        {% endunless %}
-      {% endfor %}
-
-      {% for parent in ordered_parents %}
-        <li class="nav-item mb-0">
-          <a href="{{ site.baseurl }}/categories/{{ parent | slugify | url_encode }}/" 
-             class="nav-link d-flex justify-content-between align-items-center">
-            
-            <div class="d-flex align-items-center">
-              <i class="fa-fw fas fa-folder ml-xl-3 mr-xl-3 unloaded"></i>
-              <span>{{ parent | upcase }}</span>
-            </div>
-
-            <span class="badge flex-shrink-0" 
-                  style="background-color: rgba(128, 128, 128, 0.2); color: inherit; font-weight: normal; border-radius: 10px; padding: 2px 8px; font-size: 0.75rem;">
-              {{ site.categories[parent].size }}
-            </span>
-          </a>
-        </li>
-
-        {% assign sub_categories = "" | split: "" %}
-        {% for post in site.posts %}
-          {% if post.categories[0] == parent and post.categories[1] %}
-            {% assign child = post.categories[1] %}
-            {% unless sub_categories contains child %}
-              {% assign sub_categories = sub_categories | push: child %}
-            {% endunless %}
-          {% endif %}
-        {% endfor %}
-        {% assign sub_categories = sub_categories | sort %}
-
-        {% assign ordered_subs = "" | split: "" %}
-        
-        {% assign current_def = nil %}
-        {% if defined_order %}
-            {% for item in defined_order %}
-                {% if item.name == parent %}
-                    {% assign current_def = item %}
-                    {% break %}
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-
-        {% if current_def and current_def.subcategories %}
-            {% for sub_def in current_def.subcategories %}
-                {% if sub_categories contains sub_def %}
-                    {% assign ordered_subs = ordered_subs | push: sub_def %}
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-
-        {% for sub in sub_categories %}
-            {% unless ordered_subs contains sub %}
-                {% assign ordered_subs = ordered_subs | push: sub %}
-            {% endunless %}
-        {% endfor %}
-
-        {% for child in ordered_subs %}
-          <li class="nav-item mt-0">
-            <a href="{{ site.baseurl }}/categories/{{ child | slugify | url_encode }}/" 
-               class="nav-link d-flex justify-content-between align-items-center"
-               style="padding-left: 2.2rem;"> 
-               
-               <div class="d-flex align-items-center">
-                <i class="fa-fw fas fa-angle-right small ml-xl-3 mr-xl-3" style="font-size: 0.8em; opacity: 0.6;"></i>
-                <span style="font-size: 0.9em;">{{ child | upcase }}</span>
-              </div>
-
-              <span class="badge flex-shrink-0" 
-                    style="background-color: rgba(128, 128, 128, 0.15); color: inherit; font-weight: normal; border-radius: 10px; padding: 2px 8px; font-size: 0.75rem;">
-                {{ site.categories[child].size }}
-              </span>
-            </a>
-          </li>
-        {% endfor %}
-
-      {% endfor %}
-
+      <!-- the real tabs -->
       {% for tab in site.tabs %}
-        {% if tab.url contains 'categories' %}
-          {% continue %}
-        {% endif %}
-
         <li class="nav-item{% if tab.url == page.url %}{{ " active" }}{% endif %}">
           <a href="{{ tab.url | relative_url }}" class="nav-link">
             <i class="fa-fw {{ tab.icon }}"></i>
             {% capture tab_name %}{{ tab.url | split: '/' }}{% endcapture %}
+
             <span>{{ site.data.locales[include.lang].tabs.[tab_name] | default: tab.title | upcase }}</span>
           </a>
         </li>
+        <!-- .nav-item -->
       {% endfor %}
     </ul>
   </nav>
@@ -210,24 +53,23 @@
 
     {% for entry in site.data.contact %}
       {%- assign url = null -%}
+
       {% case entry.type %}
-        {% when 'github', 'twitter', 'linkedin' %}
+        {% when 'github', 'twitter' %}
           {%- unless site[entry.type].username -%}
-              {%- unless entry.url -%}
-                {%- continue -%}
-              {%- endunless -%}
+            {%- continue -%}
           {%- endunless -%}
-          {% if entry.url %}
-            {% assign url = entry.url %}
-          {% else %}
-            {% capture url %}https://{{ entry.type }}.com/{{ site[entry.type].username }}{% endcapture %}
-          {% endif %}
+          {%- capture url -%}
+            https://{{ entry.type }}.com/{{ site[entry.type].username }}
+          {%- endcapture -%}
         {% when 'email' %}
           {%- unless site.social.email -%}
             {%- continue -%}
           {%- endunless -%}
           {%- assign email = site.social.email | split: '@' -%}
-          {%- capture url -%}javascript:location.href = 'mailto:' + ['{{ email[0] }}','{{ email[1] }}'].join('@'){%- endcapture -%}
+          {%- capture url -%}
+            javascript:location.href = 'mailto:' + ['{{ email[0] }}','{{ email[1] }}'].join('@')
+          {%- endcapture -%}
         {% when 'rss' %}
           {% assign url = '/feed.xml' | relative_url %}
         {% else %}
@@ -235,10 +77,29 @@
       {% endcase %}
 
       {% if url %}
-        <a href="{{ url }}" aria-label="{{ entry.type }}" target="_blank" rel="noopener noreferrer">
+        <a
+          href="{{ url }}"
+          aria-label="{{ entry.type }}"
+          {% assign link_types = '' %}
+
+          {% unless entry.noblank %}
+            target="_blank"
+            {% assign link_types = 'noopener noreferrer' %}
+          {% endunless %}
+
+          {% if entry.type == 'mastodon' %}
+            {% assign link_types = link_types | append: ' me' | strip %}
+          {% endif %}
+
+          {% unless link_types == empty %}
+            rel="{{ link_types }}"
+          {% endunless %}
+        >
           <i class="{{ entry.icon }}"></i>
         </a>
       {% endif %}
     {% endfor %}
   </div>
+  <!-- .sidebar-bottom -->
 </aside>
+<!-- #sidebar -->
