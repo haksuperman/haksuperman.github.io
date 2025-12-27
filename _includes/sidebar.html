@@ -3,14 +3,82 @@
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
 
 <style>
-  /* 사이드바 스타일 설정 */
+  /* --------------------------------------- */
+  /* 스타일 설정 */
+  /* --------------------------------------- */
   .site-title { transition: color 0.2s ease-in-out !important; }
   html:not([data-mode='dark']) .site-title { color: #000000 !important; }
   html:not([data-mode='dark']) .site-title:hover { color: #888888 !important; text-decoration: none; }
   html[data-mode='dark'] .site-title { color: #ffffff !important; }
   html[data-mode='dark'] .site-title:hover { color: #999999 !important; text-decoration: none; }
-  #sidebar .nav-item { display: block !important; visibility: visible !important; opacity: 1 !important; }
-  #sidebar .nav-link { display: flex !important; align-items: center; }
+  
+  /* 사이드바 메뉴 영역(.nav) 안의 아이템만 너비 100% */
+  #sidebar nav .nav-item { 
+    display: block !important; 
+    width: 100% !important; 
+  }
+  #sidebar nav .nav-link { 
+    display: flex !important; 
+    align-items: center; 
+    width: 100% !important; 
+  }
+  
+  /* --------------------------------------- */
+  /* [수정] 뱃지(숫자) 다크/라이트 모드 색상 분기 */
+  /* --------------------------------------- */
+  
+  /* 1. 뱃지 공통 스타일 */
+  .nav-item .badge {
+    font-weight: normal;
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 11.5px !important;
+    transition: all 0.3s ease;
+  }
+
+  /* 2. 라이트 모드(White Mode)일 때 색상 */
+  html:not([data-mode='dark']) .nav-item .badge {
+    background-color: rgba(0, 0, 0, 0.08) !important; /* 연한 회색 배경 */
+    color: #555555 !important; /* 진한 회색 글자 */
+  }
+
+  /* 3. 다크 모드(Dark Mode)일 때 색상 */
+  html[data-mode='dark'] .nav-item .badge {
+    background-color: rgba(255, 255, 255, 0.12) !important; /* 반투명 흰색 배경 */
+    color: #d6d6d6 !important; /* 연한 회색 글자 */
+  }
+
+  /* 4. 선택된 항목(Active)일 때 색상 (모드 상관없이 강조) */
+  .nav-item.active .badge {
+    background-color: rgba(128, 128, 128, 0.5) !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+  }
+
+  /* 접기/펼치기 아이콘 회전 애니메이션 */
+  .collapse-icon { transition: transform 0.3s ease; }
+  a[aria-expanded="true"] .collapse-icon { transform: rotate(90deg); }
+
+  /* 폴더 아이콘 토글 로직(1) */
+  /* 메뉴가 닫혀있을 때('false' 이거나 속성이 없을 때) -> 열린 폴더 아이콘 숨김 */
+  a[aria-expanded="false"] .fa-folder-open,
+  a:not([aria-expanded]) .fa-folder-open {
+    display: none !important;
+  }
+
+  /* 폴더 아이콘 토글 로직(2) */
+  /* 메뉴가 열려있을 때('true') -> 닫힌 폴더 아이콘 숨기고, 열린 폴더 아이콘 보임 */
+  a[aria-expanded="true"] .fa-folder {
+    display: none !important;
+  }
+  a[aria-expanded="true"] .fa-folder-open {
+    display: inline-block !important;
+  }
+  
+  /* 프로필 영역 좌우 여백 대칭 맞추기 */
+  #sidebar .profile-wrapper {
+    padding-right: 2.5rem !important; /* 원본의 1.25rem 무시하고 강제 적용 */
+  }
 </style>
 
 <aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
@@ -44,41 +112,88 @@
 
       {% for entry in site.data.navigation %}
         {% assign parent = entry.name %}
+        {% capture parent_slug %}{{ parent | slugify }}{% endcapture %}
+        {% capture parent_url %}/categories/{{ parent_slug | url_encode }}/{% endcapture %}
         
-        <li class="nav-item mb-0">
-          <a href="{{ site.baseurl }}/categories/{{ parent | slugify | url_encode }}/" 
-             class="nav-link d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-              <i class="fa-fw fas fa-folder ml-xl-3 mr-xl-3 unloaded"></i>
-              <span>{{ parent | upcase }}</span>
-            </div>
-            <span class="badge flex-shrink-0" style="background-color: rgba(128, 128, 128, 0.2); color: inherit; font-weight: normal; border-radius: 10px; padding: 2px 8px; font-size: 0.75rem;">
-              {{ site.categories[parent].size | default: 0 }}
-            </span>
-          </a>
-        </li>
+        {% assign is_expanded = false %}
+        
+        {% if page.url contains parent_slug %}
+          {% assign is_expanded = true %}
+        {% endif %}
 
         {% if entry.subcategories %}
           {% for child in entry.subcategories %}
-            <li class="nav-item mt-0">
-              <a href="{{ site.baseurl }}/categories/{{ child | slugify | url_encode }}/" 
-                 class="nav-link d-flex justify-content-between align-items-center"
-                 style="padding-left: 2.2rem;"> 
-                 <div class="d-flex align-items-center">
-                  <i class="fa-fw fas fa-angle-right small ml-xl-3 mr-xl-3" style="font-size: 0.8em; opacity: 0.6;"></i>
-                  <span style="font-size: 0.9em;">{{ child | upcase }}</span>
-                </div>
-                <span class="badge flex-shrink-0" style="background-color: rgba(128, 128, 128, 0.15); color: inherit; font-weight: normal; border-radius: 10px; padding: 2px 8px; font-size: 0.75rem;">
-                  {{ site.categories[child].size | default: 0 }}
-                </span>
-              </a>
-            </li>
+            {% capture child_path %}/categories/{{ child | slugify | url_encode }}/{% endcapture %}
+            {% if page.url contains child_path %}
+              {% assign is_expanded = true %}
+            {% endif %}
           {% endfor %}
         {% endif %}
-      {% endfor %}
+
+        {% if page.categories %}
+           {% if page.categories contains parent %}
+              {% assign is_expanded = true %}
+           {% endif %}
+           {% if entry.subcategories %}
+             {% for child in entry.subcategories %}
+               {% if page.categories contains child %}
+                 {% assign is_expanded = true %}
+               {% endif %}
+             {% endfor %}
+           {% endif %}
+        {% endif %}
+
+        <li class="nav-item mb-0{% if page.url == parent_url %} active{% endif %}">
+          <a href="#collapse-{{ parent_slug }}" 
+             class="nav-link d-flex align-items-center"
+             data-bs-toggle="collapse" 
+             role="button" 
+             aria-expanded="{% if is_expanded %}true{% else %}false{% endif %}" 
+             aria-controls="collapse-{{ parent_slug }}">
+            
+            <div class="d-flex align-items-center">
+              
+              <i class="fas fa-folder fa-fw" style="padding-right: 15px;"></i>
+              
+              <i class="fas fa-folder-open fa-fw" style="padding-right: 15px;"></i>
+
+              <span class="text-truncate">{{ parent | upcase }}</span>
+            </div>
+
+            <i class="fa-fw fas fa-angle-right collapse-icon ms-auto" style="margin-right: 0 !important;"></i>
+          </a>
+
+          {% if entry.subcategories %}
+            <div class="collapse {% if is_expanded %}show{% endif %}" id="collapse-{{ parent_slug }}">
+              <ul class="nav flex-column ps-0 mb-0 pb-0 w-100">
+                {% for child in entry.subcategories %}
+                  {% capture child_url %}/categories/{{ child | slugify | url_encode }}/{% endcapture %}
+                  
+                  <li class="nav-item mt-0{% if page.url == child_url %} active{% endif %}" style="padding-right: 0px;">
+                    <a href="{{ site.baseurl }}{{ child_url }}" 
+                       class="nav-link d-flex justify-content-between align-items-center"
+                       style="padding-left: 0.8rem;"> 
+                      
+                      <div class="d-flex align-items-center flex-grow-1" style="min-width: 0;">
+                        
+                        <i class="fas fa-align-left fa-fw text-muted" style="font-size: 0.75rem; margin-right: 8px; opacity: 0.8;"></i>
+                        <span class="text-truncate" style="font-size: 0.9em;">{{ child | upcase }}</span>
+                      </div>
+
+                      <span class="badge ms-3 flex-shrink-0">
+                        {{ site.categories[child].size | default: 0 }}
+                      </span>
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+        </li> {% endfor %}
 
       {% for tab in site.tabs %}
         {% if tab.url contains 'categories' %}{% continue %}{% endif %}
+
         <li class="nav-item{% if tab.url == page.url %}{{ " active" }}{% endif %}">
           <a href="{{ tab.url | relative_url }}" class="nav-link">
             <i class="fa-fw {{ tab.icon }}"></i>
@@ -95,7 +210,10 @@
       <button type="button" class="btn btn-link nav-link" aria-label="Switch Mode" id="mode-toggle">
         <i class="fas fa-adjust"></i>
       </button>
-      {% if site.data.contact.size > 0 %}<span class="icon-border"></span>{% endif %}
+
+      {% if site.data.contact.size > 0 %}
+        <span class="icon-border"></span>
+      {% endif %}
     {% endunless %}
 
     {% for entry in site.data.contact %}
@@ -114,7 +232,9 @@
         {% else %}{% assign url = entry.url %}
       {% endcase %}
       {% if url %}
-        <a href="{{ url }}" aria-label="{{ entry.type }}" target="_blank" rel="noopener noreferrer"><i class="{{ entry.icon }}"></i></a>
+        <a href="{{ url }}" aria-label="{{ entry.type }}" target="_blank" rel="noopener noreferrer">
+          <i class="{{ entry.icon }}"></i>
+        </a>
       {% endif %}
     {% endfor %}
   </div>
