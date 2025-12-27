@@ -1,0 +1,13 @@
+navigation:
+  - name: CLOUD
+    children:
+      - name: AWS
+      - name: OCI
+  - name: DEVOPS
+    children:
+      - name: KUBERNETES
+      - name: TERRAFORM
+  - name: ON-PREMISE
+    children:
+      - name: LINUX
+      - name: NETWORK

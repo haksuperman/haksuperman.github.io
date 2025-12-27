@@ -1,5 +1,53 @@
-<!-- The Side Bar -->
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
+<style>
+  /* --------------------------------------- */
+  /* 공통 애니메이션 설정 (부드러운 전환) */
+  /* --------------------------------------- */
+  .site-title {
+    transition: color 0.2s ease-in-out !important; /* 반응 속도를 살짝 빠르게 조정 */
+  }
+  /* --------------------------------------- */
+  /* 1. 화이트 모드 (Light Mode) */
+  /* --------------------------------------- */
+  /* 기본: 완전한 검은색 (가장 선명함) */
+  html:not([data-mode='dark']) .site-title { 
+    color: #000000 !important; 
+  }
+  /* 호버: 중간 톤의 회색 (힘을 뺀 느낌) */
+  html:not([data-mode='dark']) .site-title:hover { 
+    color: #888888 !important; 
+    text-decoration: none; 
+  }
+  /* --------------------------------------- */
+  /* 2. 다크 모드 (Dark Mode) */
+  /* --------------------------------------- */
+  /* 기본: 밝은 흰색 (가장 선명함) */
+  html[data-mode='dark'] .site-title { 
+    color: #ffffff !important; 
+  }
+  /* 호버: 중간 톤의 회색 (눌리는 느낌) */
+  html[data-mode='dark'] .site-title:hover { 
+    color: #999999 !important; 
+    text-decoration: none; 
+  }
+  /* --------------------------------------- */
+  /* 3. 사이드바 필수 설정 (유지) */
+  /* --------------------------------------- */
+  /* [핵심] 사이드바 메뉴 강제 표시 (JS 충돌 방지) */
+  #sidebar .nav-item {
+    display: block !important; /* 무조건 보이게 설정 */
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* 링크 스타일 */
+  #sidebar .nav-link {
+    display: flex !important;
+    align-items: center;
+  }
+</style>
 <aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
   <header class="profile-wrapper">
     <a href="{{ '/' | relative_url }}" id="avatar" class="rounded-circle">
@@ -10,96 +58,109 @@
         <img src="{{- avatar_url -}}" width="112" height="112" alt="avatar" onerror="this.style.display='none'">
       {%- endif -%}
     </a>
-
-    <a class="site-title d-block" href="{{ '/' | relative_url }}">{{ site.title }}</a>
-    <p class="site-subtitle fst-italic mb-0">{{ site.tagline }}</p>
+    <a class="site-title d-block" href="{{ '/' | relative_url }}" 
+       style="font-family: 'Nanum Gothic', sans-serif !important; 
+              font-weight: 700; 
+              letter-spacing: -0.5px; 
+              font-size: 1.7rem;"> {{ site.title }}
+    </a>
+    <p class="site-subtitle fst-italic mb-0" style="font-size: 0.9rem; opacity: 0.8;">
+      {{ site.tagline }}
+    </p>
   </header>
-  <!-- .profile-wrapper -->
-
   <nav class="flex-column flex-grow-1 w-100 ps-0">
     <ul class="nav">
-      <!-- home -->
       <li class="nav-item{% if page.layout == 'home' %}{{ " active" }}{% endif %}">
         <a href="{{ '/' | relative_url }}" class="nav-link">
           <i class="fa-fw fas fa-home"></i>
           <span>{{ site.data.locales[include.lang].tabs.home | upcase }}</span>
         </a>
       </li>
-      <!-- the real tabs -->
+      <!-- _data/navigation.yml을 통해 카테고리 불러오기 -->
+      {% for item in site.data.navigation %}
+        <li class="nav-item mb-0">
+          <a href="{{ site.baseurl }}/categories/{{ item.name | slugify | url_encode }}/" 
+             class="nav-link d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <i class="fa-fw fas fa-folder ml-xl-3 mr-xl-3 unloaded"></i>
+              <span>{{ item.name | upcase }}</span>
+            </div>
+            <span class="badge flex-shrink-0" 
+                  style="background-color: rgba(128, 128, 128, 0.2); color: inherit; font-weight: normal; border-radius: 10px; padding: 2px 8px; font-size: 0.75rem;">
+              {{ site.categories[item.name].size }}
+            </span>
+          </a>
+        </li>
+        {% for child in item.children %}
+          <li class="nav-item mt-0">
+            <a href="{{ site.baseurl }}/categories/{{ child.name | slugify | url_encode }}/" 
+               class="nav-link d-flex justify-content-between align-items-center"
+               style="padding-left: 2.2rem;">
+              <div class="d-flex align-items-center">
+                <i class="fa-fw fas fa-angle-right small ml-xl-3 mr-xl-3" style="font-size: 0.8em; opacity: 0.6;"></i>
+                <span style="font-size: 0.9em;">{{ child.name | upcase }}</span>
+              </div>
+              <span class="badge flex-shrink-0" 
+                    style="background-color: rgba(128, 128, 128, 0.15); color: inherit; font-weight: normal; border-radius: 10px; padding: 2px 8px; font-size: 0.75rem;">
+                {{ site.categories[child.name].size }}
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+      {% endfor %}
       {% for tab in site.tabs %}
+        {% if tab.url contains 'categories' %}
+          {% continue %}
+        {% endif %}
         <li class="nav-item{% if tab.url == page.url %}{{ " active" }}{% endif %}">
           <a href="{{ tab.url | relative_url }}" class="nav-link">
             <i class="fa-fw {{ tab.icon }}"></i>
             {% capture tab_name %}{{ tab.url | split: '/' }}{% endcapture %}
-
             <span>{{ site.data.locales[include.lang].tabs.[tab_name] | default: tab.title | upcase }}</span>
           </a>
         </li>
-        <!-- .nav-item -->
       {% endfor %}
     </ul>
   </nav>
-
-  <div class="sidebar-bottom d-flex flex-wrap  align-items-center w-100">
+  <div class="sidebar-bottom d-flex flex-wrap align-items-center w-100">
     {% unless site.theme_mode %}
       <button type="button" class="btn btn-link nav-link" aria-label="Switch Mode" id="mode-toggle">
         <i class="fas fa-adjust"></i>
       </button>
-
       {% if site.data.contact.size > 0 %}
         <span class="icon-border"></span>
       {% endif %}
     {% endunless %}
-
     {% for entry in site.data.contact %}
       {%- assign url = null -%}
-
       {% case entry.type %}
-        {% when 'github', 'twitter' %}
+        {% when 'github', 'twitter', 'linkedin' %}
           {%- unless site[entry.type].username -%}
-            {%- continue -%}
+              {%- unless entry.url -%}
+                {%- continue -%}
+              {%- endunless -%}
           {%- endunless -%}
-          {%- capture url -%}
-            https://{{ entry.type }}.com/{{ site[entry.type].username }}
-          {%- endcapture -%}
+          {% if entry.url %}
+            {% assign url = entry.url %}
+          {% else %}
+            {% capture url %}https://{{ entry.type }}.com/{{ site[entry.type].username }}{% endcapture %}
+          {% endif %}
         {% when 'email' %}
           {%- unless site.social.email -%}
             {%- continue -%}
           {%- endunless -%}
           {%- assign email = site.social.email | split: '@' -%}
-          {%- capture url -%}
-            javascript:location.href = 'mailto:' + ['{{ email[0] }}','{{ email[1] }}'].join('@')
-          {%- endcapture -%}
+          {%- capture url -%}javascript:location.href = 'mailto:' + ['{{ email[0] }}','{{ email[1] }}'].join('@'){%- endcapture -%}
         {% when 'rss' %}
           {% assign url = '/feed.xml' | relative_url %}
         {% else %}
           {% assign url = entry.url %}
       {% endcase %}
-
       {% if url %}
-        <a
-          href="{{ url }}"
-          aria-label="{{ entry.type }}"
-          {% assign link_types = '' %}
-
-          {% unless entry.noblank %}
-            target="_blank"
-            {% assign link_types = 'noopener noreferrer' %}
-          {% endunless %}
-
-          {% if entry.type == 'mastodon' %}
-            {% assign link_types = link_types | append: ' me' | strip %}
-          {% endif %}
-
-          {% unless link_types == empty %}
-            rel="{{ link_types }}"
-          {% endunless %}
-        >
+        <a href="{{ url }}" aria-label="{{ entry.type }}" target="_blank" rel="noopener noreferrer">
           <i class="{{ entry.icon }}"></i>
         </a>
       {% endif %}
     {% endfor %}
   </div>
-  <!-- .sidebar-bottom -->
 </aside>
-<!-- #sidebar -->
