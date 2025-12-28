@@ -200,32 +200,39 @@
       opacity: 0.1;
   }
 
-  /* --- Archives(아카이브) 타임라인 업그레이드 --- */
+/* --- Archives(아카이브) 타임라인 업그레이드 --- */
 
-  /* 1. 행(Row) 호버 효과: 은은한 배경과 둥근 모서리 */
-  #archives li:hover {
-      background-color: rgba(255, 255, 255, 0.03); /* 아주 옅은 배경 */
-      border-radius: 8px;
-      transition: background-color 0.2s ease;
+  /* 1. [기본 상태] 게시물 제목 & 날짜 색상 (테마 기본값) */
+  #archives li a {
+      color: var(--text-color) !important;
+      text-decoration: none !important;
+  }
+  #archives li .date {
+      color: var(--text-muted-color) !important;
   }
 
-  /* 2. 점(Dot) 인터랙션: 호버 시 주황색 네온 효과 */
+  /* 2. [호버 상태] 배경/카드 효과 제거 (깔끔함 유지) */
+  #archives li:hover {
+      background: none !important;
+      transition: none !important;
+  }
+
+  /* 3. [텍스트] 호버 시 색 적용 */
+  #archives li:hover a,
+  #archives li:hover .date {
+      color: #00A8FF !important;
+      transition: color 0.2s ease;
+  }
+
+  /* 4. [아이콘] 호버 시 빛나는 효과(Glow) */
   #archives li:hover a::before {
-      background: #ff8b0d !important; /* 점 색상 변경 */
-      box-shadow: 0 0 8px rgba(255, 139, 13, 0.6); /* 빛 번짐(Glow) 효과 */
-      transform: scale(1.2); /* 점이 살짝 커짐 */
+      background: #00A8FF !important;
+      box-shadow: 0 0 10px #00A8FF !important;
+      transform: scale(1.2) !important;
       transition: all 0.2s ease;
   }
 
-  /* 3. 텍스트 동기화: 호버 시 날짜와 제목 색상 강조 */
-  #archives li:hover a,
-  #archives li:hover .date {
-      color: #ff8b0d !important; /* 텍스트도 주황색으로 통일 */
-      text-decoration: none !important;
-      transition: color 0.2s;
-  }
-
-  /* 4. 클릭 영역 확장 */
+  /* 5. 클릭 영역 보정 */
   #archives li {
       position: relative; 
   }
@@ -236,14 +243,11 @@
       top: 0;
       width: 105%;
       height: 100%;
-      z-index: 1; /* 링크 클릭 보장 */
+      z-index: 1;
   }
 
-  /* 5. [수정됨] 연도(Year) 아이콘 삭제 */
+  /* 6. 연도 아이콘 삭제 */
   #archives .year::after {
-      display: none !important; /* 아이콘 숨김 처리 */
-      content: none !important;
-      box-shadow: none !important;
-      border: none !important;
+      display: none !important;
   }
 </style>
