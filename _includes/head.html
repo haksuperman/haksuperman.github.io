@@ -133,30 +133,25 @@
   {% include metadata-hook.html %}
 </head>
 <style>
-  /* 1. 리스트 그룹(ul) 설정: 여백(들여쓰기) 복구 */
-  #page-category ul,
-  #page-tags ul,
-  #page-archives ul {
+  /* 1. [Category 전용] 리스트 그룹(ul) 설정 */
+  #page-category ul {
       list-style-type: none !important; /* 기호 삭제 */
+      padding-left: 1.5rem !important;  /* 카테고리 목록 들여쓰기 유지 */
   }
 
-  /* 2. 리스트 아이템(li) 기본 카드 설정 */
-  #page-category li,
-  #page-tags li,
-  #page-archives li {
+  /* 2. [Category 전용] 리스트 아이템(li) 카드 스타일 */
+  #page-category li {
       position: relative;
       border-radius: 12px;
-      padding: 12px 16px !important;
-      margin-bottom: 6px;
+      padding: 10px 16px !important;
+      margin-bottom: 3px;
       transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
       border: 1px solid transparent;
       list-style: none !important;
   }
 
   /* 3. 호버(Mouse Over) 효과 */
-  #page-category li:hover,
-  #page-tags li:hover,
-  #page-archives li:hover {
+  #page-category li:hover {
       background-color: rgba(255, 255, 255, 0.06);
       transform: translateY(-2px) scale(1.01);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
@@ -165,9 +160,7 @@
   }
 
   /* 4. 액티브(클릭) 효과 */
-  #page-category li:active,
-  #page-tags li:active,
-  #page-archives li:active {
+  #page-category li:active {
       transform: scale(0.98);
       background-color: rgba(255, 255, 255, 0.08);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -175,9 +168,7 @@
   }
 
   /* 5. 텍스트 링크 스타일 강제 초기화 */
-  #page-category li a,
-  #page-tags li a,
-  #page-archives li a {
+  #page-category li a {
       text-decoration: none !important;
       border-bottom: none !important;
       box-shadow: none !important;
@@ -185,16 +176,12 @@
   }
   
   /* 호버 시에도 텍스트 스타일 유지 */
-  #page-category li:hover a,
-  #page-tags li:hover a,
-  #page-archives li:hover a {
+  #page-category li:hover a {
       color: inherit !important;
   }
 
   /* 6. 카드 전체 클릭 가능하게 만들기 (확장) */
-  #page-category li a::after,
-  #page-tags li a::after,
-  #page-archives li a::after {
+  #page-category li a::after {
       content: '';
       position: absolute;
       top: 0;
@@ -205,15 +192,58 @@
   }
 
   /* 7. 날짜 옆 점선 효과 처리 */
-  #page-category li .dash,
-  #page-tags li .dash,
-  #page-archives li .dash {
+  #page-category li .dash {
       transition: opacity 0.2s;
   }
   
-  #page-category li:hover .dash,
-  #page-tags li:hover .dash,
-  #page-archives li:hover .dash {
+  #page-category li:hover .dash {
       opacity: 0.1;
+  }
+
+  /* --- Archives(아카이브) 타임라인 업그레이드 --- */
+
+  /* 1. 행(Row) 호버 효과: 은은한 배경과 둥근 모서리 */
+  #archives li:hover {
+      background-color: rgba(255, 255, 255, 0.03); /* 아주 옅은 배경 */
+      border-radius: 8px;
+      transition: background-color 0.2s ease;
+  }
+
+  /* 2. 점(Dot) 인터랙션: 호버 시 주황색 네온 효과 */
+  #archives li:hover a::before {
+      background: #ff8b0d !important; /* 점 색상 변경 */
+      box-shadow: 0 0 8px rgba(255, 139, 13, 0.6); /* 빛 번짐(Glow) 효과 */
+      transform: scale(1.2); /* 점이 살짝 커짐 */
+      transition: all 0.2s ease;
+  }
+
+  /* 3. 텍스트 동기화: 호버 시 날짜와 제목 색상 강조 */
+  #archives li:hover a,
+  #archives li:hover .date {
+      color: #ff8b0d !important; /* 텍스트도 주황색으로 통일 */
+      text-decoration: none !important;
+      transition: color 0.2s;
+  }
+
+  /* 4. 클릭 영역 확장 */
+  #archives li {
+      position: relative; 
+  }
+  #archives li a::after {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 0;
+      width: 105%;
+      height: 100%;
+      z-index: 1; /* 링크 클릭 보장 */
+  }
+
+  /* 5. [수정됨] 연도(Year) 아이콘 삭제 */
+  #archives .year::after {
+      display: none !important; /* 아이콘 숨김 처리 */
+      content: none !important;
+      box-shadow: none !important;
+      border: none !important;
   }
 </style>

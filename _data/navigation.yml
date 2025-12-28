@@ -4,6 +4,7 @@
   subcategories:
     - AWS
     - OCI
+    - MULTICLOUD
 
 - name: DEVOPS
   subcategories:
