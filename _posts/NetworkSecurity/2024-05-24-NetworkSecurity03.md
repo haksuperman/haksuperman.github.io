@@ -2,7 +2,7 @@
 title: "[Network Security] Nmap을 활용한 네트워크 스캐닝"      # 글 제목
 date: 2024-05-24 00:15:00 +0900 # 작성 시간
 categories: [SECURITY, NETWORK SECURITY]        # [대분류, 소분류]
-tags: [security, network, nmap, nslookup, ping, tcp하프오픈스캔, traceroute, tracert, wireshark, 스캐닝, scanning]     # 태그 (반드시 소문자로 시작 권장)
+tags: [security, network, nmap, nslookup, ping, tcp 하프오픈 스캔, traceroute, tracert, wireshark, 스캐닝, scanning]     # 태그 (반드시 소문자로 시작 권장)
 ---
 ## 1\. nmap을 활용한 활성화 된 Host 스캔
 
