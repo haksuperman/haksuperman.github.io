@@ -1,0 +1,132 @@
+---
+title: "[Web Security] 웹 서비스 공격 (웹 해킹, Web Hacking)"       # 글 제목
+date: 2024-05-26 20:27:00 +0900 # 작성 시간
+categories: [SECURITY, WEB SECURITY]        # [대분류, 소분류]
+tags: [security, web security, owasp]     # 태그 (반드시 소문자로 시작 권장)
+---
+웹 해킹은 웹 서비스를 대상으로 발생하는 해킹을 말한다. 주로 웹 사이트 취약점을 이용하여 권한이 없는 시스템에 접근하거나 데이터 유출 또는 파괴와 같은 행위를 말한다.
+
+## 1\. 웹 해킹(Web Hacking)
+
+-   웹 서비스를 대상으로 하는 해킹
+-   웹 사이트 취약점을 이용하여 권한이 없는 시스템에 접근하거나 데이터 유출 및 파괴하는 행위
+
+## 2\. 종류
+
+-   웹 엔진을 이용한 해킹(Apache, IIS 취약점 등)
+-   웹 서버 및 미들웨어를 이용한 해킹(OS, JEUS, WebLogic, WebShere 취약점 등)
+-   주로 웹 애플리케이션을 이용한 해킹(SQL Injection, XSS, 파일 업로드/다운로드 취약점)
+
+## 3\. 웹 취약점의 위험성
+
+-   웹에서 이용되는 구간 전 범위에서 1차 피해 발생 가능
+-   웹 서비스 공격에서 2차 공격으로 인한 추가 확산된 범위 공격으로의 시발점 가능
+-   웹으로 할 수 있는 범위만큼 접근할 수 있는 범위도 확대됨
+
+## 4\. 한국인터넷진흥원
+
+-   대중적으로 가장 많이 사용되는 진단 가이드
+-   주요정보통신 기반시설 운영기관은 매년 취약점 분석/평가를 실시(정보통신기반 보호법 제9조)
+-   정보 시스템의 설정현황 확인 + 웹 취약점 진단
+
+[https://www.kisa.or.kr/2060204/form?postSeq=12&page=1](https://www.kisa.or.kr/2060204/form?postSeq=12&page=1)
+
+![image](https://blog.kakaocdn.net/dna/cNd8sj/btsHDNXZO02/AAAAAAAAAAAAAAAAAAAAACZXYdCcnY1MgbNeVsWlXDW1kfjLHLO2ng8lvt71qLTq/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=EXKTYEMIDW5OcyBCtZIde2jZTQ4%3D)
+2021년 게시물이지만, 각종 취약점 공격 기법에 대해 공부할 수 있다.
+
+![image](https://blog.kakaocdn.net/dna/7WeRy/btsHB3HY1F8/AAAAAAAAAAAAAAAAAAAAABJv5eDX5mxYLkWQF2wHTFSztNu3btHaKwXqs3ScPTfq/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=Amx%2BOgcdBLYwrIXr7hF3rKPfQQA%3D)
+정보통신기반보호법에는 주요정보통신기반시설의 보호에 관한 대책을 수립, 시행하도록 되어 있는데, 이 때 사용할 수 있는 진단 항목이다.
+
+| 버퍼 오버플로우 | 상 | BO | 크로스사이트 리퀘스트 변조(CSRF) | 상 | CF |
+| 포맷스트링 | 상 | FS | 세션 예측 | 상 | SE |
+| LDAP 인젝션 | 상 | LI | 불충분한 인가 | 상 | IN |
+| 운영체제 명령 실행 | 상 | OC | 불충분한 세션 만료 | 상 | SC |
+| SQL 인젝션 | 상 | SI | 세션 고정 | 상 | SF |
+| SSI 인젝션 | 상 | SS | 자동화 공격 | 상 | AU |
+| XPath 인젝션 | 상 | XI | 프로세스 검증 누락 | 상 | PV |
+| 디렉터리 인덱싱 | 상 | DI | 파일 업로드 | 상 | FU |
+| 정보 누출 | 상 | IL | 파일 다운로드 | 상 | FD |
+| 악성 콘텐츠 | 상 | CS | 관리자 페이지 노출 | 상 | AE |
+| 크로스사이트 스크립팅 | 상 | XS | 경로 추적 | 상 | PT |
+| 약한 문자열 강도 | 상 | BF | 위치 공개 | 상 | PL |
+| 불충분한 인증 | 상 | IA | 데이터 평문 전송 | 상 | SN |
+| 취약한 패스워드 복구 | 상 | PR | 쿠키 변조 | 상 | CC |
+
+## 5\. OWASP(The Open Web Application Security Project)
+
+-   오픈소스 웹 애플리케이션 보안 프로젝트
+-   주로 웹에 관한 보안 취약점에 대한 연구를 수행
+
+### 1) OWASP Top 10
+
+-   주로 웹 환경에서 발생할 수 있는 취약점(정보노출, 악성 파일 및 스크립트, 보안 취약점 등)을 연구
+-   여러가지 취약점 중 상위 10가지 위협에 대해 3~4년 주기로 발표(2004년~)
+
+### 2) 2021 vs 2017
+![image](https://blog.kakaocdn.net/dna/bJEpo5/btsHCRz2LlR/AAAAAAAAAAAAAAAAAAAAALk55QHCuFEER5zK_h2H0Mxet3d-NTYQNowm74SVk1je/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=hqhsBI6cAnDXNZDGFGLMHtrlnLI%3D)
+
+기존 2017년의 TOP 10과 비교하며 파악해야 한다!
+
+-   신규 추가 항목
+    -   A4. Insecure Design(안전하지 않은 설계)
+    -   A8. Software and Data Integrity Failures(소프트웨어 및 데이터 무결성 오류)
+    -   A10. Server-Side Request Forgery(서버 측 요청 위조)
+-   타 카테고리로 통합된 항목
+    -   Cross-Site Scripting(XSS) -> Injection(인젝션)
+    -   XML External Entities(XXE) -> Security misconfiguration(보안 구성 오류)
+    -   Insecure Deserialization(안전하지 않은 역직렬화) -> Software and Data Integrity Failures(소프트웨어 및 데이터 무결성 오류)
+
+### 3) OWASP TOP 10:2021
+
+#### A1. 취약한 접근 통제(Broken Access Control)
+
+-   사용자 접근제어가 제대로 인증되지 않을 경우 발생하는 취약점
+-   다른 사용자의 계정 및 데이터에 접근해 중요한 파일 열람 및 접근 권한 수정 등 가능
+
+#### A2. 암호화 오류(Cryptographic Failures)
+
+-   민감 데이터 노출(2017)의 원인이 암호화 실패라고 분석되어 보다 근본적인 원인으로 명칭 변경
+-   민감 데이터는 불필요하게 저장하지 않고 저장이 필요한 경우 안전하게 암호화해야 함
+-   강력한 최신 표준 알고리즘 사용, 프로토콜 및 암호화 키 설정 여부 확인 필요
+
+#### A3. 인젝션(Injection)
+
+-   SQL, OS, XXE, LDAP 인젝션 등 신뢰할 수 없는 데이터가 전달 될 때 나타나는 취약점
+-   악의적인 데이터 주입으로 인해 공격자가 명령 실행, 권한 없이 데이터 접근 등 가능
+
+#### A4. 안전하지 않은 설계(Insecure Design)
+
+-   위협 모델링, 보안 설계의 중요성을 강조
+-   설계 과정에서 발생하는 보안적인 결함
+-   기획 단계와 애플리케이션 설계 과정에서의 보안사항 준수 필요
+
+#### A5. 보안 구성 오류(Security Misconfiguration)
+
+-   소프트웨어의 구성이 고도화됨에 따라 보안 구성 오류 취약점이 증가할 것으로 예측
+-   불필요한 기능 활성화 및 설치, 상세한 오류메시지 노출, 최신 보안기능 비활성화 등으로 발생
+
+#### A6. 취약하고 오래된 컴포넌트(Vulnerable and Outdated Components)
+
+-   오픈소스를 기반으로 다양한 라이브러리와 컴포넌트들이 연결되는 애플리케이션의 경우, 제공되는 라이브러리와 컴포넌트에 알려진 취약점이 존재할 수 있음
+-   관리되지 않은 타사 구성 요소를 사용하거나 사용중인 구성 요소의 버전을 모르는 경우에 해당
+
+#### A7. 식별 및 인증 오류(Identification and Authentication Failures)
+
+-   사용자의 신원확인, 인증 및 세션 관리가 적절히 되지 않았을 때 취약점이 발생
+-   'root' 또는 'admin/admin'과 같은 기본 암호, 취약하거나 잘 알려진 암호를 허용하는 경우 해당
+-   도난된 계정 정보의 재사용을 막기 위해 다중 인증을 구현해두는 것이 필요
+
+#### A8. 소프트웨어와 데이터 무결성 오류(Software and Data Integrity Failures)
+
+-   무결성 확인 없이 업데이트 되는 것을 악용하여 악의적인 파일을 배포 및 실행이 가능함
+-   공격자가 보고 수정 가능한 구조, 개체, 데이터가 인코딩 혹은 직렬화되는 경우 취약점에 해당
+
+#### A9. 보안 로깅과 모니터링 오류(Security Logging and Monitoring Failures)
+
+-   데이터가 점점 많아지면서 한 곳에서 데이터를 시간순으로 로깅하고 모니터링할 필요성 증가
+-   의심스러운 활동을 감지하고 신속하게 대응할 수 있도록 효과적인 모니터링 및 경고 시스템을 설정하는 것이 중요
+
+#### A10. 서버측 요청 위조(SSRF, Server-Side Request Forgery)
+
+-   서버 측 자체의 요청을 변조하여 공격자가 원하는 형태의 악성 행위를 서버에 던져주고, 서버가 이를 검증 없이 그대로 받아 응답하는 공격
+-   최근 클라우드 서비스와 이키텍처의 복잡성으로 인해 SSRF의 심각도가 높아지고 있음

@@ -172,12 +172,11 @@
                   <li class="nav-item mt-0{% if page.url == child_url %} active{% endif %}" style="padding-right: 0px;">
                     <a href="{{ site.baseurl }}{{ child_url }}" 
                        class="nav-link d-flex justify-content-between align-items-center"
-                       style="padding-left: 0.8rem;"> 
+                       style="padding-left: 0.8rem !important;"> 
                       
                       <div class="d-flex align-items-center flex-grow-1" style="min-width: 0;">
                         
-                        <i class="fas fa-align-left fa-fw text-muted" style="font-size: 0.75rem; margin-right: 8px; opacity: 0.8;"></i>
-                        <span class="text-truncate" style="font-size: 0.9em;">{{ child | upcase }}</span>
+                        <i class="fas fa-align-left fa-fw text-muted flex-shrink-0" style="font-size: 0.75rem; margin-right: 10px; opacity: 0.8;"></i>                        <span class="text-truncate" style="font-size: 0.9em;">{{ child | upcase }}</span>
                       </div>
 
                       <span class="badge ms-3 flex-shrink-0">
