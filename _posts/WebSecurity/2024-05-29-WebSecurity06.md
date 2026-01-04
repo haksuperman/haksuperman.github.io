@@ -17,7 +17,7 @@ tags: [security, web security, file upload]     # 태그 (반드시 소문자로
     -   PHP 환경에서 실행 가능한 언어로 작성된 파일 : .php 등
 
 1. .asp 환경임을 확인
-![image](/assets/img/posts/WebSecurity/WebSecurity05_02.png)
+![image](/assets/img/posts/WebSecurity/WebSecurity06_01.png)
 
 #### 2) 업로드한 악성 파일을 실행
 
@@ -28,8 +28,8 @@ tags: [security, web security, file upload]     # 태그 (반드시 소문자로
 
 
 1. GitHub에 공개된 webshell 파일 다운
-![image](/assets/img/posts/WebSecurity/WebSecurity05_03.png)
-![image](/assets/img/posts/WebSecurity/WebSecurity05_04.png)
+![image](/assets/img/posts/WebSecurity/WebSecurity06_02.png)
+![image](/assets/img/posts/WebSecurity/WebSecurity06_03.png)
 
 > 웹 쉘(Webshell) : 서버에서 명령어를 실행할 수 있는 악성코드 파일
 {: .prompt-info }
@@ -50,10 +50,10 @@ tags: [security, web security, file upload]     # 태그 (반드시 소문자로
     -   게시판에 글쓰기 권한과 파일 첨부 기능이 있는지 확인한 후 확장자가 jsp/php/asp/cgi 등의 파일들이 업로드 가능한지 확인
 
 1. 다운 받은 cmd.asp 파일 업로드 테스트
-![image](/assets/img/posts/WebSecurity/WebSecurity05_05.png)
+![image](/assets/img/posts/WebSecurity/WebSecurity06_04.png)
 
 2. 특정 확장자만 업로드 가능
-![image](/assets/img/posts/WebSecurity/WebSecurity05_06.png)
+![image](/assets/img/posts/WebSecurity/WebSecurity06_05.png)
 
 ## 3\. 우회 기법
 
@@ -65,10 +65,10 @@ tags: [security, web security, file upload]     # 태그 (반드시 소문자로
 
 
 1. .aSp 확장자로 업로드 시도
-![image](/assets/img/posts/WebSecurity/WebSecurity05_07.png)
+![image](/assets/img/posts/WebSecurity/WebSecurity06_06.png)
 
 2. 대소문자 우회 공격 실패
-![image](/assets/img/posts/WebSecurity/WebSecurity05_08.png)
+![image](/assets/img/posts/WebSecurity/WebSecurity06_07.png)
 
 #### 2) 확장자 연장 우회 공격
 
@@ -77,11 +77,11 @@ tags: [security, web security, file upload]     # 태그 (반드시 소문자로
 -   Ex) **attack.txt.asp**
 
 1. txt를 확장자로 인식하고 업로드 되도록 공격
-![image](/assets/img/posts/WebSecurity/WebSecurity05_09.png)
+![image](/assets/img/posts/WebSecurity/WebSecurity06_08.png)
 
 2. 확장자 연장 우회 공격 성공
 확장자를 구분짓는 조건문자 ('.') 를 왼쪽부터 검사해서 txt를 확장자로 인식 한 것 -> 우측부터 검사하도록 해야 함!
-![image](/assets/img/posts/WebSecurity/WebSecurity05_10.png)
+![image](/assets/img/posts/WebSecurity/WebSecurity06_09.png)
 
 #### 3) 특수문자 우회 공격
 
@@ -89,14 +89,14 @@ tags: [security, web security, file upload]     # 태그 (반드시 소문자로
 -   Ex) **"%00"**, **"%ZZ"**, **"%09"**, **"%13"** \-> %가 들어갔다는 것은 URL 인코딩으로 판단 가능
 
 1. URL Incode 확인
-![image](/assets/img/posts/WebSecurity/WebSecurity05_11.png)
+![image](/assets/img/posts/WebSecurity/WebSecurity06_10.png)
 
 2. %00이 Null인 것 확인
-![image](/assets/img/posts/WebSecurity/WebSecurity05_12.png)
+![image](/assets/img/posts/WebSecurity/WebSecurity06_11.png)
 
 
 3. %00이 Null 값(종단)을 의미하므로 cmd.asp 가 되는 것이다.
-![image](/assets/img/posts/WebSecurity/WebSecurity05_13.png)
+![image](/assets/img/posts/WebSecurity/WebSecurity06_12.png)
 
 4. 업로드 성공
-![image](/assets/img/posts/WebSecurity/WebSecurity05_14.png)
+![image](/assets/img/posts/WebSecurity/WebSecurity06_13.png)
