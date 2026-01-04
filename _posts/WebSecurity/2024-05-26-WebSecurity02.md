@@ -13,13 +13,13 @@ tags: [security, web security, shodan, censys, ghdb]     # 태그 (반드시 소
 1. 로그인을 진행해야 완전한 Searching을 할 수 있다.
 
 2. 인터넷에 노출되어 있는 정보들을 가공해서 보기 편하게 모아 놓은 것(실제 해킹의 작업은 x)
-![image](https://blog.kakaocdn.net/dna/dBaY8Z/btsHDhZvteF/AAAAAAAAAAAAAAAAAAAAAN_257g_S64MGNEkidaT11nWwftwA3Ct-UCSfUK-v0g2/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=tHB4EyRgets%2FBDO0ujwMQBlQjQE%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity02_01.png)
 
 3. IP와 서버 종류들도 확인 가능(더 취약한 웹 서버의 경우 버전 정보까지도 나올 수 있음 -> 버전 별로 노출된 취약점 확인 가능)
-![image](https://blog.kakaocdn.net/dna/ROjlP/btsHCxhyIcW/AAAAAAAAAAAAAAAAAAAAADvdBkC6h_UcjnXzbzRUgq_rxlgFBX_emk11n8-0BS8r/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=WHPKIZGqDK8ae0uAokSzHPbhEW4%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity02_02.png)
 
 4. IP 혹은 IP 대역대로 검색할 때는 **net:** 을 붙여서 검색
-![image](https://blog.kakaocdn.net/dna/coTTYX/btsHB5eLgZt/AAAAAAAAAAAAAAAAAAAAAGfgfCho33EEcFVO_sNW5qNiqCQVOeqxNM_RFJ_uATEE/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=kJZ3QWu4AtrPaqbfaypRZx6b9E4%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity02_03.png)
 
 ## 2\. Censys
 
@@ -28,10 +28,10 @@ tags: [security, web security, shodan, censys, ghdb]     # 태그 (반드시 소
 [https://search.censys.io/](https://search.censys.io/)
 
 1. 오픈된 포트도 검색 가능
-![image](https://blog.kakaocdn.net/dna/dsT1ok/btsHDBjdoRO/AAAAAAAAAAAAAAAAAAAAAHiM94XJucvDdlcW5da1wc9vFR6uAPQJbviZWDh_GoyM/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=vW3Vr2xJ4mJc1U3nBe7e8aKvdj4%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity02_04.png)
 
 2. 쇼단과 다르게 Censys는 ip 검색 시 net: 을 붙이지 않아도 되는데, Censys는 비회원 시 질의 제한이 있다.
-![image](https://blog.kakaocdn.net/dna/Tbbyw/btsHDOilUzG/AAAAAAAAAAAAAAAAAAAAAErWCIo-5qSMGwgMzRMIo9xMHoBC_5jatHbfrLb3oE-h/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=S%2BAu6mUJZmrhnCRyhcM4bBFWXuw%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity02_05.png)
 
 ## 3\. GHDB(Google Hacking Database)
 
@@ -42,14 +42,14 @@ tags: [security, web security, shodan, censys, ghdb]     # 태그 (반드시 소
 [##_Image|kage@ymnQE/btsHDOvT3HK/AAAAAAAAAAAAAAAAAAAAAJe9kF_qhTVQSCoa4OusRLciRJJyd7OBrB1CBJtIMyfI/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&amp;expires=1767193199&amp;allow_ip=&amp;allow_referer=&amp;signature=VCeeVYs%2FTl7Ev%2FsfeIqlpijYupM%3D|CDM|1.3|{"originWidth":2560,"originHeight":1528,"style":"alignCenter","filename":"09_GHDB 메뉴 선택.png"}_##]
 
 1. 구글 해킹 데이터베이스(GHDB)
-![image](https://blog.kakaocdn.net/dna/ymnQE/btsHDOvT3HK/AAAAAAAAAAAAAAAAAAAAAJe9kF_qhTVQSCoa4OusRLciRJJyd7OBrB1CBJtIMyfI/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=VCeeVYs%2FTl7Ev%2FsfeIqlpijYupM%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity02_06.png)
 
 3. 웹 서버가 기본적으로 제공하는 디렉터리 인덱스 -> 보안 상 비활성화 해야 함!
 (디렉터리의 구조를 나열시켜줌)
-![image](https://blog.kakaocdn.net/dna/NvYM4/btsHBDb123o/AAAAAAAAAAAAAAAAAAAAAIpx48JIGAdqSIADs5ytqa7HOcck7IWG7ZtOP-fO4Qvh/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=U5uuU4bVUMDfc2qY2eHIdDvwrjY%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity02_07.png)
 
 4. 구글링하는 방식으로 index of 페이지 검색
-![image](https://blog.kakaocdn.net/dna/bIrI8a/btsHCvqs4M8/AAAAAAAAAAAAAAAAAAAAAPKirzGmtivBqX1m7jTZNMhbDHmVhFUte2xbgEjSayzl/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=9Y8DfCAj9N6%2FSNCZdQ18L3kEfMM%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity02_08.png)
 
 > 허가 받지 않은 사이트는 국내 법상 해킹으로 간주될 위험이 있음!  
 > (실제 뭘 들어가 보지는 않음...)

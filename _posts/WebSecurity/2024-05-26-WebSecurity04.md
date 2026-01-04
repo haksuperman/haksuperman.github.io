@@ -26,13 +26,13 @@ tags: [security, web security, sqlinjection]     # 태그 (반드시 소문자�
 -   인증 우회
     -   사용자 인증 우회, 정상적인 사용자의 인증권한 획득 가능
     -   사용자 로그인 입력 값에 비정상적인 SQL Query 삽입
-![image](https://blog.kakaocdn.net/dna/suID0/btsHBXOK31n/AAAAAAAAAAAAAAAAAAAAAHCLWVuPtRoUWIlxqkr4JErWN2Enz25snAPl2imZFWVV/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=kzz1V%2F%2B0Ap6wO5S07XiqgHwx6V4%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity04_01.png)
 무조건 참을 반환하도록 입력한 것
 
 ## 3\. SQL Injection(인증 우회) 실습
 
 1. 로그인 해보기
-![image](https://blog.kakaocdn.net/dna/cuh6h2/btsHCqCWaUs/AAAAAAAAAAAAAAAAAAAAAF2_T0QRRFC5PtBsnWaggy8bxBWcPx_FBlMjJMloJn9i/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=j7MKaOlI2GGnLGFaPcReli0ibyI%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity04_02.png)
 
     > - ID : admin
     > - PASSWORD : ' or 1=1 --
@@ -41,9 +41,9 @@ tags: [security, web security, sqlinjection]     # 태그 (반드시 소문자�
 
 2. admin 로그인 했는데 oyes 로그인 됨
 강제 참을 반환하도록 했는데, DB에서 모든 회원을 찾았고 회원 중 가장 위에 있던 oyes 사용자로 로그인 된 것
-![image](https://blog.kakaocdn.net/dna/KiZHx/btsHDAdzFeZ/AAAAAAAAAAAAAAAAAAAAADUW6OHvIRh4N3jTxrNDuosq-zwDLi3uY8BWq2CkR2uF/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=5dDUmCfvZ9A3FRqw8ucnmYmNhZ4%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity04_03.png)
 
-    > ![image](https://blog.kakaocdn.net/dna/d7uifa/btsHBTyT94E/AAAAAAAAAAAAAAAAAAAAAPCmtAgKffy7h1XKz6QYAw9dfW6zso9dasS0l8xRAIoe/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=5eDphlTjgOt7UOsVQsYptPVD16Y%3D)
+    > ![image](/assets/img/posts/WebSecurity/WebSecurity04_04.png)
     > 패스워드가 이렇게 들어갔는데, 해당 조건문이 항상 참이 되어 버림(members 테이블의 모든 항목들이 참이 된 것)
     > \-> **SQL 구문에 대한 입력 값 검증이 되지 않았기 때문에** 비정상적인 SQL 구문으로 공격이 성공한 것
     {: .prompt-info }
@@ -68,7 +68,7 @@ tags: [security, web security, sqlinjection]     # 태그 (반드시 소문자�
     -   '시스템 구조 상 이렇기 때문에 잘못 됐어 제대로 다시 해줘' 안내를 해줄 때 정보 노출의 위험이 있다.
 
 1. 로그인 시도
-![image](https://blog.kakaocdn.net/dna/buNvRk/btsHCXtuhqC/AAAAAAAAAAAAAAAAAAAAAMeDwqxYS0UoVxmFuMB2k8Kb8vfFvNnf4keNhbIuIJor/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=SGxHwmZvctcs2OCfMtqVyxZ1e0M%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity04_05.png)
 
     > ID : aaaa<br>
     > PW : 'and db\_name() > 1 --<br>
@@ -77,7 +77,7 @@ tags: [security, web security, sqlinjection]     # 태그 (반드시 소문자�
 
 2. DB이름을 숫자 1과 비교하려하니, 에러 발생<br>
 \-> DB 측 에러임을 유추 가능, 이때 DB명 노출
-![image](https://blog.kakaocdn.net/dna/driorZ/btsHCB5gomd/AAAAAAAAAAAAAAAAAAAAAFeJVDVkZcFP1VAzJ6xy1D8Ad8ajLTmBP4ofD18tRigc/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=IJL9i%2F6pFmP0E%2F6Mfst0CFpvn3c%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity04_06.png)
 
 #### 2) having을 이용하여 테이블명과 첫 번째 컬럼명 파악
 
@@ -85,7 +85,7 @@ tags: [security, web security, sqlinjection]     # 태그 (반드시 소문자�
 -   의도적으로 having을 사용해 오류를 발생시킴(group by 없이 having을 쓰면 에러 발생)
 
 1. 로그인 시도
-![image](https://blog.kakaocdn.net/dna/VHskS/btsHBPwF8zM/AAAAAAAAAAAAAAAAAAAAAHaqK6zDhnzc914Q28V5dOgQEylnePKJELS7PNx_2hTP/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=qiA00m091TZH1qxlupyiu%2FnSpkM%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity04_07.png)
 
     > ID : aaaa<br>
     > PW : 'having 1=1 --<br>
@@ -94,15 +94,15 @@ tags: [security, web security, sqlinjection]     # 태그 (반드시 소문자�
     {: .prompt-info }
 
 2. Members 테이블명에 num 컬러명 노출
-![image](https://blog.kakaocdn.net/dna/cD0nf5/btsHBNMp7eF/AAAAAAAAAAAAAAAAAAAAAMykQ58XPqNuUlJl1hGcXIVa8fgA73X26afni-ip0UNf/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=Vir98avx8MTdnYSmf7gGq0wCdSk%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity04_08.png)
 
 #### 3) group by()를 이용하여 나머지 컬럼명 파악
 1. 로그인 시도
-![image](https://blog.kakaocdn.net/dna/bRVE4G/btsHDGrhjws/AAAAAAAAAAAAAAAAAAAAABICZ3mAeQpDaNhmmnTlorZFMerqnuAgAwMthkXF0_Xo/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=1isRaYrA4Z4LoDYWWLSg8DtRP%2Fo%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity04_09.png)
 
     > ID : aaaa<br>
     > PW : 'group by (num) --
     {: .prompt-info }
 
 2. 다음 컬럼명 확인 가능(집계함수 group by를 통해 뭘 할건지를 명시 안해서 에러 발생)
-![image](https://blog.kakaocdn.net/dna/G7Wpi/btsHDx2eOKa/AAAAAAAAAAAAAAAAAAAAAKxXZHPuRl7TK0sKsmgxPvuD05zKbCo4gFW2aziGN7MB/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=O76HRqAc7iV2zXa8sCnnY%2FApK48%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity04_10.png)

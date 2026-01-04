@@ -31,10 +31,10 @@ tags: [security, web security, owasp]     # 태그 (반드시 소문자로 시�
 
 [https://www.kisa.or.kr/2060204/form?postSeq=12&page=1](https://www.kisa.or.kr/2060204/form?postSeq=12&page=1)
 
-![image](https://blog.kakaocdn.net/dna/cNd8sj/btsHDNXZO02/AAAAAAAAAAAAAAAAAAAAACZXYdCcnY1MgbNeVsWlXDW1kfjLHLO2ng8lvt71qLTq/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=EXKTYEMIDW5OcyBCtZIde2jZTQ4%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity01_01.png)
 2021년 게시물이지만, 각종 취약점 공격 기법에 대해 공부할 수 있다.
 
-![image](https://blog.kakaocdn.net/dna/7WeRy/btsHB3HY1F8/AAAAAAAAAAAAAAAAAAAAABJv5eDX5mxYLkWQF2wHTFSztNu3btHaKwXqs3ScPTfq/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=Amx%2BOgcdBLYwrIXr7hF3rKPfQQA%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity01_02.png)
 정보통신기반보호법에는 주요정보통신기반시설의 보호에 관한 대책을 수립, 시행하도록 되어 있는데, 이 때 사용할 수 있는 진단 항목이다.
 
 | 버퍼 오버플로우 | 상 | BO | 크로스사이트 리퀘스트 변조(CSRF) | 상 | CF |
@@ -63,7 +63,7 @@ tags: [security, web security, owasp]     # 태그 (반드시 소문자로 시�
 -   여러가지 취약점 중 상위 10가지 위협에 대해 3~4년 주기로 발표(2004년~)
 
 ### 2) 2021 vs 2017
-![image](https://blog.kakaocdn.net/dna/bJEpo5/btsHCRz2LlR/AAAAAAAAAAAAAAAAAAAAALk55QHCuFEER5zK_h2H0Mxet3d-NTYQNowm74SVk1je/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=hqhsBI6cAnDXNZDGFGLMHtrlnLI%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity01_03.png)
 
 기존 2017년의 TOP 10과 비교하며 파악해야 한다!
 

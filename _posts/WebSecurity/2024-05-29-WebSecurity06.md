@@ -17,7 +17,7 @@ tags: [security, web security, file upload]     # 태그 (반드시 소문자로
     -   PHP 환경에서 실행 가능한 언어로 작성된 파일 : .php 등
 
 1. .asp 환경임을 확인
-![image](https://blog.kakaocdn.net/dna/wF1Y9/btsHGdD2ShO/AAAAAAAAAAAAAAAAAAAAAJVB4XjVoq3olruxdGFw8byMNWujKlWAPIwJfjtgegCF/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=%2B%2FrAJAL1MHwrhLBfzYKZcfPBUxU%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_02.png)
 
 #### 2) 업로드한 악성 파일을 실행
 
@@ -28,8 +28,8 @@ tags: [security, web security, file upload]     # 태그 (반드시 소문자로
 
 
 1. GitHub에 공개된 webshell 파일 다운
-![image](https://blog.kakaocdn.net/dna/dr8bb6/btsHGCKcsuk/AAAAAAAAAAAAAAAAAAAAAFzpVv3QRKH-Yp07dYVc_k140M1UvvDfI4dB_TSRwXYK/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=7h0QHliuRqm5GC1NUK4vCHktuKA%3D)
-![image](https://blog.kakaocdn.net/dna/VlycQ/btsHGbGmwh4/AAAAAAAAAAAAAAAAAAAAAJdevwm7AEtx_9Uno1FyvgFtzmy0qBzB59U6gd1g8cLs/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=qE%2BRJz%2FSedHiG29Jsjx4SAw%2Bpac%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_03.png)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_04.png)
 
 > 웹 쉘(Webshell) : 서버에서 명령어를 실행할 수 있는 악성코드 파일
 {: .prompt-info }
@@ -50,10 +50,10 @@ tags: [security, web security, file upload]     # 태그 (반드시 소문자로
     -   게시판에 글쓰기 권한과 파일 첨부 기능이 있는지 확인한 후 확장자가 jsp/php/asp/cgi 등의 파일들이 업로드 가능한지 확인
 
 1. 다운 받은 cmd.asp 파일 업로드 테스트
-![image](https://blog.kakaocdn.net/dna/cdPDzT/btsHGAlok3c/AAAAAAAAAAAAAAAAAAAAAOOTAW-mAE_rh9vgsHWyfJPGe-fBvzWQaxmsRWOkw4mA/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=zkDuU1ogk4WippjKm6ZFSoHxjW0%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_05.png)
 
 2. 특정 확장자만 업로드 가능
-![image](https://blog.kakaocdn.net/dna/bMhEaL/btsHHhrU7Va/AAAAAAAAAAAAAAAAAAAAADMhp_RdqnfBXiBhMIrxDeGh_1a3Qp7MAMNMpbhB1COu/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=2FtijneiATgdpPyB9QveEb945s0%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_06.png)
 
 ## 3\. 우회 기법
 
@@ -65,10 +65,10 @@ tags: [security, web security, file upload]     # 태그 (반드시 소문자로
 
 
 1. .aSp 확장자로 업로드 시도
-![image](https://blog.kakaocdn.net/dna/c5XOVz/btsHGX1Grtv/AAAAAAAAAAAAAAAAAAAAACSWFUeT7_5ItbTdZtTgng4dBOnjIwht14_PtE792qMF/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=ughWBJxyx0BU2R2fzPb0bTS86Hc%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_07.png)
 
 2. 대소문자 우회 공격 실패
-![image](https://blog.kakaocdn.net/dna/bHOyB7/btsHHiqPEXd/AAAAAAAAAAAAAAAAAAAAAIcnJzF2IfQVoYoKTxohCn_I5ZwGGVjrlHZekT6b07ng/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=2kjZgk9sZe5XbzlKIukJh0yNJkA%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_08.png)
 
 #### 2) 확장자 연장 우회 공격
 
@@ -77,11 +77,11 @@ tags: [security, web security, file upload]     # 태그 (반드시 소문자로
 -   Ex) **attack.txt.asp**
 
 1. txt를 확장자로 인식하고 업로드 되도록 공격
-![image](https://blog.kakaocdn.net/dna/EWM2U/btsHFQoWFkA/AAAAAAAAAAAAAAAAAAAAAIzbixDRVrLl6-X2QTvfgtLO4vwv52vEsXdOWHFPCAka/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=zYaxdofdv1l2%2FdViBLwAzKcMM8k%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_09.png)
 
 2. 확장자 연장 우회 공격 성공
 확장자를 구분짓는 조건문자 ('.') 를 왼쪽부터 검사해서 txt를 확장자로 인식 한 것 -> 우측부터 검사하도록 해야 함!
-![image](https://blog.kakaocdn.net/dna/bHfFAy/btsHGTZmrma/AAAAAAAAAAAAAAAAAAAAAJ-uymYNzmMTBdvd_cTPuGMvjyM8Au8v5ZuOuLCDWUaO/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=um4sNlAillugA%2Fc6VKHCXml5DH4%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_10.png)
 
 #### 3) 특수문자 우회 공격
 
@@ -89,14 +89,14 @@ tags: [security, web security, file upload]     # 태그 (반드시 소문자로
 -   Ex) **"%00"**, **"%ZZ"**, **"%09"**, **"%13"** \-> %가 들어갔다는 것은 URL 인코딩으로 판단 가능
 
 1. URL Incode 확인
-![image](https://blog.kakaocdn.net/dna/cpmHTw/btsHHtyRPVT/AAAAAAAAAAAAAAAAAAAAAB906Pk4QzkNMk8y-wWEjFq_VJ1gVgkF2wT_dQKPXPOT/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=oKj11vVyPRH642jsB%2FJRcbHyY0Y%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_11.png)
 
 2. %00이 Null인 것 확인
-![image](https://blog.kakaocdn.net/dna/daTSmo/btsHGbNanoB/AAAAAAAAAAAAAAAAAAAAABUo3hOMlUPrTrZf_wv9eoASu0A95zVkHYlrZojomQky/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=1Rl0UTKJmwOuVnprcKSjov5XdzQ%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_12.png)
 
 
 3. %00이 Null 값(종단)을 의미하므로 cmd.asp 가 되는 것이다.
-![image](https://blog.kakaocdn.net/dna/KF5sw/btsHF9BLIXm/AAAAAAAAAAAAAAAAAAAAADyh-dSL1d4IJwmxKusQoaFQ0HGAQqy4cjiO9JobmH0O/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=R5hipHBEQbRXGNtJn0huArPZDNQ%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_13.png)
 
 4. 업로드 성공
-![image](https://blog.kakaocdn.net/dna/Lq4WR/btsHIaMl1iz/AAAAAAAAAAAAAAAAAAAAAA-7zZhiFTD4rA3nD5EB4NLjLxD34x07p8jljeXaNcUI/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=L8%2Fo%2BSbroJkyiCxuQWS56VWaaF8%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_14.png)

@@ -32,17 +32,17 @@ SQL 구문이 아닌 스크립트를 악용하는 기법으로, 로그인 한 �
 ## 3) 실습
 
 1. XSS 팝업창 출력되는지 테스트
-![image](https://blog.kakaocdn.net/dna/vR1QK/btsHCyBO6cp/AAAAAAAAAAAAAAAAAAAAAI6mFKDcJPApKYbVzXG5HwDwE5Ur8iBo34CKFfevN7aF/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=GEm8Zssd%2FPIwx8GBtyJh62cwtSo%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_01.png)
 
 2. XSS 팝업 출력 -> 취약점이 있다고 판단
-![image](https://blog.kakaocdn.net/dna/4Rh72/btsHCU5D1Q0/AAAAAAAAAAAAAAAAAAAAAOPzbMw27L2TlZKpjyJ3l34VF11JatOC12nwZDKx6OgH/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=FfmaDif%2BYAhukQC9d3HTZnRGM8A%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_02.png)
 
 3. 취약점 진단 문구를 작성하고 게시물 등록
-![image](https://blog.kakaocdn.net/dna/cRalFF/btsHEmNImcI/AAAAAAAAAAAAAAAAAAAAABELM-mJZizf8CualZDufeBA-97ch6DzSp8LiYkzHbpF/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=wgdNLYpwbnN1nK2fdL%2FyBHqua%2BE%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_03.png)
 
 4. 해당 게시물을 열면 취약점이 파악된대로 팝업 출력
-![image](https://blog.kakaocdn.net/dna/buM3NB/btsHEUJOrR9/AAAAAAAAAAAAAAAAAAAAAEnbYjkLDKedOxMdBW1hoa8QsXq91afj1GswrRRBksbc/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=SMyGmFGrQdXunbLH6D5wuvE8U%2Bg%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_04.png)
 
 5. 쿠키 값도 그대로 출력됨
 \-> 둘 다 취약점이 존재
-![image](https://blog.kakaocdn.net/dna/dR68F1/btsHEkWFJsj/AAAAAAAAAAAAAAAAAAAAAE6_TXLX7SAV_MmVKrAOlLftZ2x0yooyd2owEbi5yz08/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=8bHFxySaShC%2FMahz2m%2FQP8ZnAHg%3D)
+![image](/assets/img/posts/WebSecurity/WebSecurity05_05.png)
