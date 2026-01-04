@@ -45,13 +45,13 @@ tags: [security, network, nmap, nslookup, ping, tcp 하프오픈 스캔, tracero
 실제 핑이 나가지는 않지만 해당 웹 사이트에서 사용하는 주소 확인 가능<br>
 (DB서버의 주소는 별도 행위가 필요)<br>
 이외 대표적으로 nmap이라는 도구를 이용해 스캐닝 작업 가능!
-![image](https://blog.kakaocdn.net/dna/daXvUK/btsHy0EX7FM/AAAAAAAAAAAAAAAAAAAAAA7b4-QVrt9QSLlTCVot11PzAYu7NolMtS2arGpZ-JGj/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=S1iSh77r%2BySunUoL9Nx7ldsfiwU%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity02_01.png)
 
 #### 3) DNS 질의
 
 **nslookup**
 nslookup 명령으로 dns 질의(역질의도 가능)
-![image](https://blog.kakaocdn.net/dna/k9lbR/btsHA1BVopF/AAAAAAAAAAAAAAAAAAAAAHMsRh-L-5GikTSuTptocKf083sjQnfeDG_W_kIXx0QG/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=VDzQiwUz1VBZJikopx38GxKg%2FbQ%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity02_02.png)
 
 **dig(Domain Information Groper)**
 -   nslookup에 대비 유연성 및 편의성, 출력의 명료성을 가진 DNS 쿼리 도구
@@ -65,7 +65,7 @@ nslookup 명령으로 dns 질의(역질의도 가능)
 -   주 DNS 서버와 보조 DNS 서버  
     \-> 보다 다양한 정보 획득 가능
 - whois에서 kisec.com 질의 했을 때 결과
-![image](https://blog.kakaocdn.net/dna/bgr7rn/btsHAOJzuxJ/AAAAAAAAAAAAAAAAAAAAABStZBFpVUt1-p-K0OWL-5hDeOvIr2p7wa7hGQkmgt2i/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=0xSnvRRnvEHGNOZaZdfZNDFKErM%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity02_03.png)
 
 **intodsn.com**
 
@@ -82,7 +82,7 @@ nslookup 명령으로 dns 질의(역질의도 가능)
 -   Traceroute(Unix/Linux)  
     \-> traceroute 자체는 7계층, 명령어들이 사용하는 프로토콜은 ICMP 3계층
 - Windows 11에서 tracert 명령으로 8.8.8.8 질의 결과
-![image](https://blog.kakaocdn.net/dna/IDSJ6/btsHy6dQfMy/AAAAAAAAAAAAAAAAAAAAAC5ctRPCvCKBeH5uI51FWc-lhncv96Fp9CeMy9j5GIA7/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=T568LMJXsqKqR48VdHpEscshla0%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity02_04.png)
 \-> 8.8.8.8로 가는 경로 추적(경로 중 있는 라우터들의 주소 출력, 최대 30개의 라우터를 거쳐 갈 수 있음)
 
 **VisualRoute**

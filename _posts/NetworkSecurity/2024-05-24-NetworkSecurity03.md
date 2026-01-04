@@ -33,14 +33,14 @@ tags: [security, network, nmap, nslookup, ping, tcp 하프오픈 스캔, tracero
 192.168.0.18 : CentOS 7.6<br>
 192.168.0.254 : VMware 예약<br>
 192.168.0.15 : Kali<br>
-![image](https://blog.kakaocdn.net/dna/ERjCN/btsHy9BJpdC/AAAAAAAAAAAAAAAAAAAAAGEi6qGLeG9gT-TypejPT5NWARyTVbHWvPMQD_ynnYXB/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=zbkJ1McRDaG6p44RgWXG%2FrNSjz0%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity03_01.png)
 
 
 2. wireshark 실행해서 -sP 옵션 자세히 확인 해보기
-![image](https://blog.kakaocdn.net/dna/4qOEf/btsHz4GpVKT/AAAAAAAAAAAAAAAAAAAAAF1qkYoG52B6s5dtehGD91tXM1YIuInT4K0oT8nb806K/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=e665gGQ6%2F5QlZVj%2BSarcZ4Gxfd0%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity03_02.png)
 
 3. -sP 옵션은 Ping 통신을 이용해 스캔하는 방식인데, ARP 패킷으로 스캔함(어..?)
-![image](https://blog.kakaocdn.net/dna/sy50A/btsHztz0F9m/AAAAAAAAAAAAAAAAAAAAAC5xAXFYZrK_WyAW2X4KmrzwrSsgp8HAQYlg99jYFUaW/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=Ln0oV8%2BfGpc9hKX9YX%2FzxaH9FvA%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity03_03.png)
 
 > **ICMP Echo Request**  
 >  - 대부분의 경우, 특히 대상이 라우터나 인터넷 상의 원격 호스트일 때, ICMP Echo Request 패킷을 보냄  
@@ -62,10 +62,10 @@ tags: [security, network, nmap, nslookup, ping, tcp 하프오픈 스캔, tracero
 
 1. CentOS 6.9(192.168.0.17)을 대상으로 스캔한 것이 아닌 **통계적으로 가장 많이 사용**하는 포트 5개 스캔
 (ftp, telnet, http, https는 해당 시스템에 설치가 되어 있지 않아서 closed)
-![image](https://blog.kakaocdn.net/dna/WnStm/btsHzuex2OP/AAAAAAAAAAAAAAAAAAAAAAtO0maHRgfvTEK9cv831P3s9TKiDzVhgDMLskIA1bPr/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=Owe%2FyZQwlfIwcTiBLOng3Oy1yCY%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity03_04.png)
 
 2. 상위 10개의 프로토콜도 스캔 가능(TCP 통신으로 스캔함)
-![image](https://blog.kakaocdn.net/dna/bhZSiz/btsHAheuBSh/AAAAAAAAAAAAAAAAAAAAABiFJjDtdOH7f2LX0giUexlERduBtd6GkieED8IKJ2NZ/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=Ts07SjZfaSb3KwEDGom4DfYi49M%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity03_05.png)
 
 ## 3\. Script를 이용한 스캐닝
 
@@ -75,18 +75,18 @@ tags: [security, network, nmap, nslookup, ping, tcp 하프오픈 스캔, tracero
 
 
 스크립트의 위치는 /usr/share/nmap/scripts에 있음( find / -name "scripts" )
-![image](https://blog.kakaocdn.net/dna/cT9Vl9/btsHz1CY1jO/AAAAAAAAAAAAAAAAAAAAANwabCX1dpKOJo_OLXwhCiOeMwzu8Zn4OCEQN_DEhPUJ/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=qMF9dubeao2%2BnVyA6UNh56b2Nb8%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity03_06.png)
 
 ## 4\. 보내고 받은 모든 패킷 표시하며 스캐닝 수행
 
 -   옵션 : --packet-trace
 
 1. `--packet-trace` 명령 안했을 때
-![image](https://blog.kakaocdn.net/dna/c9XkJM/btsHzH5OKPT/AAAAAAAAAAAAAAAAAAAAAKW16pYRg1VpBXVGnSwo4LtT8xcupwhYS6Nfe9BwX5Ch/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=6GkQ%2BzF17pno9dy2zB%2F7DqggrX4%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity03_07.png)
 
 2. `--packet-trace` 명령 했을 때
-![image](https://blog.kakaocdn.net/dna/c5zZnw/btsHA3zNH0G/AAAAAAAAAAAAAAAAAAAAABh39u6FFe42-55Vi6Pf43t4JWQoiGMxNj4Ne-Lu5Y5v/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=DX17B3nBa47L0svXgSh6iOIgBKI%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity03_08.png)
 
 3. ssh말고 다른 포트가 열린 것도 확인해 보고 싶으면 CentOS 7.6 웹 서버 설치(yum install -y httpd) 후 똑같이 진행 해보기
 (iptables -L 확인 후 iptables -F / iptables -X 로 iptable 날린 후 진행)
-![image](https://blog.kakaocdn.net/dna/bk1E3v/btsHApDxNu7/AAAAAAAAAAAAAAAAAAAAAEijGsN3j2qFsm8qa-n1EEB4RUPZCgtMQgYtJjTLioLF/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=2SBjBnX1OEFxRN%2Bc8wa0I8kQZVQ%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity03_09.png)

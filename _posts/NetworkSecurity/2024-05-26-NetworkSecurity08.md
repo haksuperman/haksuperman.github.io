@@ -43,7 +43,7 @@ ARP 스푸핑은 근거리 네트워크에서 사용되는 대표적인 중간�
     ping 192.168.0.18 -c 3
     ```
 
-    ![image](https://blog.kakaocdn.net/dna/cI36lL/btsHCmAtIzf/AAAAAAAAAAAAAAAAAAAAAKzaLdHPbnf1kGkXBNBt4xHp48oz5Fz1pJ3sdPz6aUHt/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=EfFcR8InL%2FLNN66LDaC3aSVG2Qc%3D)
+    ![image](/assets/img/posts/NetworkSecurity/NetworkSecurity08_01.png)
 
 
 2. CentOS 7.6에서 Kail, CentOS 6.9로 핑을 보내 정상적인 ARP 테이블 구성
@@ -53,7 +53,7 @@ ARP 스푸핑은 근거리 네트워크에서 사용되는 대표적인 중간�
     ping 192.168.0.17 -c 3
     ```
 
-    ![image](https://blog.kakaocdn.net/dna/bFlU3y/btsHCukI48s/AAAAAAAAAAAAAAAAAAAAAA49eUnSCAsHAaqObOxXHNVCBflKKQ3fjrsP_3j8rdBF/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=Uc5xf8REh2sY5gGMjV84Q3tkFpc%3D)
+    ![image](/assets/img/posts/NetworkSecurity/NetworkSecurity08_02.png)
 
 #### 2) 정상적인 ARP 테이블 확인
 1. CentOS 6.9 ARP 테이블 확인
@@ -62,7 +62,7 @@ ARP 스푸핑은 근거리 네트워크에서 사용되는 대표적인 중간�
     ```bash
     arp -a
     ```
-    ![image](https://blog.kakaocdn.net/dna/bxYhRO/btsHBWCcphz/AAAAAAAAAAAAAAAAAAAAAK96BYCB__1z0PzU2MomiTnF1MJ2MQQoyxPeQFRDsW0s/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=hI%2FnokgjCI%2FwJ86CSP9EqNKO108%3D)
+    ![image](/assets/img/posts/NetworkSecurity/NetworkSecurity08_03.png)
 
 
 2. CentOS 7.6 ARP 테이블 확인
@@ -72,13 +72,13 @@ ARP 스푸핑은 근거리 네트워크에서 사용되는 대표적인 중간�
     apr -a
     ```
 
-    ![image](https://blog.kakaocdn.net/dna/ykGl7/btsHB9OSJN7/AAAAAAAAAAAAAAAAAAAAAH0TuCd7nuTNui7ZXlf0q01xesxNhQKclKsA9f4-EKe6/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=nmK3Rdo9aEoUFFMu%2FJ42OnWN8IU%3D)
+    ![image](/assets/img/posts/NetworkSecurity/NetworkSecurity08_04.png)
 
 #### 3) Kail에서 ARP Spoofing 공격
 
 
 공격 대상의 서버를 두 곳 모두 진행(CentOS 6.9, CentOS 7.6 모두 양 방향으로 패킷을 보낼 수 있기 때문)
-![image](https://blog.kakaocdn.net/dna/oOT1G/btsHCokM5hQ/AAAAAAAAAAAAAAAAAAAAAFXwXKtiWSG1SAH4bqBiQ57pAEasc75R08MAQgGnh5iK/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=n0CmEaN9ULHVsRDoQa7jUw%2FuB5E%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity08_05.png)
 
 (1) eth0 네트워크 인터페이스를 사용해(-i 옵션), 192.168.0.17의 IP를 가진 시스템을 공격(-t 옵션), 자신을 192.168.0.18 IP로 속임<br>
 \-> 192.168.0.17(CentOS 6.9)이 192.168.0.18(CentOS 7.6)로 패킷을 보내면 공격자(Kali)로 보내도록 ARP 테이블을 공격
@@ -97,12 +97,12 @@ arpspoof -i eth0 -t 192.168.0.18 192.168.0.17
 #### 4) 기존 패킷 도착지로 전달(fragrouter -B1)
 
 1. 공격지(Kali)로 온 패킷을 원래 도착지로 전달(전달하는 느낌)
-![image](https://blog.kakaocdn.net/dna/cBcro2/btsHCnMVcwy/AAAAAAAAAAAAAAAAAAAAADeIUJq3bK-7Lk2fP8x21yRItlMl0ljOpGzzvxfAgRXp/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=hTkHZBv98lAJCebWOeSGVG6HmLI%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity08_06.png)
 
 2. Kali에서 수집한 ICMP 패킷 확인<br>
 fragrouter -B1 터미널 창에서 총 3개의 패킷을 받고 전달한 것 확인 가능<br>
 (와이어샤크에서 자세한 패킷 확인 가능)
-![image](https://blog.kakaocdn.net/dna/bAhAr3/btsHDdphtkz/AAAAAAAAAAAAAAAAAAAAACh39wMZHwmY9rTwr7fASQr7aNgCEjNCLEsxZcCLNnpd/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=Zv0ILwvgnW4FMGl%2Fp%2BGgtcWKueA%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity08_07.png)
 
 > flagrouter -B1 명령을 수행하지 않고 공격자(Kali)에서 다 먹어버리면 ARP Poisoning 공격이다!  
 > (포워딩까지 하면 ARP Spoofing)
@@ -111,11 +111,11 @@ fragrouter -B1 터미널 창에서 총 3개의 패킷을 받고 전달한 것 �
 #### 5) 피해 서버, 클라이언트(CentOS 6.9, CentOS 7.6) ARP 테이블 확인
 1. CentOS 6.9 ARP 테이블 확인
 CentOS 7.6(192.168.0.18)의 MAC 주소가 Kali(192.168.0.15)의 MAC 주소인 **00:0c:29:fe:e3:96**으로 바뀜
-![image](https://blog.kakaocdn.net/dna/bPXLYd/btsHBM7J4pD/AAAAAAAAAAAAAAAAAAAAAC2gwoMM2Mw26lCJsmkkc_5dZ-zAf4-Kv3kbjzbkeVqA/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=NlnkIzqKVuWRoQmgYY3Kbm%2BYQmI%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity08_08.png)
 
 2. CentOS 7.6 ARP 테이블 확인
 CentOS 6.9(192.168.0.17)의 MAC 주소가 Kali(192.168.0.15)의 MAC 주소인 **00:0c:29:fe:e3:96**으로 바뀜
-![image](https://blog.kakaocdn.net/dna/Kktyj/btsHCuyj3Dz/AAAAAAAAAAAAAAAAAAAAAFV98d9j_zYsnmXAvVF-p4TWqk6qBQDxCrggWh13tsAQ/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1767193199&allow_ip=&allow_referer=&signature=st7THWwhb2x0ovMlocC3fYKQKE0%3D)
+![image](/assets/img/posts/NetworkSecurity/NetworkSecurity08_09.png)
 
 ## 5\. ARP Spoofing 대응방안(시스템 내)
 
