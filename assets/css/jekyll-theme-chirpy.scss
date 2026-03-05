@@ -11,45 +11,20 @@
 /* append your custom style below */
 
 /* -----------------------------
-   Sleek TOC - Light/Dark Mode Auto Support
+   Sleek Dark TOC - 컴팩트 버전 (여백 축소 & 스크롤 최적화)
 ------------------------------*/
 
-/* 1. 변수 설정: 라이트/다크 모드에 따른 색상 스위칭 */
-:root {
-  /* ☀️ 라이트 모드 기본 색상 */
-  --toc-text: #6b7280;         /* 기본 글씨: 눈이 편안한 짙은 회색 */
-  --toc-hover: #111827;        /* 호버 글씨: 거의 검은색에 가까운 진회색 */
-  --toc-active-text: #0070f3;  /* 활성화 글씨: 쨍하고 명확한 블루 (Vercel 스타일) */
-  --toc-active-bg: rgba(0, 112, 243, 0.08); /* 활성화 배경: 아주 연한 파란색 */
-}
-
-/* 🌙 다크 모드 속성 덮어쓰기 (토글 버튼으로 다크모드 선택 시) */
-[data-mode="dark"] {
-  --toc-text: #8b949e;         /* 기존 다크모드 회색 */
-  --toc-hover: #c9d1d9;        /* 기존 다크모드 밝은 회색 */
-  --toc-active-text: #00e5ff;  /* 기존 네온 시안 */
-  --toc-active-bg: rgba(0, 229, 255, 0.1);
-}
-
-/* 🌙 OS 시스템 설정이 다크모드일 때 (사용자가 라이트모드로 강제하지 않은 경우) */
-@media (prefers-color-scheme: dark) {
-  html:not([data-mode="light"]) {
-    --toc-text: #8b949e;
-    --toc-hover: #c9d1d9;
-    --toc-active-text: #00e5ff;
-    --toc-active-bg: rgba(0, 229, 255, 0.1);
-  }
-}
-
-/* -----------------------------
-   2. TOC 레이아웃 및 스타일 적용
-------------------------------*/
-
-/* TOC 하위항목 항상 펼치기 (필수 유지) */
+/* TOC 하위항목 항상 펼치기 */
 #toc-wrapper .is-collapsed {
   max-height: none !important;
   overflow: visible !important;
 }
+
+/* 💡 1. 가지치기: 3단계(H4) 이하의 너무 깊은 목차는 아예 숨겨서 길이 대폭 단축 */
+#toc-wrapper ul ul ul {
+  display: none !important;
+}
+
 
 /* TOC 전체 리스트 초기화 */
 #toc-wrapper ul {
@@ -58,43 +33,66 @@
   margin-left: 0;
 }
 
+/* 💡 2. 여백 다이어트: 항목 간의 상하 간격을 6px -> 2px로 축소하여 밀도를 높임 */
 #toc-wrapper li {
-  margin: 6px 0;
+  margin: 2px 0; 
 }
 
 /* 기본 링크 스타일 */
 #toc-wrapper a {
   display: block;
   font-size: 0.85rem;
-  color: var(--toc-text); /* 🎨 환경에 맞춰 자동 변경 */
+  color: #8b949e; 
   text-decoration: none;
-  padding: 6px 12px;
+  /* 💡 2. 여백 다이어트: 링크 내부 패딩을 6px 12px -> 4px 10px로 축소 */
+  padding: 4px 10px; 
   transition: all 0.2s ease-in-out; 
 }
 
-/* Hover (마우스 오버) 효과 */
+/* Hover 효과 */
 #toc-wrapper a:hover {
-  color: var(--toc-hover); /* 🎨 환경에 맞춰 자동 변경 */
+  color: #c9d1d9;
   transform: translateX(4px); 
 }
 
-/* Active (현재 위치) 강조 */
+/* Active 강조 */
 #toc-wrapper .active > a {
-  color: var(--toc-active-text); /* 🎨 환경에 맞춰 자동 변경 */
+  color: #00e5ff; 
   font-weight: 600;
-  /* 배경 그라데이션 적용 (우측으로 갈수록 투명해짐) */
-  background: linear-gradient(90deg, var(--toc-active-bg) 0%, transparent 100%);
+  background: linear-gradient(90deg, rgba(0, 229, 255, 0.1) 0%, rgba(0, 229, 255, 0) 100%); 
   transform: translateX(4px); 
   border-radius: 4px; 
 }
 
-/* 하위 계층(Depth 2, 3) 들여쓰기 */
+/* 하위 계층(Depth 2) 들여쓰기 */
 #toc-wrapper ul ul {
   padding-left: 12px;
   margin-left: 0;
 }
 
-/* 하위 계층 폰트 크기 미세 조정 */
+/* 하위 계층 폰트 크기 */
 #toc-wrapper ul ul a {
   font-size: 0.8rem;
+}
+
+/* -----------------------------
+   💡 3. 올바른 스크롤 영역 지정 (본문 스크롤과 동기화)
+------------------------------*/
+/* 스크롤바는 '껍데기(#toc-wrapper)'가 아닌 '내용물(#toc)'에 달아야 자동 스크롤이 작동합니다. */
+#toc {
+  max-height: calc(100vh - 140px); /* 화면 높이에 맞춰 스크롤 영역이 유동적으로 변함 */
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* 미니멀 커스텀 스크롤바 */
+#toc::-webkit-scrollbar {
+  width: 4px;
+}
+#toc::-webkit-scrollbar-track {
+  background: transparent;
+}
+#toc::-webkit-scrollbar-thumb {
+  background: #4b5563; 
+  border-radius: 4px;
 }
