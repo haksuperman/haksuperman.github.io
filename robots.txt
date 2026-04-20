@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://haksuperman.github.io/sitemap.xml
