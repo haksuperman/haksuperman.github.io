@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /
+
+# Staging site: switch to Allow at the production cutover.

@@ -1,0 +1,82 @@
+baseURL: "https://haksuperman.github.io/"
+title: 뭉게뭉게 학수의 클라우드 세상
+copyright: "© 2026 Haksu."
+languageCode: ko-kr
+defaultContentLanguage: ko
+enableRobotsTXT: true
+enableGitInfo: true
+titleCaseStyle: none
+
+frontmatter:
+  lastmod: [lastmod, ":git", date, publishDate]
+
+outputs:
+  home: [HTML, RSS]
+  section: [HTML, RSS]
+
+module:
+  imports:
+    - path: github.com/imfing/hextra
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    noClasses: false
+    lineNos: false
+
+enableInlineShortcodes: true
+
+menu:
+  main:
+    - name: Docs
+      pageRef: /docs
+      weight: 1
+    - name: Series
+      pageRef: /study
+      weight: 2
+    - name: About
+      pageRef: /about
+      weight: 3
+    - name: Search
+      weight: 4
+      params:
+        type: search
+    - name: GitHub
+      weight: 5
+      url: "https://github.com/haksuperman/haksuperman.github.io"
+      params:
+        icon: github
+
+params:
+  description: Cloud, Network, Security and Infrastructure Notes
+  navbar:
+    displayTitle: true
+    displayLogo: true
+    logo:
+      path: images/haksuperman.jpg
+      dark: images/haksuperman.jpg
+      link: /
+      width: 32
+      height: 32
+  footer:
+    displayCopyright: true
+    displayPoweredBy: true
+  editURL:
+    enable: true
+    base: "https://github.com/haksuperman/haksuperman.github.io/edit/main/content"
+  theme:
+    default: dark
+    displayToggle: true
+  search:
+    enable: true
+    type: flexsearch
+    flexsearch:
+      index: content
+  page:
+    width: wide
+  sidebar:
+    autoCollapse: true
+  displayUpdatedDate: true
+  dateFormat: "2006년 1월 2일"

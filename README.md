@@ -1,84 +1,73 @@
-<!-- markdownlint-disable-next-line -->
-<div align="center">
+# 뭉게뭉게 학수의 클라우드 세상
 
-  <!-- markdownlint-disable-next-line -->
-  # Chirpy Jekyll Theme
+`haksuperman.github.io`의 Hugo/Hextra 기반 기술 블로그 저장소입니다.
 
-  A minimal, responsive, and feature-rich Jekyll theme for technical writing.
+## 원칙
 
-  [![CI](https://img.shields.io/github/actions/workflow/status/cotes2020/jekyll-theme-chirpy/ci.yml?logo=github)][ci]&nbsp;
-  [![Codacy Badge](https://img.shields.io/codacy/grade/4e556876a3c54d5e8f2d2857c4f43894?logo=codacy)][codacy]&nbsp;
-  [![GitHub license](https://img.shields.io/github/license/cotes2020/jekyll-theme-chirpy?color=goldenrod)][license]&nbsp;
-  [![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy?&logo=RubyGems&logoColor=ghostwhite&label=gem&color=orange)][gem]&nbsp;
-  [![Open in Dev Containers](https://img.shields.io/badge/Dev_Containers-Open-deepskyblue?logo=linuxcontainers)][open-container]
+- 기존 공식 사이트는 최종 승인 전까지 변경하지 않습니다.
+- 문서는 `Docs`에서 제목순으로 탐색합니다.
+- 강의와 책을 따라 학습한 글은 `Series`에서 목차 순서로 탐색합니다.
+- 독립적인 구축 및 테스트 절차는 `Docs / Guide & Lab`에 둡니다.
+- 기존 `/posts/.../` 주소는 Hugo alias로 보존합니다.
+- 기술 스택은 상위 카테고리 대신 태그로 유지합니다.
 
-  [**Live Demo** →][demo]
+## 로컬 확인
 
-  [![Devices Mockup](https://chirpy-img.netlify.app/commons/devices-mockup.png)][demo]
+Hugo Extended와 Go를 설치한 뒤 다음 명령을 실행합니다.
 
-</div>
+```bash
+hugo server --buildDrafts --navigateToChanged
+```
 
-## Features
+새 게시물 생성, 이미지 배치, 초안 검수와 수동 배포 절차는 [게시물 작성 가이드](AUTHORING.md)를 따릅니다.
 
-- Dark Theme
-- Localized UI language
-- Pinned Posts on Home Page
-- Hierarchical Categories
-- Trending Tags
-- Table of Contents
-- Last Modified Date
-- Syntax Highlighting
-- Mathematical Expressions
-- Mermaid Diagrams & Flowcharts
-- Dark Mode Images
-- Embed Media
-- Comment Systems
-- Built-in Search
-- Atom Feeds
-- PWA
-- Web Analytics
-- SEO & Performance Optimization
+Docs 문서는 다음처럼 생성합니다.
 
-## Documentation
+```bash
+hugo new content --kind docs docs/guide-lab/<slug>/index.md
+```
 
-To learn how to use, develop, and upgrade the project, please refer to the [Wiki][wiki].
+Series 문서는 다음처럼 생성합니다.
 
-## Contributing
+```bash
+hugo new content --kind series study/<series-name>/<sequence-slug>/index.md
+```
 
-Contributions (_pull requests_, _issues_, and _discussions_) are what make the open-source community such an amazing place
-to learn, inspire, and create. Any contributions you make are greatly appreciated.
-For details, see the "[Contributing Guidelines][contribute-guide]".
+## 마이그레이션
 
-## Credits
+전체 132개 게시물의 분류·원문 해시·기존 URL 계획표를 다시 생성합니다.
 
-### Contributors
+```bash
+python3 scripts/build_migration_plan.py \
+  --source /path/to/haksuperman.github.io/site
+```
 
-Thanks to [all the contributors][contributors] involved in the development of the project!
+1차 Docs 이관 명세를 만든 뒤 게시물을 재생성합니다. 원본 해시가 계획 시점과 다르면 이관을 중단합니다.
 
-[![all-contributors](https://contrib.rocks/image?repo=cotes2020/jekyll-theme-chirpy&columns=16)][contributors]
-<sub> — Made with [contrib.rocks](https://contrib.rocks)</sub>
+```bash
+python3 scripts/build_ready_docs_manifest.py
 
-### Third-Party Assets
+python3 scripts/migrate_posts.py \
+  --source /path/to/haksuperman.github.io/site \
+  --target . \
+  --manifest migration/ready-docs.json
+```
 
-This project is built on the [Jekyll][jekyllrb] ecosystem and some [great libraries][lib], and is developed using [VS Code][vscode] as well as tools provided by [JetBrains][jetbrains] under a non-commercial open-source software license.
+변환 과정에서는 기존 `/posts/.../` 주소를 alias로 보존하고, 이미지를 각 Hugo page bundle로 복사하며, 공개되어 있던 VPN Pre-Shared Key 값은 자리표시자로 치환합니다.
 
-The avatar and favicon for the project's website are from [ClipartMAX][clipartmax].
+확정된 Series 묶음은 별도의 명세로 재생성합니다. 정확한 강의·책 출처가 확인되지 않은 문서는 front matter의 `sourceStatus: needs-review`로 추적합니다.
 
-## License
+```bash
+python3 scripts/build_study_manifest.py
 
-This project is published under [MIT License][license].
+python3 scripts/migrate_posts.py \
+  --source /path/to/haksuperman.github.io/site \
+  --target . \
+  --manifest migration/study-posts.json
+```
 
-[gem]: https://rubygems.org/gems/jekyll-theme-chirpy
-[ci]: https://github.com/cotes2020/jekyll-theme-chirpy/actions/workflows/ci.yml?query=event%3Apush+branch%3Amaster
-[codacy]: https://app.codacy.com/gh/cotes2020/jekyll-theme-chirpy/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade
-[license]: https://github.com/cotes2020/jekyll-theme-chirpy/blob/master/LICENSE
-[open-container]: https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/cotes2020/jekyll-theme-chirpy
-[jekyllrb]: https://jekyllrb.com/
-[clipartmax]: https://www.clipartmax.com/middle/m2i8b1m2K9Z5m2K9_ant-clipart-childrens-ant-cute/
-[demo]: https://cotes2020.github.io/chirpy-demo/
-[wiki]: https://github.com/cotes2020/jekyll-theme-chirpy/wiki
-[contribute-guide]: https://github.com/cotes2020/jekyll-theme-chirpy/blob/master/docs/CONTRIBUTING.md
-[contributors]: https://github.com/cotes2020/jekyll-theme-chirpy/graphs/contributors
-[lib]: https://github.com/cotes2020/chirpy-static-assets
-[vscode]: https://code.visualstudio.com/
-[jetbrains]: https://www.jetbrains.com/?from=jekyll-theme-chirpy
+이관 후에는 Hugo 전체 빌드를 실행한 다음 다음 검증을 통과해야 합니다.
+
+```bash
+python3 scripts/validate_build.py
+```

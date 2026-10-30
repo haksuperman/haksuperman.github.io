@@ -1,0 +1,328 @@
+[
+  {
+    "source": "_posts/AWS/2024-03-01-AWS01.md",
+    "source_sha256": "475a34e7261c952ba0eefeb44ba88be7bfa1da58ac22411f1fcf55d70d30d116",
+    "legacy_url": "/posts/aws01/",
+    "destination": "content/docs/guide-lab/aws-saa-c03-pass-review/index.md",
+    "title": "AWS SAA-C03 일주일 합격 후기",
+    "linkTitle": "AWS SAA-C03 합격 후기",
+    "section": "Guide & Lab"
+  },
+  {
+    "source": "_posts/AWS/2025-07-30-AWS03.md",
+    "source_sha256": "f405d0f30200079a5cd71c0f559fa861b82138d52fa21da1c9a4edf294df1b59",
+    "legacy_url": "/posts/aws03/",
+    "destination": "content/docs/guide-lab/aws-scs-c02-pass-review/index.md",
+    "title": "AWS SCS-C02 시험을 두 번 미룬 직장인의 합격 후기",
+    "linkTitle": "AWS SCS-C02 합격 후기",
+    "section": "Guide & Lab"
+  },
+  {
+    "source": "_posts/Kubernetes/2024-04-01-Kubernetes05.md",
+    "source_sha256": "c58d72033104ff881775d6809f2252ea5ab6bd32dd774e5c97621ee6a18150cc",
+    "legacy_url": "/posts/kubernetes05/",
+    "destination": "content/docs/command-tool/windows-kubectl/index.md",
+    "title": "Windows에 kubectl을 설치해 원격 Kubernetes 클러스터 관리하기",
+    "linkTitle": "Windows kubectl",
+    "section": "Command & Tool"
+  },
+  {
+    "source": "_posts/Linux/2026-01-21-Linux06.md",
+    "source_sha256": "b587b8e8a52da67137d0c4fd5688d12c195b53dabfd92261c6c5ea6925960ba6",
+    "legacy_url": "/posts/linux06/",
+    "destination": "content/docs/command-tool/linux-commands/index.md",
+    "title": "엔지니어를 위한 Linux 명령어",
+    "linkTitle": "Linux 명령어",
+    "section": "Command & Tool"
+  },
+  {
+    "source": "_posts/MultiCloud/2025-10-25-MultiCloud01.md",
+    "source_sha256": "26ef7c63dea88a973d423223cda9b36ca07628487bc456d5c5f9539b040f0843",
+    "legacy_url": "/posts/multicloud01/",
+    "destination": "content/docs/guide-lab/aws-oci-bgp-vpn/01-overview/index.md",
+    "title": "AWS–OCI BGP VPN 이중화 개요",
+    "linkTitle": "01. 개요",
+    "section": "Guide & Lab",
+    "weight": 10
+  },
+  {
+    "source": "_posts/MultiCloud/2025-10-25-MultiCloud02.md",
+    "source_sha256": "5711e59de9424a743580a807c76ace99a09dc8c447df7803ab2eb88b7a5094fd",
+    "legacy_url": "/posts/multicloud02/",
+    "destination": "content/docs/guide-lab/aws-oci-bgp-vpn/02-vpn1-aws-temporary-cgw/index.md",
+    "title": "VPN 1 구성: AWS 임시 Customer Gateway",
+    "linkTitle": "02. VPN 1 — AWS 임시 CGW",
+    "section": "Guide & Lab",
+    "weight": 20
+  },
+  {
+    "source": "_posts/MultiCloud/2025-10-25-MultiCloud03.md",
+    "source_sha256": "e7117e084a9c5c26adf3d127b9f155ff47a7ec013d6363edceabf215928c8fef",
+    "legacy_url": "/posts/multicloud03/",
+    "destination": "content/docs/guide-lab/aws-oci-bgp-vpn/03-vpn1-oci/index.md",
+    "title": "VPN 1 구성: OCI CPE와 VPN",
+    "linkTitle": "03. VPN 1 — OCI",
+    "section": "Guide & Lab",
+    "weight": 30
+  },
+  {
+    "source": "_posts/MultiCloud/2025-10-25-MultiCloud04.md",
+    "source_sha256": "67f7a3c01b71c07bf67418fb99435a5eebcca1c56707ff657e00bd93dba23f19",
+    "legacy_url": "/posts/multicloud04/",
+    "destination": "content/docs/guide-lab/aws-oci-bgp-vpn/04-vpn1-aws-final-cgw/index.md",
+    "title": "VPN 1 구성: AWS Customer Gateway와 PSK",
+    "linkTitle": "04. VPN 1 — AWS CGW와 PSK",
+    "section": "Guide & Lab",
+    "weight": 40
+  },
+  {
+    "source": "_posts/MultiCloud/2025-10-25-MultiCloud05.md",
+    "source_sha256": "138e41268ce338eb8ac810edbfaf2f5b6e688cd856768aa5634e918ab638106f",
+    "legacy_url": "/posts/multicloud05/",
+    "destination": "content/docs/guide-lab/aws-oci-bgp-vpn/05-vpn1-validation/index.md",
+    "title": "VPN 1 연결 결과 확인",
+    "linkTitle": "05. VPN 1 결과 확인",
+    "section": "Guide & Lab",
+    "weight": 50
+  },
+  {
+    "source": "_posts/MultiCloud/2025-10-25-MultiCloud06.md",
+    "source_sha256": "6306930815cdf1bd178849bdfabc180d74823da0fde120d786a2c94a1c7829d0",
+    "legacy_url": "/posts/multicloud06/",
+    "destination": "content/docs/guide-lab/aws-oci-bgp-vpn/06-vpn2-aws-temporary-cgw/index.md",
+    "title": "VPN 2 구성: AWS Transit Gateway와 임시 Customer Gateway",
+    "linkTitle": "06. VPN 2 — AWS 임시 CGW",
+    "section": "Guide & Lab",
+    "weight": 60
+  },
+  {
+    "source": "_posts/MultiCloud/2025-10-25-MultiCloud07.md",
+    "source_sha256": "071d811412fea1311a35cb2d82e44230a34625e255dd0c90b14db266ac29212d",
+    "legacy_url": "/posts/multicloud07/",
+    "destination": "content/docs/guide-lab/aws-oci-bgp-vpn/07-vpn2-oci/index.md",
+    "title": "VPN 2 구성: OCI CPE와 VPN",
+    "linkTitle": "07. VPN 2 — OCI",
+    "section": "Guide & Lab",
+    "weight": 70
+  },
+  {
+    "source": "_posts/MultiCloud/2025-10-25-MultiCloud08.md",
+    "source_sha256": "55824b50a4f4a0e88f07cca3ddd02826299b04c777e48d6f01b9f112cf81c206",
+    "legacy_url": "/posts/multicloud08/",
+    "destination": "content/docs/guide-lab/aws-oci-bgp-vpn/08-vpn2-aws-final-cgw/index.md",
+    "title": "VPN 2 구성: AWS Customer Gateway와 PSK",
+    "linkTitle": "08. VPN 2 — AWS CGW와 PSK",
+    "section": "Guide & Lab",
+    "weight": 80
+  },
+  {
+    "source": "_posts/MultiCloud/2025-10-25-MultiCloud09.md",
+    "source_sha256": "a47677742af7ebc4988d5e5fb1dc071a1e0ce21b2f5a6df79c03e6eb34b653ce",
+    "legacy_url": "/posts/multicloud09/",
+    "destination": "content/docs/guide-lab/aws-oci-bgp-vpn/09-vpn2-validation/index.md",
+    "title": "VPN 2 연결 결과 확인",
+    "linkTitle": "09. VPN 2 결과 확인",
+    "section": "Guide & Lab",
+    "weight": 90
+  },
+  {
+    "source": "_posts/MultiCloud/2025-10-25-MultiCloud10.md",
+    "source_sha256": "2ee210864262045d00ddc76240a37c3de90ee9b18930fd08ac4069095dd2648f",
+    "legacy_url": "/posts/multicloud10/",
+    "destination": "content/docs/guide-lab/aws-oci-bgp-vpn/10-connectivity-test/index.md",
+    "title": "AWS–OCI VPN 통신 확인",
+    "linkTitle": "10. 통신 확인",
+    "section": "Guide & Lab",
+    "weight": 100
+  },
+  {
+    "source": "_posts/MultiCloud/2025-10-25-MultiCloud11.md",
+    "source_sha256": "89b822009bdff19c36e30ccf718a27dd79a009c6399a727038338524ef4bff59",
+    "legacy_url": "/posts/multicloud11/",
+    "destination": "content/docs/guide-lab/aws-oci-bgp-vpn/11-dynamic-routing-retrospective/index.md",
+    "title": "BGP 동적 라우팅 결과와 회고",
+    "linkTitle": "11. 동적 라우팅과 회고",
+    "section": "Guide & Lab",
+    "weight": 110
+  },
+  {
+    "source": "_posts/OCI/2024-05-10-OCI01.md",
+    "source_sha256": "82d0e80c0ebc3c957d35bcc025fd523a2c1c70984d3d2687619862b71e3a0849",
+    "legacy_url": "/posts/oci01/",
+    "destination": "content/docs/theory-reference/oci-services-compared-with-aws/index.md",
+    "title": "OCI 주요 서비스와 AWS 대응 관계",
+    "linkTitle": "OCI 서비스와 AWS 비교",
+    "section": "Theory & Reference"
+  },
+  {
+    "source": "_posts/OCI/2024-06-11-OCI02.md",
+    "source_sha256": "6792f8885b4cb2039b5d2b50f87f8eb9d103c917cf4cc99150b3fcd537a7c265",
+    "legacy_url": "/posts/oci02/",
+    "destination": "content/docs/command-tool/oci-access-methods/index.md",
+    "title": "OCI에 접근하는 방법",
+    "linkTitle": "OCI 접근 방법",
+    "section": "Command & Tool"
+  },
+  {
+    "source": "_posts/OCI/2024-06-12-OCI03.md",
+    "source_sha256": "cbc5843096021555299865ec3d95ca64d5124edc5d36c421f956e7a6993ad86b",
+    "legacy_url": "/posts/oci03/",
+    "destination": "content/docs/theory-reference/oci-foundations/index.md",
+    "title": "Oracle Cloud Infrastructure 기본 개념",
+    "linkTitle": "OCI 기본 개념",
+    "section": "Theory & Reference"
+  },
+  {
+    "source": "_posts/OCI/2024-12-03-OCI15.md",
+    "source_sha256": "cc597609a090c174be918e1605241c986d12de3911c7baa4ae39e2041919601e",
+    "legacy_url": "/posts/oci15/",
+    "destination": "content/docs/guide-lab/oci-development-vm-docker/index.md",
+    "title": "OCI 개발용 가상 머신과 Docker 구성",
+    "linkTitle": "OCI VM과 Docker",
+    "section": "Guide & Lab"
+  },
+  {
+    "source": "_posts/OCI/2025-05-01-OCI16.md",
+    "source_sha256": "195b67d9e03d63fbf5bcc20593b15384cd594de7fb340da64385ebb602ff5ac9",
+    "legacy_url": "/posts/oci16/",
+    "destination": "content/docs/command-tool/oci-object-storage-cyberduck/index.md",
+    "title": "Cyberduck으로 OCI Object Storage 사용하기",
+    "linkTitle": "OCI Object Storage와 Cyberduck",
+    "section": "Command & Tool"
+  },
+  {
+    "source": "_posts/OCI/2025-07-28-OCI17.md",
+    "source_sha256": "341e1f1eac3b838dc275ce882b862885cce765b23faebe819a7316d5b18738c0",
+    "legacy_url": "/posts/oci17/",
+    "destination": "content/docs/guide-lab/oci-lb-domain-redirect/index.md",
+    "title": "OCI Load Balancer Ruleset으로 도메인 리다이렉트하기",
+    "linkTitle": "OCI LB 도메인 리다이렉트",
+    "section": "Guide & Lab"
+  },
+  {
+    "source": "_posts/OCI/2025-07-28-OCI18.md",
+    "source_sha256": "de9b14739c11b5681439149a5dfde1f94006e2b0b0c913650028a6415f72baf3",
+    "legacy_url": "/posts/oci18/",
+    "destination": "content/docs/guide-lab/oci-lb-add-www/index.md",
+    "title": "OCI Load Balancer Ruleset으로 www 강제하기",
+    "linkTitle": "OCI LB www 강제",
+    "section": "Guide & Lab"
+  },
+  {
+    "source": "_posts/OCI/2026-01-04-OCI19.md",
+    "source_sha256": "0f4870e6cecc4034d99ab6f58e4344c785abffe9082d50269ea0ae2bba61f828",
+    "legacy_url": "/posts/oci19/",
+    "destination": "content/docs/theory-reference/oke-cni-plugin/index.md",
+    "title": "OKE 클러스터의 CNI 플러그인",
+    "linkTitle": "OKE CNI 플러그인",
+    "section": "Theory & Reference"
+  },
+  {
+    "source": "_posts/OCI/2026-01-04-OCI20.md",
+    "source_sha256": "fc99fa52b7300778bdd6d4c1f7e9f4ce657555ce6a20c6455fdec2d9797ce3f4",
+    "legacy_url": "/posts/oci20/",
+    "destination": "content/docs/guide-lab/oke-network-setup/index.md",
+    "title": "OKE 클러스터 네트워크 구성",
+    "linkTitle": "OKE 네트워크 구성",
+    "section": "Guide & Lab"
+  },
+  {
+    "source": "_posts/OCI/2026-01-04-OCI21.md",
+    "source_sha256": "02ccf227f8c500b8b610515dd60eac1d2c385abcc744c6e1b5e06e9255b0aba3",
+    "legacy_url": "/posts/oci21/",
+    "destination": "content/docs/guide-lab/oke-cluster-deployment/index.md",
+    "title": "OKE 클러스터 배포",
+    "linkTitle": "OKE 클러스터 배포",
+    "section": "Guide & Lab"
+  },
+  {
+    "source": "_posts/OCI/2026-01-04-OCI22.md",
+    "source_sha256": "6ae7d808b088b6839bd5b62dd459cfa861be903ab82f9a5bd3c9dbe99dec3b0f",
+    "legacy_url": "/posts/oci22/",
+    "destination": "content/docs/guide-lab/oke-access-setup/index.md",
+    "title": "OKE 클러스터 접속 환경 구성",
+    "linkTitle": "OKE 접속 환경",
+    "section": "Guide & Lab"
+  },
+  {
+    "source": "_posts/OCI/2026-01-04-OCI23.md",
+    "source_sha256": "31a827113e680d0a0057518533cad2daf5e9a1d2e8628472867311fa3fc2e8e9",
+    "legacy_url": "/posts/oci23/",
+    "destination": "content/docs/guide-lab/oke-sample-workload/index.md",
+    "title": "OKE에 Sample 파드와 서비스 배포하기",
+    "linkTitle": "OKE Sample 워크로드",
+    "section": "Guide & Lab"
+  },
+  {
+    "source": "_posts/OCI/2026-05-27-OCI24.md",
+    "source_sha256": "6d6717d52248d0c5c11dfe72659df6928f48abf0f805409d4e98e9057402e587",
+    "legacy_url": "/posts/oci24/",
+    "destination": "content/docs/theory-reference/oke-persistent-volume-overview/index.md",
+    "title": "OKE PersistentVolume 개요",
+    "linkTitle": "OKE PersistentVolume 개요",
+    "section": "Theory & Reference"
+  },
+  {
+    "source": "_posts/OCI/2026-05-27-OCI25.md",
+    "source_sha256": "9fed482ac8e01a2acfdb768838e9b20976f0ce0507fb9a66a4de24d22f527f83",
+    "legacy_url": "/posts/oci25/",
+    "destination": "content/docs/guide-lab/oke-block-volume-iscsi/index.md",
+    "title": "OKE Block Volume 구성: iSCSI",
+    "linkTitle": "OKE Block Volume — iSCSI",
+    "section": "Guide & Lab"
+  },
+  {
+    "source": "_posts/OCI/2026-05-27-OCI26.md",
+    "source_sha256": "c7cde7c1589ee4d42728e9b52ecf789d2022ab369a81b7c9de1321158af07b10",
+    "legacy_url": "/posts/oci26/",
+    "destination": "content/docs/guide-lab/oke-block-volume-paravirtualized/index.md",
+    "title": "OKE Block Volume 구성: Paravirtualized",
+    "linkTitle": "OKE Block Volume — Paravirtualized",
+    "section": "Guide & Lab"
+  },
+  {
+    "source": "_posts/OCI/2026-05-27-OCI27.md",
+    "source_sha256": "190ae37d8dc57ea85c36afac4ba92555bf08512f1ac9b5c45acbb9768925da2e",
+    "legacy_url": "/posts/oci27/",
+    "destination": "content/docs/guide-lab/oke-file-storage-dynamic-provisioning/index.md",
+    "title": "OKE File Storage 동적 프로비저닝",
+    "linkTitle": "OKE File Storage — 동적",
+    "section": "Guide & Lab"
+  },
+  {
+    "source": "_posts/OCI/2026-05-27-OCI28.md",
+    "source_sha256": "6aebcabdb9cf26bb3829905f0a55c7e195fe8f6c2493d1156332cfa212cee1fc",
+    "legacy_url": "/posts/oci28/",
+    "destination": "content/docs/guide-lab/oke-file-storage-static-provisioning/index.md",
+    "title": "OKE File Storage 정적 프로비저닝",
+    "linkTitle": "OKE File Storage — 정적",
+    "section": "Guide & Lab"
+  },
+  {
+    "source": "_posts/OCI/2026-05-27-OCI29.md",
+    "source_sha256": "f43dea2242c17855870e49c673b87ac1408e4430b9aa4dea33356e4ef469c931",
+    "legacy_url": "/posts/oci29/",
+    "destination": "content/docs/theory-reference/oke-node-cycling/index.md",
+    "title": "OKE Node Cycling 개요",
+    "linkTitle": "OKE Node Cycling",
+    "section": "Theory & Reference"
+  },
+  {
+    "source": "_posts/OCI/2026-06-12-OCI30.md",
+    "source_sha256": "675f88726d796a17b0927949b311798302dfae7b1d04de24c23e0eb96a7acacb",
+    "legacy_url": "/posts/oci30/",
+    "destination": "content/docs/guide-lab/oci-console-network-perimeters/index.md",
+    "title": "Network Perimeters로 OCI Console 접근 제어하기",
+    "linkTitle": "OCI Console 접근 제어",
+    "section": "Guide & Lab"
+  },
+  {
+    "source": "_posts/OCI/2026-08-15-OCI31.md",
+    "source_sha256": "0bcfa9eabd875164f615106c8b49c1011478cd3f29fa27fa0d0d200d13acf6cf",
+    "legacy_url": "/posts/oci31/",
+    "destination": "content/docs/guide-lab/oci-bastion-private-instance/index.md",
+    "title": "OCI Bastion과 Passphrase SSH Key를 이용한 Private Instance 보안 접속",
+    "linkTitle": "OCI Bastion 보안 접속",
+    "section": "Guide & Lab"
+  }
+]

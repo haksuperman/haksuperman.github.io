@@ -1,0 +1,156 @@
+---
+title: "사고 대응 자동화"
+linkTitle: "10.3. 사고 대응 자동화"
+date: "2026-04-26T17:34:00+09:00"
+lastmod: "2026-04-26T17:34:00+09:00"
+aliases: ["/posts/aws41/"]
+tags:
+  - "cloud"
+  - "aws"
+  - "public cloud"
+categories:
+  - "CLOUD"
+  - "AWS"
+weight: 1030
+sourceStatus: "needs-review"
+---
+## 1. 사고 대응 자동화 및 플레이북 스크립팅
+모든 검사 결과를 추적할 수 있는 플레이북을 확보한 후에는 이를 자동화하여 문제 해결 속도를 높일 수 있다.<br>
+자동화를 통해 운영자보다 빠르게 실행하고 실수를 줄일 수 있다.<br>
+여기서는 PCI DSS 규정 준수를 위해 PCI 관련 태그가 있는 S3 버킷만 조건부로 암호화하는 것을 예시로 한다.
+![image](AWS41_01.png)
+
+## 2. S3 버킷 암호화를 위한 Lambda 함수 코드
+이 자동화를 파이썬(Python)으로 작성하여 AWS Lambda에서 실행할 수 있다.<br>
+아래 코드는 경고를 수신하고, 태그를 확인한 뒤, 조건에 맞으면 기본 암호화를 활성화하고 기존 객체까지 암호화하는 전체 코드의 예시이다.
+
+```python
+import boto3
+
+s3_client = boto3.client('s3')
+
+def handler(event):
+    s3_bucket_arn = event['context']['resources'][0]
+
+    tag_set = s3_client.get_bucket_tagging(Bucket=s3_bucket_arn)['TagSet']
+    
+    # PCI 태그가 설정되었는지 확인
+    is_pci = False
+    for tag in tag_set:
+        if tag['Key'] == 'PCI' and tag['Value'] == 'True':
+            is_pci = True
+            break
+
+    if is_pci:
+        s3_client.put_bucket_encryption(
+            Bucket=s3_bucket_arn,
+            ServerSideEncryptionConfiguration={
+                'Rules': [
+                    {
+                        'ApplyServerSideEncryptionByDefault': {
+                            'SSEAlgorithm': 'AES256',
+                            'KMSMasterKeyID': 'string'
+                        }
+                    }
+                ]
+            }
+        )
+
+        objects = s3_client.list_objects_v2(
+            Bucket=s3_bucket_arn,
+        )
+
+        for obj in objects.get('Contents', []):
+            s3_client.copy_object(
+                Bucket=s3_bucket_arn,
+                CopySource={'Bucket': s3_bucket_arn, 'Key': obj['Key']},
+                Key=obj['Key'],
+                SSECustomerAlgorithm='AES256'
+            )
+```
+- `s3_bucket_arn = ...` : 핸들러가 호출되면 전달받은 이벤트에서 문제의 S3 버킷 ARN을 추출한다.
+- `tag_set` 조회 및 `is_pci` 확인 : 버킷의 태그를 조회하여 PCI=True 조건이 맞는지 검사한다.
+- `put_bucket_encryption` : 조건이 참일 경우 S3 버킷에 대한 기본 암호화를 활성화한다.
+- `list_obejct_v2` 및 `copy_object` : 기존에 존재하던 객체들도 반복문을 통해 제자리 복사 방식으로 암호화를 적용한다.
+
+이 Lambda 함수를 테스트하기 위해 사용하는 테스트 입력 JSON 형식은 아래와 같다.
+```json
+{
+  "resources": [
+    "REPLACE_WITH_YOUR_S3_BUCKET_ARN"
+  ]
+}
+```
+Lambda 콘솔에서 테스트 이벤트를 구성할 때 사용하는 JSON 데이터이다. 위 문자열을 실제 테스트할 S3 버킷의 ARN으로 교체하여 실행하면 코드가 정상 작동하는지 확인할 수 있다.
+
+## 3. Security Hub 사용자 지정 작업 및 EventBridge 트리거 설정
+매번 수동으로 실행하는 대신, Security Hub 콘솔에서 특정 검사 결과를 클릭했을 때 이 Lambda 함수가 실행되도록 '사용자 지정 작업(Custom Action)'을 만들 수 있다.
+
+```bash
+$ aws securityhub create-action-target \
+  --name "Encrypt S3 Bucket" \
+  --description "Action to encrypt the S3 bucket" \
+  --id "Encrypt"
+```
+
+- `create-action-target` : Security Hub에 사용자 지정 작업을 생성하는 명령어이다.
+- `--name` : Security Hub 콘솔 UI 드롭다운 메뉴에 표시될 작업의 이름을 설정한다.
+<br>
+생성된 작업이 클릭될 때 실제로 Lambda를 실행하도록 EventBridge 규칙을 생성해야 한다.
+
+```bash
+$ aws events put-rule --name SecurityHubTrigger \
+  --event-pattern \
+  '{
+    "source": [
+      "aws.securityhub"
+    ],
+    "detail-type": [
+      "Security Hub Findings - Custom Action"
+    ],
+    "resources": [
+      "arn:aws:securityhub:us-west-2:123456789012:action/custom/test-action1"
+    ]
+  }'
+```
+
+EventBridge 규칙을 생성하는 CLI 명령어이다.<br>
+`event-pattern` 파라미터로 전달된 JSON을 통해, Security Hub에서 발생한 'Custom Action' 이벤트 중 지정된 ARN 리소스와 일치하는 이벤트가 발생할 경우 트리거되도록 한다.
+
+## 4. 콘솔에서의 사용자 지정 작업 실행
+모든 설정이 완료되면, Security Hub의 검사 결과 목록에서 대상을 선택하고 'Actions(작업)' 드롭다운 메뉴를 클릭하여 Encrypt S3 Bucket을 실행할 수 있다. 이를 클릭하면 이벤트 정보가 EventBridge를 통해 Lambda 함수로 전달되어 버킷이 자동으로 암호화된다.
+
+## 5. 완전 자동화된 대응
+사용자가 콘솔에서 직접 작업을 클릭하는 과정을 우회(bypass)하고, 자동으로 복원할 수 있는 특정 유형의 검사 결과가 발생하면 EventBridge를 통해 Lambda 함수가 즉시 실행되도록 설정할 수 있다.
+<br>
+
+이를 위해서는 EventBridge에서 특정 검사 결과 유형만 필터링하여 Lambda로 보내는 이벤트 규칙을 생성해야 한다.<br>
+아래 코드는 특정 Security Hub 검사 결과 유형에서 트리거하는 EventBridge 규칙 코드 예시이다.
+
+```json
+{
+  "source": [
+    "aws.securityhub"
+  ],
+  "detail-type": [
+    "Security Hub Findings - Imported"
+  ],
+  "detail": {
+    "findings": {
+      "type": [
+        "PCI.S3.4"
+      ]
+    }
+  }
+}
+```
+
+- `source` 부분 : 이 규칙이 Security Hub의 이벤트에서 실행되어야 함을 나타낸다.
+- `detail-type` 부분 : Security Hub로 검사 결과를 가져올 때(Imported) 규칙을 실행해야 함을 나타낸다.
+- `"type"` 부분 : 모든 검사 결과가 아닌, 검사 결과 유형이 PCI.S3.4인 경우에만 실행되도록 제한한다.
+
+## 6. 자동화된 접근 방식의 이점
+위와 같이 규칙을 설정하면, PCI 태그가 있고 기본 암호화가 활성화되지 않은 S3 버킷이 생성되었을 때 몇 분 안에 자동으로 암호화가 설정된다.
+- 즉각적인 대응 : 운영자가 인지하고 조치할 때까지 기다릴 필요 없이 복원 사항이 즉시 적용된다.
+- 오류 감소 : 스크립트로 작성된 자동화 로직이 수행하므로 사람(운영자)이 수동으로 할 때보다 실수할 가능성이 훨씬 적다.
+- 시간 및 비용 절감 : 운영자가 수동으로 플레이북을 실행하는 데 소요되는 엄청난 시간을 절약해 준다. 결과적으로 더 많은 인력을 고용하지 않고도 더 큰 규모의 애플리케이션으로 사고 대응 프로그램을 확장할 수 있다.
