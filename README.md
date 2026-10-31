@@ -19,18 +19,21 @@ Hugo Extended와 Go를 설치한 뒤 다음 명령을 실행합니다.
 hugo server --buildDrafts --navigateToChanged
 ```
 
-새 게시물 생성, 이미지 배치, 초안 검수와 수동 배포 절차는 [게시물 작성 가이드](AUTHORING.md)를 따릅니다.
+새 게시물 생성, 이미지 배치와 초안 검수는 [게시물 작성 가이드](AUTHORING.md)를 따릅니다. Pull Request 검증, GitHub Pages 배포, 실패 대응과 롤백은 [운영 및 복구 가이드](OPERATIONS.md)를 따릅니다.
 
 Docs 문서는 다음처럼 생성합니다.
 
 ```bash
-hugo new content --kind docs docs/guide-lab/<slug>/index.md
+SLUG=oke-version-upgrade
+hugo new content --kind docs "docs/guide-lab/${SLUG}/index.md"
 ```
 
 Series 문서는 다음처럼 생성합니다.
 
 ```bash
-hugo new content --kind series study/<series-name>/<sequence-slug>/index.md
+SERIES_NAME=aws-security
+SEQUENCE_SLUG=11-01-new-security-topic
+hugo new content --kind series "study/${SERIES_NAME}/${SEQUENCE_SLUG}/index.md"
 ```
 
 ## 마이그레이션
