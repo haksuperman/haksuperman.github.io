@@ -1,0 +1,114 @@
+---
+title: "AWS CLI와 Terraform 설치, Visual Studio Code 연동"
+linkTitle: "02. AWS CLI와 Terraform 설치, Visual Studio Code 연동"
+date: "2024-05-19T22:51:00+09:00"
+lastmod: "2024-05-19T22:51:00+09:00"
+aliases: ["/posts/terraform02/"]
+tags:
+  - "terraform"
+  - "iac"
+  - "devops"
+  - "dev"
+  - "ops"
+  - "awscli"
+  - "vsc"
+categories:
+  - "DEVOPS"
+  - "TERRAFORM"
+weight: 20
+sourceStatus: "needs-review"
+---
+## 1. awscli 설치
+1. python-pip 설치
+```bash
+sudo apt-get install python3-php
+```
+![image](Terraform02_01.png)
+
+
+2. 설치한 pip를 이용해 awscli 설치
+```bash
+sudo pip3 install awscli
+```
+![image](Terraform02_02.png)
+
+
+## 2. Terraform 설치
+1. gnupg와 software-properties-common 패키지 설치<br>
+- gnupg : 데이터와 통신의 암호화와 서명을 위해 사용되는 무료 소프트웨어<br>
+- software-properties-common : 소프트웨어 저장소와 관련된 유틸리티들을 포함한 패키지
+```bash
+sudo apt-get install -y gnupg \\
+software-properties-common
+```
+![image](Terraform02_03.png)
+
+2. GPG 키 설정<br>
+1) Hashicorp의 GPG 키 다운<br>
+2) 다운로드한 키를 바이너리 형식으로 변환<br>
+3) 변환된 키를 '/usr/share/keyrings/hashicorp-arvchive-keyring.gpg' 파일에 저장<br>
+4) 저장된 키의 지문을 출력하여 키가 올바르게 저장되었는지 확인
+![image](Terraform02_04.png)
+```bash
+sudo wget -O- https://apt.releases.hashicorp.com/gpg | \\
+gpg --dearmor | \\
+sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+gpg --no-default-keyring \\
+\--keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg \\
+\--fingerprint
+```
+
+3. Hashicorp Repository 추가
+```bash
+sudo echo "deb \[signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg\] \\
+https://apt.release.hashicorp.com $(lsb\_release  -cs) main" | \\
+sudo tee /etc/apt/sources.list.d/hashicorp.list
+```
+![image](Terraform02_05.png)
+
+
+4. apt 패키지 목록 업데이트
+```bash
+sudo apt update
+```
+![image](Terraform02_06.png)
+
+5. terraform 설치
+```bash
+sudo apt install -y terraform
+```
+![image](Terraform02_07.png)
+
+## 3. Terafform 명령어 Alias 설정
+1. Terraform 명령어 Alias 설정하기 위한 파일 작성 및 적용
+```bash
+cat <<EOF> ~/.bash\_aliases
+alias t='terraform'
+alias ti='terraform init'
+alias tp='terraform plan'
+alias ta='terraform apply'
+alias td='terraform destroy'
+EOF
+source ./bash\_aliases
+```
+![image](Terraform02_08.png)
+
+## 4. VSC(Visual Studio Code) 설치
+[https://code.visualstudio.com/docs/?dv=win64](https://code.visualstudio.com/docs/?dv=win64)
+
+## 5. VSC 확장팩 설치
+1. Korean Language Pack for Visual Studio Code 설치
+![image](Terraform02_09.png)
+
+2. Remote Development 설치
+![image](Terraform02_10.png)
+
+3. Hashicorp Terrafrom 설치
+![image](Terraform02_11.png)
+
+4. WSL 설치
+![image](Terraform02_12.png)
+
+## 6. WSL(Ubuntu 20.04)에서 VSC 실행
+사용자 홈디렉터리에서 'code .' 명령으로 VSC 연동되어 실행
+![image](Terraform02_13.png)

@@ -1,0 +1,13 @@
+FROM golang:1.26-bookworm
+
+ARG HUGO_VERSION=0.156.0
+ARG TARGETARCH
+
+RUN wget -q -O /tmp/hugo.deb \
+      "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-${TARGETARCH}.deb" \
+    && dpkg -i /tmp/hugo.deb \
+    && rm /tmp/hugo.deb
+
+WORKDIR /src
+
+ENTRYPOINT ["hugo"]

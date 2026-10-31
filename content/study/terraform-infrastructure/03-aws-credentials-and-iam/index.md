@@ -1,0 +1,106 @@
+---
+title: "Terraform을 위한 AWS Credentials와 IAM 준비"
+linkTitle: "03. Terraform을 위한 AWS Credentials와 IAM 준비"
+date: "2024-05-20T20:26:00+09:00"
+lastmod: "2024-05-20T20:26:00+09:00"
+aliases: ["/posts/terraform03/"]
+tags:
+  - "terraform"
+  - "iac"
+  - "devops"
+  - "dev"
+  - "ops"
+  - "aws credentials"
+  - "iam"
+categories:
+  - "DEVOPS"
+  - "TERRAFORM"
+weight: 30
+sourceStatus: "needs-review"
+---
+## 1. 테라폼 작업용 AWS IAM User 생성
+1. 새 IAM User 생성
+![image](Terraform03_01.png)
+
+2. 유저명, 패스워드 설정(테라폼으로 작업한 내용이 잘 적용됐는지 확인 하기 위한 용으로 AWS Management Console 접속 허용)
+![image](Terraform03_02.png)
+
+3. 해당 IAM User가 사용할 권한 부여
+![image](Terraform03_03.png)
+{{< callout type="warning" >}}
+Terraform으로 작업할 최소한의 권한만 부여 해야 함!  
+실습을 위해 AdministratorAccess 권한을 부여한 것, 절대 위험!!!  
+(추후 권한 관련 IAM 공부는 꼭 하기)
+{{< /callout >}}
+
+4. 생성할 IAM에 태그 추가
+사실 테라폼 작업 시 꼭 필요한 설정은 아닌 것 같긴 하지만, 나중을 위해 태그는 많을수록 좋다 했으니 설정 :)
+![image](Terraform03_04.png)
+
+5. 생성한 IAM 로그인
+![image](Terraform03_05.png)
+
+## 2. MFA 설정
+
+이대로 진행해도 되긴 하지만, 보안을 위해 2차 보안 인증을 설정해야 한다.
+
+1. Security credentials 선택
+![image](Terraform03_06.png)
+
+2. MFA 장비 연동
+![image](Terraform03_07.png)
+
+3. 인증 어플과 해당 MFA를 구분할 수 있도록 이름 부여
+![image](Terraform03_08.png)
+
+4. QR 코드와 생성된 MFA 코드 인증을 통해 인증 어플(Google Authenticator)과 연동
+![image](Terraform03_09.png)
+
+5. 장비 추가
+![image](Terraform03_10.png)
+
+6. AWS에서 출력한 QR 코드 스캔
+![image](Terraform03_11.png)
+
+7. 장비 추가 완료
+![image](Terraform03_12.png)
+
+8. 인증 어플에서 생성된 MFA 코드를 두 번 입력해 인증 받기
+![image](Terraform03_13.png)
+
+## 3. WSL CLI 환경에서 AWS Credentials 인증을 위한 Access Key 생성
+
+1. Access Key 생성
+![image](Terraform03_14.png)
+
+2. CLI용으로 생성 및 '위의 권장 사항을 이해하였으며 Access Key 생성을 진행하겠다' 안내 문구 체크
+![image](Terraform03_15.png)
+
+3. 첫 번째 Access Key 생성
+![image](Terraform03_16.png)
+Access key와 Secret access key는 추후 다시 확인할 수 없다! (적어도 내 얕은 지식으로는...)<br>
+아니면 아래 .csv 파일을 다운 받아 추후에 파일로 확인할 수는 있다.
+
+4. 두 번째 Access Key 생성
+난 그래서 따로 메모장에 첫 번째, 두 번째 적어 놓는다.
+![image](Terraform03_17.png)
+
+5. Access Key 두 개 생성된 것 확인
+![image](Terraform03_18.png)
+
+## 4. Credentials 정보 등록
+1. aws configure 명령으로 Credential 정보 등록
+![image](Terraform03_19.png)
+
+2. ~/.aws/credentials 파일에서 등록한 Credentials 정보 확인 가능
+![image](Terraform03_20.png)
+
+## 5. 작업 경로 구성 및 VSC 실행 방법
+1. 하나의 테라폼 프로젝트 작업용 디렉터리 생성
+![image](Terraform03_21.png)
+
+2. 해당 위치에서 code . 명령으로 VSC 실행
+![image](Terraform03_22.png)
+
+3. 자동으로 VSC 실행
+![image](Terraform03_23.png)

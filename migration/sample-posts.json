@@ -1,0 +1,40 @@
+[
+  {
+    "source": "_posts/OCI/2026-08-15-OCI31.md",
+    "destination": "content/docs/guide-lab/oci-bastion-private-instance/index.md",
+    "title": "OCI Bastion과 Passphrase SSH Key를 이용한 Private Instance 보안 접속",
+    "linkTitle": "OCI Bastion 보안 접속",
+    "section": "Guide & Lab"
+  },
+  {
+    "source": "_posts/Linux/2026-01-21-Linux06.md",
+    "destination": "content/docs/command-tool/linux-commands/index.md",
+    "title": "엔지니어를 위한 Linux 명령어",
+    "linkTitle": "Linux 명령어",
+    "section": "Command & Tool"
+  },
+  {
+    "source": "_posts/WebSecurity/2024-05-26-WebSecurity04.md",
+    "destination": "content/study/web-security/04-sql-injection-auth-bypass/index.md",
+    "title": "SQL Injection 인증 우회와 데이터베이스 정보 획득",
+    "linkTitle": "04. SQL Injection 인증 우회",
+    "section": "Study",
+    "weight": 40
+  },
+  {
+    "source": "_posts/Kubernetes/2024-03-26-Kubernetes02.md",
+    "destination": "content/study/kubernetes-cluster/02-docker-installation/index.md",
+    "title": "Docker 설치",
+    "linkTitle": "02. Docker 설치",
+    "section": "Study",
+    "weight": 20
+  },
+  {
+    "source": "_posts/AWS/2026-01-24-AWS08.md",
+    "destination": "content/study/aws-security/02-02-iam-common-patterns/index.md",
+    "title": "AWS IAM의 일반적인 권한 관리 패턴",
+    "linkTitle": "2.2. IAM 권한 관리 패턴",
+    "section": "Study",
+    "weight": 220
+  }
+]

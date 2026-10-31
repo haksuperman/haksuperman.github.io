@@ -1,25 +1,15 @@
-# Bundler cache
-.bundle
-vendor
-Gemfile.lock
+# Hugo output
+public/
+resources/
+.hugo_build.lock
 
-# Jekyll cache
-.jekyll-cache
-.jekyll-metadata
-_site
+# Editor
+.vscode/
 
-# RubyGems
-*.gem
+# Python helper scripts
+__pycache__/
+*.pyc
 
-# NPM dependencies
-node_modules
-package-lock.json
-
-# IDE configurations
-.idea
-.vscode/*
-!.vscode/settings.json
-!.vscode/extensions.json
-!.vscode/tasks.json
-
-# Misc
+# Local workspace files
+.DS_Store
+AGENTS.md
