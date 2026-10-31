@@ -53,12 +53,12 @@ def main() -> int:
     ready_manifest = json.loads(
         (ROOT / "migration" / "ready-docs.json").read_text(encoding="utf-8")
     )
-    study_manifest = json.loads(
-        (ROOT / "migration" / "study-posts.json").read_text(encoding="utf-8")
+    series_manifest = json.loads(
+        (ROOT / "migration" / "series-posts.json").read_text(encoding="utf-8")
     )
     manifests_by_source = {
         item["source"]: item
-        for item in [*sample_manifest, *ready_manifest, *study_manifest]
+        for item in [*sample_manifest, *ready_manifest, *series_manifest]
     }
     planned_by_source = {
         item["source"]: item
@@ -134,6 +134,21 @@ def main() -> int:
             f"expected {len(manifests_by_source)} legacy aliases, found {len(aliases)}"
         )
 
+    series_sources = list((ROOT / "content" / "series").rglob("*.md"))
+    series_aliases: list[Path] = []
+    for source in series_sources:
+        relative = source.relative_to(ROOT / "content" / "series")
+        page_path = relative.parent
+        canonical = PUBLIC / "series" / page_path / "index.html"
+        legacy_alias = PUBLIC / "study" / page_path / "index.html"
+        if not canonical.exists():
+            errors.append(f"missing Series page: {canonical.relative_to(PUBLIC)}")
+        if not legacy_alias.exists():
+            errors.append(
+                f"missing legacy Study alias: {legacy_alias.relative_to(PUBLIC)}"
+            )
+        series_aliases.append(legacy_alias)
+
     if errors:
         print("\n".join(errors))
         return 1
@@ -144,6 +159,7 @@ def main() -> int:
                 "inventory": len(inventory),
                 "migrated_posts": len(manifests_by_source),
                 "legacy_aliases": len(aliases),
+                "series_legacy_aliases": len(series_aliases),
                 "html_pages_checked": len(list(PUBLIC.rglob("*.html"))),
             },
             ensure_ascii=False,

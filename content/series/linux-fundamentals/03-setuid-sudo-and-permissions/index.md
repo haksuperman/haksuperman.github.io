@@ -1,0 +1,99 @@
+---
+title: "SetUID, sudo와 리눅스 권한"
+linkTitle: "03. SetUID, sudo와 리눅스 권한"
+date: "2024-01-02T01:24:00+09:00"
+lastmod: "2024-01-02T01:24:00+09:00"
+aliases: ["/posts/linux03/", "/study/linux-fundamentals/03-setuid-sudo-and-permissions/"]
+tags:
+  - "linux"
+  - "sudo"
+  - "permission"
+categories:
+  - "ON-PREMISE"
+  - "LINUX"
+weight: 30
+sourceStatus: "needs-review"
+---
+SetUID
+
+ \- SetUID가 설정된 파일을 실행하게 되면 Shell에 접속한 사용자 -> 실행 파일의 소유자 권한으로 변경해 실행함
+
+ \- 일반 사용자가 SuperUser의 권한을 행사하고 싶을때마다 해당 권한을 획득하는 것보다는 SetUID를 이용해 해당 파일을 실행할 때만 관리자(SuperUser) 권한으로 실행
+
+\-> 이러한 모든 실행 파일의 소유자는 root 소유자임(관리자 권한으로 무언가를 실행하고 싶을 때 사용할 일이 많기 때문
+
+ex) find 같은 명령어가 SetUID 설정된 명령어 파일임
+
+find로 SetUID 설정된 root 소유자 파일 찾아보기
+
+![image](Linux03_01.png)
+
+sudo find / -user root -perm -4000
+
+![image](Linux03_02.png)
+
+소유자 권한에 s(SetUID), 소유자에 root
+
+![image](Linux03_03.png)
+
+sudo 그룹에도 속해 있음
+
+![image](Linux03_04.png)
+
+ \- 일시적으로 root 권한 획득 가능(이전에 `REDACTED_PERSONAL_PASSWORD`으로 sudo 한번 접속해서 캐시 남아있어서 획득 가능, 자기 자신의 암호를 입력함)
+
+ \- 슈퍼유저로 잠시 대체
+
+![image](Linux03_05.png)
+
+ \- 사용자를 root로 대체하겠다라는 의미(root의 패스워드를 입력함)
+
+ \- 쉘 자체를 다른 사용자로 대체
+
+![image](Linux03_06.png)
+
+sudo 명령으로 useradd abc의 명령이 수행됨(관리자 권한을 일시적으로 획득해서)
+
+![image](Linux03_07.png)
+
+sudo 명령으로 일시적으로 관리자 권한을 획득해서 userdel 명령 사용 가능
+
+![image](Linux03_08.png)
+
+ \- sudo 그룹에 포함되어 있어야 해당 계정으로 sudo 사용 가능
+
+ \- sudo 그룹 자체에도 해당 권한이 부여되어 있어야 sudo 그룹에 속한 계정으로 sudo 가능(꼭 sudo 그룹이 아니어도 다른 그룹에 해당 권한이 있으면 다른 그룹도 sudo 가능함)
+
+ \- root의 허락이 있어야 해당 그룹에 속할 수 있음
+
+![image](Linux03_09.png)
+
+sudo visudo
+
+![image](Linux03_10.png)
+![image](Linux03_11.png)
+
+일반 사용자(ubuntu)로는 해당 파일 수정 권한 없음(read only)
+
+![image](Linux03_12.png)
+
+관리자 권한을 획득해 접속하면 수정 가능
+
+![image](Linux03_13.png)
+
+nano 명령을 사용하면 윈도우의 노트패드와 같은 방식으로 사용
+
+![image](Linux03_14.png)
+
+ctrl + x 로 종료
+
+(큰 파일은 vi에디터로 하는 것이 편리하고, 작은 파일은 nano가 유용할 수 있음)
+
+\* 여러 작업을 해야할 때는 sudo -i 로 아예 계정 변경 후 작업하는 것이 편리하고, 일시적인 작업에는 sudo 명령으로 한번만 관리자 권한 획득 후 작업하는 것이 편함
+
+![image](Linux03_15.png)
+![image](Linux03_16.png)
+
+홈 디렉터리에 복사했기 때문에 ubuntu 소유자로 복사된 것
+
+(소유자에 따른 권한이 달라서 연습하려고 복사해온 것)
