@@ -1,0 +1,250 @@
+---
+title: "라우터 보안 설정과 Static Routing"
+linkTitle: "09. 라우터 보안 설정과 Static Routing"
+date: "2024-01-01T19:19:00+09:00"
+lastmod: "2024-01-01T19:19:00+09:00"
+aliases: ["/posts/network09/", "/study/network-fundamentals/09-router-security-and-static-routing/"]
+tags:
+  - "network"
+  - "routing"
+  - "setting"
+  - "static routing"
+categories:
+  - "ON-PREMISE"
+  - "NETWORK"
+weight: 90
+sourceStatus: "needs-review"
+---
+### R & S(Routing & Switching)
+
+Router
+
+-   WAN(50kbps ~ 44Mpbs)과 LAN(100Mbps~1000Mbps)의 인터페이스를 모두 가짐
+-   라우터는 서로 다른 네트워크들을 연결해주는 역할
+-   LAN 구간 안에서의 라우터 사용은 굳이, 고급 스위치를 놓고 높은 대역폭으로 높은 속도를 뽑아내는 것이 현명함
+-   한 건물의 네트워크실은 지하에 두도록 설계함(ISP업체의 전용선들이 지하에 매설되어 있음)
+-   \-> ISP업체의 회선이 각 내부 네트워크에 직접 연결되는 것이 아니라, 먼저 MDF실(Main 통신실 or Main Rack)에 연결되고 통신 전용 케이블 통로인 TPS를 통해 각 실로 분배됨
+
+![image](Network09_01.png)
+\-> 하나의 사옥이라면 각 층마다 광케이블을 넣지 않고 백본 스위치(코어 스위치)에서 랜으로 넣으면 되지만, 각 층마다 다른 업체들이라면 MDF실에 광 포트가 많은 백본 스위치를 두고 각 층에 광케이블을 넣는 방법이 있음
+(업체별 이외의 층이 높은 건물의 경우도 랜(최대 100M)으로 해결이 안됨)
+
+\* 라우터 장비의 인터페이스 활성화(no shutdown)의 순서는 설정이 끝난 후 가장 마지막에 해야 함! -> 상대 라우터 장비와 충돌 발생 가능
+
+---
+
+통신의 개념
+
+L1(Physical Layer) : 물리적인 케이블 연결
+
+L2(Datalink Layer) : 전류흐름(논리적인 연결), 동일 네트워크 이더넷 구간에서는 ???
+
+(물리적인 연결 외에 논리적인 연결도 필요한 이유는 브로드캐스트 통신이 아닌, 흐름제어와 같은 식별 과정이 필요함 -> ex) 물리적인 연결만 되어 있으면 그냥 구리선으로 냅다 보내버리면 되는데 논리적인 연결로 누구에게만 전송할 수 있도록)
+
+\-> PPP(WAN구간 프로토콜)와 같은 프로토콜을 양방향 모두 정해야 함**(Encapsulation 과정)**
+
+(시스코 라우터는 HDLC로 기본값 설정되어 있음)
+
+\-> 보통 Point to Point 연결되어 있는 WAN 구간에서는 송수신 주소 정보를 빼고 전송함
+
+L3(Network Layer) : IP 통신
+
+\- WAN 구간에는 Point to Point 통신으로 많은 개수의 호스트가 필요 없음
+
+(ip 2개만 있으면 됨 -> 255.255.255.252 =/30)
+
+\=> 이 순서에 라우터 인터페이스 활성화(no shutdown)하는 것
+
+\* 인터페이스 장비의 serial 0/0의 의미는 0번 슬롯에 0번 포트를 의미
+
+​
+
+Encapsulation / Decapsulation
+
+\- Encapsulation(캡슐화) :
+
+\-- OSI 계층 모델에서 사용자 데이터가 각 계층을 지나면서, 하위계층은 상위계층으로부터 온 정보를 데이터로 취급하며, 자신의 계층 특성을 담은 제어정보(주소, 에러제어 등)를 헤더화시켜, 이를 붙이는(포장하는) 일련의 과정
+
+\-- 송신 데이터(페이로드)에 필요한 정보(헤더)를 붙여서 다음 계층에 보내는 기술(상위 계층 -> 통신 프로토콜 정보 추가 -> 하위 계층)
+
+\- Decapsulation(역캡슐화) :
+
+\-- 각 계층에서 추가된 특정한 프로토콜 제어 정보(PCI, 헤더 등)들을 통신의 상대 측에서는 캡슐화 과정의 역순으로 제거하면서 응용계층까지 도달하는 과정
+
+\-- 캡슐화를 거친 패킷이 최종적으로 전기신호를 통해 수신 측에 전달되면 헤더나 트레일러 등을 차례차례 제거해 나가는 것(하나 하나씩 뜯어보는 것)
+
+​
+
+\* 패킷은 Header와 Payload로 구분, Encapsulation 과정에서 각 계층에 맞는 헤더 정보를 감쌈, Decapsulation 과정에서 각 계층에 맞는 헤더 정보를 뜯어봄
+
+(이더넷은 1500byte(=15MB)의 헤더 공간)
+
+\-> 라우터에서 라우팅을 할 때 CDP, LLDP와 같은 프로토콜로 직접 연결된 링크 정보를 알아 옴(Connected), 이외의 주소 정보는 라우팅을 해줘야 함
+
+\-> #show ip route 명령어로 라우팅 테이블 확인 가능
+
+---
+
+Routing
+
+1) Static Routing
+
+\- 관리자에 의해 직접 정보 입력
+
+2) Dynamic Routing
+
+\- Protocol의 통신에 의해 정보 수집
+
+\- RIP(15홉 이내), OSPF 등
+
+![image](Network09_02.png)
+
+---
+
+### enable 보안
+
+![image](Network09_03.png)
+권한의 정도가 다름(15-MAX, 0-MIN)
+\-> enable password 설정 필요
+
+{{< callout type="warning" >}}
+원문 이미지에는 교육용 네트워크 장비 계정과 비밀번호가 표시되어 있어 공개본에서 제외했습니다.
+{{< /callout >}}
+![image](Network09_05.png)
+사용자 계정 만든 후 enable secret 을 지정해 enable 들어갈 때 해당 패스워드 입력 요구
+\* 콘솔 보안 : 콘솔(모니터, 키보드 등 작업 환경) 창에 입력하는 패스워드 보이지 않도록
+
+![image](Network09_06.png)
+아예 장비와 콘솔 연결이 끊어진 것, user exec 모드에서 exit 쳤을 때의 화면(장비의 콘솔 포트(orPC의 포트)에서 아예 뽑아 버린 것)
+-   콘솔 접속은 라우터의 콘솔 포트(Console Port)와 일반 PC의 RS232C(현재는 USB) 포트로 연결해 일반 PC의 입출력장치로 라우터의 설정하는 것
+-   콘솔 포트는 IP 할당 불가한 포트, 이러한 입출력의 통신이 가능한 것으로 보아 'IP 없이는 통신이 안된다'는 말은 모순된 말임
+
+---
+
+### 콘솔 포트 보안
+
+![image](Network09_07.png)
+
+콘솔 접속 로그인할 때 로컬 장비에서 생성한 계정(Local Database)으로만 접속할 수 있도록
+(로컬 계정을 만들기 전에 이 설정을 하면 접근 불가한 셈)
+
+![image](Network09_08.png)
+
+콘솔 포트 보안과 enable secret 설정 후 접속 화면
+
+![image](Network09_09.png)
+
+PC의 RAM(DRAM)에 저장된 내용이라고 생각하면 됨(재부팅 시 사라지는 휘발성 메모리)
+현재 운영 중인 설정 사항들이 저장되어 있음
+\* startup-config : PC의 ROM(NVRAM)이라고 생각하면 됨(재부팅 시 사라지지 않는 비휘발성 메모리)
+\-> 장비를 시작할 때 startup-config 정보를 running-config로 옮기고 작업(부팅할 때 자동으로), 종료할 때 running-config를 startup-config로 옮기고 종료(#copy running-config startup-config)
+
+![image](Network09_10.png)
+![image](Network09_11.png)
+![image](Network09_12.png)
+
+설정한 정보들 확인 가능(running-config)
+재부팅(reload) 후 설정 재확인
+나도 모르게 저장했나보다;;
+
+![image](Network09_13.png)
+erase startup-config 명령어로 장비 초기화
+메모리에는 페이지 단위로 저장, startup-config는 파일
+
+![image](Network09_14.png)
+
+---
+
+#### Encapsulation 타입 설정
+
+![image](Network09_15.png)
+show interface serial 0/0
+
+![image](Network09_16.png)
+
+반대편 라우터가 죽어 있어서 다시 다운상태가 됨
+
+![image](Network09_17.png)
+반대편 EG 라우터에도 설정
+
+![image](Network09_18.png)
+인접핑 성공
+
+![image](Network09_19.png)
+한쪽 라우터만 encapsulation 타입을 PPP로 변경
+(encapsulation 타입이 서로 다르니 통신이 안되어야 함)
+
+![image](Network09_20.png)
+
+콘솔 메시지가 다운되었다는 문구로 출력되고 핑이 안됨
+
+(L1 통신 성공, L2 통신에 문제)
+
+![image](Network09_21.png)
+다시 통신되도록 encapsulation hdlc로 맞추고 통신해보기
+
+![image](Network09_22.png)
+내부망의 게이트웨이가 되는 인터페이스에 ip와 인터페이스 활성화 설정
+
+![image](Network09_23.png)
+서브넷 마스크까지 확인하려면 show running-config 내용으로 확인 가능
+(#show ip int b로는 서브넷마스크 확인 불가)
+
+![image](Network09_24.png)
+
+---
+
+#### Static Routing
+
+![image](Network09_25.png)
+동일 네트워크 내의 게이트웨이까지 핑 통신
+
+![image](Network09_26.png)
+#show ip route 명령어로 라우팅 테이블 확인 가능
+
+![image](Network09_27.png)
+![image](Network09_28.png)
+라우터에서 ping 가능(10.0.0.1 , 10.0.0.2)
+
+![image](Network09_29.png)
+![image](Network09_30.png)
+끝단 장비인 PC1에서 ping 10.0.0.1 가능(빨간 라인), 10.0.0.2 불가능(파란 라인)
+\-> connected 라인이라 10.0.0.1 가능, 파란 라인은 패킷 돌아올 때 R1 KT(ISP) 라우터에서 172.16.0.0/23 대역을 몰라서 돌아오지 못함. 불가능
+
+![image](Network09_31.png)
+라우팅 테이블에 10.0.0.2/30 보내는 경로는 connected로 등록되어 있지만, PC1로 돌아오는 패킷의 정보가 없다
+\-> unreachable(아예 도달하지를 못함)이 아닌 timeout(도달은 했는데 돌아오지를 못함) 메시지가 출력되는 것
+**\=> 가는 경로, 돌아오는 경로 모두 등록되어 있어야 함!!**
+
+![image](Network09_32.png)
+1) R1 KT(ISP) 라우터에서 172.16.0.1/23 네트워크에 가려면 10.0.0.1/30(se 0/0)로 가라.
+2) EG 라우터에서 172.16.0.1/23 네트워크(172.16.0.0/23)에 가려면 connected 경로(neighbor)에 의해 fa 0/0로 가라
+\* 서브넷마스크를 255.255.255.255로 해당 ip 하나만으로도 지정 가능
+3) 172.16.0.0/23 네트워크 대역까지 왔으니 밑의 스위치 단에서 해결 가능
+\=> 돌아오는 패킷 해결
+
+![image](Network09_33.png)
+ip route \[목적지 네트워크\] \[방향 인터페이스\] \[전달자\]
+\-> \[목적지 네트워크\]에 가려면 \[방향 인터페이스\]로 나가서 \[전달자\]에게 가라
+
+![image](Network09_34.png)
+ping 가능
+
+![image](Network09_35.png)
+모든 장비(호스트PC)에 IP 부여 후 전 장비 통신 가능하도록 라우팅하여라
+\-> R1 KT(ISP) 라우터에 172.16.0.0/23 네트워크 대역 라우팅이 이미 되어 있으니, PC들 ip만 부여하면 통신 가능함
+
+---
+
+![image](Network09_36.png)
+**모든 장비들에 적절한 ip를 할당 후 전 구간 통신이 가능하도록 Static Routing을 설정하여라**
+
+![image](Network09_37.png)
+**connected 라인을 제외한 네트워크 대역에는 라우팅 설정이 필요**
+
+![image](Network09_38.png)
+![image](Network09_39.png)
+![image](Network09_40.png)
+![image](Network09_41.png)
+![image](Network09_42.png)
+![image](Network09_43.png)

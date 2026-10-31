@@ -12,9 +12,9 @@
 | Command & Tool | `content/docs/command-tool/` | 명령어와 도구 사용법 |
 | Guide & Lab | `content/docs/guide-lab/` | 설치, 구축, 테스트와 재현 가능한 실습 |
 | Issue & Troubleshooting | `content/docs/issue-troubleshooting/` | 문제 현상, 원인, 해결과 재발 방지 |
-| Series | `content/study/<series-name>/` | 강의, 책 또는 연속 학습의 목차형 기록 |
+| Series | `content/series/<series-name>/` | 강의, 책 또는 연속 학습의 목차형 기록 |
 
-화면에는 `Series`로 표시하지만 기존 주소를 보존하기 위해 실제 폴더명은 `study`를 사용합니다.
+화면의 메뉴, 공개 URL과 실제 콘텐츠 폴더 모두 `Series`/`series`로 통일합니다. 이전 `/study/.../` 주소는 호환용 alias로만 유지합니다.
 
 ## 2. 새 Docs 문서 만들기
 
@@ -47,19 +47,19 @@ content/docs/guide-lab/oke-version-upgrade/
 ```bash
 SERIES_NAME=aws-security
 SEQUENCE_SLUG=11-01-new-security-topic
-hugo new content --kind series "study/${SERIES_NAME}/${SEQUENCE_SLUG}/index.md"
+hugo new content --kind series "series/${SERIES_NAME}/${SEQUENCE_SLUG}/index.md"
 ```
 
 예시:
 
 ```bash
-hugo new content --kind series study/aws-security/11-01-new-security-topic/index.md
+hugo new content --kind series series/aws-security/11-01-new-security-topic/index.md
 ```
 
 생성 결과:
 
 ```text
-content/study/aws-security/11-01-new-security-topic/
+content/series/aws-security/11-01-new-security-topic/
 └── index.md
 ```
 

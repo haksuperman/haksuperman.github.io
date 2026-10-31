@@ -1,0 +1,185 @@
+---
+title: "Compartment, Group, User와 Policy 구성"
+linkTitle: "03. Compartment, Group, User와 Policy 구성"
+date: "2024-06-16T20:33:00+09:00"
+lastmod: "2024-06-16T20:33:00+09:00"
+aliases: ["/posts/oci06/", "/study/oci-foundations/03-identity-compartments-groups-users-policies/"]
+tags:
+  - "oci"
+  - "cloud"
+  - "oraclecloud"
+  - "oracle cloud infrastructure"
+  - "compartment"
+  - "user"
+  - "group"
+  - "policy"
+categories:
+  - "CLOUD"
+  - "OCI"
+weight: 30
+sourceStatus: "needs-review"
+---
+## 1. 오라클 클라우드에서의 권한 관리
+
+유저(User)를 업무 요건에 따라 그룹(Group)으로 묶고, 해당 그룹에 정책(Policy)을 통해 권한을 부여한다.
+
+권한을 부여할 때는 특정범위를 지정할 수 있는데 이는 특정 컴파트먼트 또는 테넌시로 범위를 특정할 수 있다.
+
+ex) NetworkAdmins 그룹을 생성하고 이 그룹에 네트워크 관리 유저를 추가한다. 그리고 아래와 같은 정책을 만들어 NetworkAdmins 그룹에 테넌시 내 가상 네트워크 자원을 관리할 수 있는 권한을 부여한다.
+```
+Allow group NetworkAdmins to manage virtual-network-family in tenancy
+```
+
+ -> 그룹의 구성원은 해당 정책에 따라 네트워크 관련 작업을 수행할 수 있게 된다.
+
+## 2. 도메인(Domain)
+
+유저와 그룹은 **도메인**이라고하는 더 포괄적인 클라우드 자원으로 묶어서 관리된다. 도메인은 효과적인 자원의 관리를 위해 유저, 그룹, Oracle SSO(Single Sign-On) 구성, 다이나믹 그룹(Dynamic Group) 등과 같은 권한 관리 자원들을 담는 그릇으로 생각할 수 있다.
+
+최초로 클라우드 계정이 생성될 때 디폴트(Default) 도메인이 자동으로 생성되며, 추가 도메인을 만들어 관리할 수 있다.
+
+ex) 운영 관리용 도메인에 특정 유저와 그룹 체계를 만들고, 이와 동일한 구조의 유저, 그룹 관리 체계를 개발 도메인에 만들 수 있다. 두 도메인 간의 구조는 동일하게 유지하면서 관리 자원은 서로 다르게 구성할 수 있다.
+
+## 3. 컴파트먼트(Compartment) 생성
+
+클라우드 자원의 격리 단위라고 할 수 있는 컴파트먼트를 생성한다.
+
+1. \[Identity & Security → Identity → Compartments\] 선택
+![image](OCI06_01.png)
+
+2. Create Compartment 선택
+![image](OCI06_02.png)
+
+3. Name : ociexplained  
+Description : ociexplained  
+Parent Compartment : <root 컴파트먼트> 선택
+![image](OCI06_03.png)
+
+4. 컴파트먼트 생성 확인
+![image](OCI06_04.png)
+
+
+## 4. 그룹(Group) 생성
+
+디폴트 도메인에 실습 유저와 그룹 등을 생성해서 실습을 진행할 예정이기 때문에 디폴트 도메인에 실습용 그룹을 생성한다.
+
+1. \[Identity & Security → Identity → Domain\] 선택
+![image](OCI06_05.png)
+
+2. Root 컴파트먼트 선택
+![image](OCI06_06.png)
+
+3. Default 도메인 선택
+![image](OCI06_07.png)
+
+4. Groups 메뉴 선택
+![image](OCI06_08.png)
+
+5. Create Group 선택
+![image](OCI06_09.png)
+
+6. Name에 'demo-group' 입력
+![image](OCI06_10.png)
+
+
+## 3. 유저(User) 생성
+
+생성한 그룹에 소속되어 실습을 진행하는 데 사용할 유저를 생성한다.
+
+1. \[Identity & Security → Identity → Domains\] 선택
+![image](OCI06_11.png)
+
+2. Default 도메인 선택
+![image](OCI06_12.png)
+
+3. \[Users 탭 → Create user\] 선택
+![image](OCI06_13.png)
+
+4. Use the email address as the username : 체크 해제  
+Last name : ociexplained  
+Username : ociexplained  
+Email : 내 메일 입력<br>
+\[Groups\] 섹션 : 위에서 생성한 demo-group 선택  
+(유저를 생성하면서 해당 유저가 소속될 그룹 지정)
+![image](OCI06_14.png)
+
+5. demo-group에 속한 ociexplained 유저 생성 확인
+![image](OCI06_15.png)
+
+## 4. 정책(Policy) 생성
+
+클라우드 자원을 활용하려면 해당 자원에 대한 권한이 사전에 부여되어야 한다.
+
+권한 정책을 통해 어떤 유형의 자원을 다룰 것인지, 어느 범위까지 조작이 가능한지를 자세하게 설정해야 한다. 강화된 보안을 구현하는데 반드시 필요한 조치이다!
+{{< callout type="warning" >}}
+실습용으로 테넌시 내의 모든 자원을 제어할 수 있는 권한을 부여해 개별적으로 권한을 부여하는 작업을 최소화하여 진행한다. 실습용이기 때문에 이렇게 진행하고 이는 절대 금기해야 하는 위험 요소이다!!!
+{{< /callout >}}
+
+1. \[Identity & Security → Identity → Policies\] 선택
+![image](OCI06_16.png)
+
+2. Root 컴파트먼트 선택
+![image](OCI06_17.png)
+{{< callout type="info" >}}
+정책은 테넌시 레벨로 정의되는 자원이므로 화면 왼쪽에서 root 컴파트먼트를 선택하고 진행한다!
+{{< /callout >}}
+
+3. Create Policy 선택
+![image](OCI06_18.png)
+
+
+4. Name : oci-demo-policy  
+Description : oci demo policy  
+Compartment : <root 컴파트먼트>  
+Policy Builder  
+- Show manual editor 체크
+- allow group demo-group to manage all-resources in tenancy where ANY {request.utc.timestamp.month-of-year in ('6', '7')}<br>
+\-> "demo-group"에 6월과 7월 동안에만 "all-resources" 권한을 부여
+![image](OCI06_19.png)
+
+
+## 5. 생성한 유저(User) 패스워드 재설정
+
+1. \[Identity & Security → Identity → Domains\] 선택
+![image](OCI06_20.png)
+
+2. Default 도메인 선택
+![image](OCI06_21.png)
+
+3. \[Users → 해당 유저\] 선택
+![image](OCI06_22.png)
+
+4. Reset password 선택
+![image](OCI06_23.png)
+
+5. Reset password 선택
+![image](OCI06_24.png)
+
+6. 패스워드 초기화 완료 문구 확인
+![image](OCI06_25.png)
+
+7. Sign Out으로 세션 종료
+![image](OCI06_26.png)
+
+8. 입력한 이메일로 패스워드 재설정 메일 수신
+![image](OCI06_27.png)
+
+9. 해당 링크로 패스워드 재설정
+![image](OCI06_28.png)
+
+10. 패스워드 변경 완료
+![image](OCI06_29.png)
+
+11. 창을 닫았다가 새로운 브라우저 창으로 다시 접속  
+[cloud.oracle.com](https://cloud.oracle.com)
+![image](OCI06_30.png)
+
+12. ociexplained 유저로 로그인
+![image](OCI06_31.png)
+
+13. 모바일 앱을 통한 2단계 인증 설정 진행<br>
+\-> 이전 게시물 참고하여 2단계 인증(MFA) 설정
+![image](OCI06_32.png)
+
+14. 최종적으로 ociexplained 유저로 로그인 성공
+![image](OCI06_33.png)

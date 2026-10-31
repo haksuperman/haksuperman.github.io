@@ -172,13 +172,18 @@ def migrate(
     if legacy_url != f"/posts/{legacy_slug}/":
         raise ValueError(f"legacy URL mismatch: {source} -> {legacy_url}")
 
+    aliases = [legacy_url]
+    canonical_url = destination_permalink(str(item["destination"]))
+    if canonical_url.startswith("/series/"):
+        aliases.append(canonical_url.replace("/series/", "/study/", 1))
+
     yaml = [
         "---",
         f'title: {quoted(str(item["title"]))}',
         f'linkTitle: {quoted(str(item["linkTitle"]))}',
         f"date: {quoted(date)}",
         f"lastmod: {quoted(date)}",
-        f"aliases: [{quoted(legacy_url)}]",
+        f"aliases: [{', '.join(quoted(alias) for alias in aliases)}]",
         "tags:",
         *[f"  - {quoted(tag)}" for tag in tags],
         "categories:",

@@ -15,26 +15,26 @@
   },
   {
     "source": "_posts/WebSecurity/2024-05-26-WebSecurity04.md",
-    "destination": "content/study/web-security/04-sql-injection-auth-bypass/index.md",
+    "destination": "content/series/web-security/04-sql-injection-auth-bypass/index.md",
     "title": "SQL Injection 인증 우회와 데이터베이스 정보 획득",
     "linkTitle": "04. SQL Injection 인증 우회",
-    "section": "Study",
+    "section": "Series",
     "weight": 40
   },
   {
     "source": "_posts/Kubernetes/2024-03-26-Kubernetes02.md",
-    "destination": "content/study/kubernetes-cluster/02-docker-installation/index.md",
+    "destination": "content/series/kubernetes-cluster/02-docker-installation/index.md",
     "title": "Docker 설치",
     "linkTitle": "02. Docker 설치",
-    "section": "Study",
+    "section": "Series",
     "weight": 20
   },
   {
     "source": "_posts/AWS/2026-01-24-AWS08.md",
-    "destination": "content/study/aws-security/02-02-iam-common-patterns/index.md",
+    "destination": "content/series/aws-security/02-02-iam-common-patterns/index.md",
     "title": "AWS IAM의 일반적인 권한 관리 패턴",
     "linkTitle": "2.2. IAM 권한 관리 패턴",
-    "section": "Study",
+    "section": "Series",
     "weight": 220
   }
 ]

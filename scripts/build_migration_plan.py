@@ -34,7 +34,7 @@ STUDY_SPECS = [
         "start": 2,
         "end": 2,
         "slug": "aws-technical-essentials",
-        "name": "AWS Technical Essentials Study",
+        "name": "AWS Technical Essentials Series",
         "confidence": "high",
         "review_status": "add-source-metadata",
     },
@@ -43,7 +43,7 @@ STUDY_SPECS = [
         "start": 4,
         "end": 41,
         "slug": "aws-security",
-        "name": "AWS Security Study",
+        "name": "AWS Security Series",
         "confidence": "high",
         "review_status": "add-source-metadata",
     },
@@ -52,7 +52,7 @@ STUDY_SPECS = [
         "start": 1,
         "end": 4,
         "slug": "kubernetes-cluster",
-        "name": "Kubernetes Cluster Study",
+        "name": "Kubernetes Cluster Series",
         "confidence": "high",
         "review_status": "add-source-metadata",
     },
@@ -61,7 +61,7 @@ STUDY_SPECS = [
         "start": 1,
         "end": 5,
         "slug": "linux-fundamentals",
-        "name": "Linux Fundamentals Study",
+        "name": "Linux Fundamentals Series",
         "confidence": "high",
         "review_status": "add-source-metadata",
     },
@@ -70,7 +70,7 @@ STUDY_SPECS = [
         "start": 1,
         "end": 15,
         "slug": "network-fundamentals",
-        "name": "Network Fundamentals Study",
+        "name": "Network Fundamentals Series",
         "confidence": "high",
         "review_status": "add-source-metadata",
     },
@@ -79,7 +79,7 @@ STUDY_SPECS = [
         "start": 1,
         "end": 8,
         "slug": "network-security",
-        "name": "Network Security Study",
+        "name": "Network Security Series",
         "confidence": "high",
         "review_status": "add-source-metadata",
     },
@@ -88,7 +88,7 @@ STUDY_SPECS = [
         "start": 1,
         "end": 6,
         "slug": "web-security",
-        "name": "Web Security Study",
+        "name": "Web Security Series",
         "confidence": "high",
         "review_status": "add-source-metadata",
     },
@@ -97,7 +97,7 @@ STUDY_SPECS = [
         "start": 1,
         "end": 9,
         "slug": "terraform-infrastructure",
-        "name": "Terraform Infrastructure Study",
+        "name": "Terraform Infrastructure Series",
         "confidence": "high",
         "review_status": "add-source-metadata",
     },
@@ -106,7 +106,7 @@ STUDY_SPECS = [
         "start": 4,
         "end": 14,
         "slug": "oci-foundations",
-        "name": "OCI Foundations Study",
+        "name": "OCI Foundations Series",
         "confidence": "high",
         "review_status": "add-source-metadata",
     },
@@ -132,7 +132,7 @@ def post_identity(source: str) -> tuple[str, int, str]:
     return path.parent.name, int(match.group("number")), code
 
 
-def study_spec(group: str, number: int) -> dict[str, object] | None:
+def series_spec(group: str, number: int) -> dict[str, object] | None:
     for spec in STUDY_SPECS:
         if spec["group"] == group and int(spec["start"]) <= number <= int(spec["end"]):
             return spec
@@ -160,14 +160,14 @@ def docs_section(group: str, number: int) -> str:
 
 
 def sequence_for(group: str, number: int, title: str, target_area: str) -> str | None:
-    if target_area == "Study" and group == "AWS":
+    if target_area == "Series" and group == "AWS":
         if number == 2:
             return "1"
         match = re.search(r"\]\s*(\d+(?:\.\d+)*)\.", title)
         return match.group(1) if match else str(number)
-    if target_area == "Study" and group == "OCI":
+    if target_area == "Series" and group == "OCI":
         return str(number - 3)
-    if target_area == "Study":
+    if target_area == "Series":
         return str(number)
     if group == "MultiCloud":
         return str(number)
@@ -176,9 +176,9 @@ def sequence_for(group: str, number: int, title: str, target_area: str) -> str |
 
 def suggested_title(title: str, group: str, target_area: str) -> str:
     value = BRACKET_PREFIX.sub("", title).strip()
-    if target_area == "Study" and group == "AWS":
+    if target_area == "Series" and group == "AWS":
         value = re.sub(r"^\d+(?:\.\d+)*\.\s*", "", value)
-    if target_area == "Study" and group == "Kubernetes":
+    if target_area == "Series" and group == "Kubernetes":
         value = re.sub(r"^쿠버네티스 설치\(\d+\)_?", "", value).strip()
     if group == "MultiCloud":
         value = re.sub(r"^AWS-OCI VPN tunnel 이중화 \(BGP\)_\d+\.", "", value).strip()
@@ -189,25 +189,25 @@ def docs_review_status(group: str, number: int) -> tuple[str, str, str]:
     if (group == "Linux" and number <= 5) or group == "Network" or (group == "AWS" and number == 2):
         return (
             "medium",
-            "confirm-docs-or-study-based-on-origin",
-            "강의·책을 따라 작성한 원고인지 확인한 뒤 Docs 또는 Study를 확정합니다.",
+            "confirm-docs-or-series-based-on-origin",
+            "강의·책을 따라 작성한 원고인지 확인한 뒤 Docs 또는 Series를 확정합니다.",
         )
     return "high", "ready", "독립 문서로 바로 이관할 수 있습니다."
 
 
 def classify(group: str, number: int, title: str) -> dict[str, object]:
-    spec = study_spec(group, number)
+    spec = series_spec(group, number)
     if spec:
-        target_area = "Study"
+        target_area = "Series"
         target_section = None
         target_collection = str(spec["slug"])
-        target_parent = f"content/study/{target_collection}/"
+        target_parent = f"content/series/{target_collection}/"
         confidence = str(spec["confidence"])
         review_status = str(spec["review_status"])
         if review_status == "add-source-metadata":
-            review_note = "Study 분류는 명확하며 강의명·책 이름·저자·강사 등 출처 정보가 필요합니다."
+            review_note = "Series 분류는 명확하며 강의명·책 이름·저자·강사 등 출처 정보가 필요합니다."
         else:
-            review_note = "강의·책 기반인지 확인한 뒤 Study 범위와 출처를 확정합니다."
+            review_note = "강의·책 기반인지 확인한 뒤 Series 범위와 출처를 확정합니다."
     else:
         target_area = "Docs"
         target_section = docs_section(group, number)
@@ -291,7 +291,7 @@ def build_plan(source_root: Path) -> dict[str, object]:
             "source_is_read_only": True,
             "preserve_legacy_urls": True,
             "migrate_before_editorial_merge": True,
-            "study_definition": "강의나 책의 목차를 따라 학습한 기록",
+            "series_definition": "강의나 책의 목차를 따라 학습한 기록",
             "docs_definition": "독립적으로 찾아 쓰는 기술 문서와 테스트 매뉴얼",
         },
         "items": items,
@@ -310,8 +310,8 @@ def validate_items(items: list[dict[str, object]]) -> None:
     for item in items:
         if item["target_area"] == "Docs" and item["target_section"] not in ALLOWED_DOC_SECTIONS:
             raise ValueError(f"invalid Docs section: {item['source']}")
-        if item["target_area"] == "Study" and not item["target_collection"]:
-            raise ValueError(f"missing Study collection: {item['source']}")
+        if item["target_area"] == "Series" and not item["target_collection"]:
+            raise ValueError(f"missing Series collection: {item['source']}")
 
 
 def markdown_summary(plan: dict[str, object]) -> str:
@@ -320,20 +320,20 @@ def markdown_summary(plan: dict[str, object]) -> str:
     docs_counts = Counter(
         str(item["target_section"]) for item in items if item["target_area"] == "Docs"
     )
-    study_counts = Counter(
-        str(item["target_collection"]) for item in items if item["target_area"] == "Study"
+    series_counts = Counter(
+        str(item["target_collection"]) for item in items if item["target_area"] == "Series"
     )
     review_counts = Counter(str(item["review_status"]) for item in items)
     migration_counts = Counter(str(item["migration_status"]) for item in items)
 
-    study_names = {str(spec["slug"]): str(spec["name"]) for spec in STUDY_SPECS}
+    series_names = {str(spec["slug"]): str(spec["name"]) for spec in STUDY_SPECS}
     lines = [
         "# 전체 게시물 이관 계획 요약",
         "",
         f"- 원본 저장소 커밋: `{plan['source_commit']}`",
         f"- 원본 게시물: {plan['source_post_count']}개",
         f"- Docs 제안: {area_counts['Docs']}개",
-        f"- Study 제안: {area_counts['Study']}개",
+        f"- Series 제안: {area_counts['Series']}개",
         f"- 현재 이관 완료: {migration_counts['migrated']}개",
         f"- 남은 게시물: {plan['source_post_count'] - migration_counts['migrated']}개",
         "- 원본 저장소는 읽기 전용으로 유지",
@@ -350,16 +350,16 @@ def markdown_summary(plan: dict[str, object]) -> str:
     lines.extend(
         [
             "",
-            "## Study 제안",
+            "## Series 제안",
             "",
-            "| Study | 게시물 수 | 검토 상태 |",
+            "| Series | 게시물 수 | 검토 상태 |",
             "|---|---:|---|",
         ]
     )
     spec_by_slug = {str(spec["slug"]): spec for spec in STUDY_SPECS}
-    for slug, count in sorted(study_counts.items()):
+    for slug, count in sorted(series_counts.items()):
         spec = spec_by_slug[slug]
-        lines.append(f"| {study_names[slug]} | {count} | {spec['review_status']} |")
+        lines.append(f"| {series_names[slug]} | {count} | {spec['review_status']} |")
 
     lines.extend(
         [
@@ -369,9 +369,9 @@ def markdown_summary(plan: dict[str, object]) -> str:
             "| 상태 | 게시물 수 | 의미 |",
             "|---|---:|---|",
             f"| ready | {review_counts['ready']} | 현재 분류로 바로 이관 가능 |",
-            f"| add-source-metadata | {review_counts['add-source-metadata']} | Study 출처 정보 필요 |",
-            f"| confirm-study-boundary-and-source | {review_counts['confirm-study-boundary-and-source']} | Study 여부와 범위 확인 필요 |",
-            f"| confirm-docs-or-study-based-on-origin | {review_counts['confirm-docs-or-study-based-on-origin']} | 강의·책 기반 여부에 따라 Docs/Study 결정 |",
+            f"| add-source-metadata | {review_counts['add-source-metadata']} | Series 출처 정보 필요 |",
+            f"| confirm-series-boundary-and-source | {review_counts['confirm-series-boundary-and-source']} | Series 여부와 범위 확인 필요 |",
+            f"| confirm-docs-or-series-based-on-origin | {review_counts['confirm-docs-or-series-based-on-origin']} | 강의·책 기반 여부에 따라 Docs/Series 결정 |",
             "",
             "## 안전 장치",
             "",

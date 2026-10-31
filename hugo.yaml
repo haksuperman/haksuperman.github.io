@@ -34,7 +34,7 @@ menu:
       pageRef: /docs
       weight: 1
     - name: Series
-      pageRef: /study
+      pageRef: /series
       weight: 2
     - name: About
       pageRef: /about

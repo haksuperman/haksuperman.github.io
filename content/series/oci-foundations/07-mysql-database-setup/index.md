@@ -1,0 +1,114 @@
+---
+title: "MySQL 데이터베이스 설치와 기본 구성"
+linkTitle: "07. MySQL 데이터베이스 설치와 기본 구성"
+date: "2024-06-20T21:25:00+09:00"
+lastmod: "2024-06-20T21:25:00+09:00"
+aliases: ["/posts/oci10/", "/study/oci-foundations/07-mysql-database-setup/"]
+tags:
+  - "oci"
+  - "cloud"
+  - "oraclecloud"
+  - "oracle cloud infrastructure"
+  - "database"
+  - "mysql"
+categories:
+  - "CLOUD"
+  - "OCI"
+weight: 70
+sourceStatus: "needs-review"
+---
+[[OCI] 통신을 위한 네트워크 설정 (with. 시큐리티 리스트, Bastion 세션, 서버 자체 방화벽)]({{< relref "/series/oci-foundations/06-network-security-and-firewall/" >}})
+이렇게 진행한 가상 머신 인스턴스 중 프라이빗 서브넷에 생성한 oci-demo-db 가상 머신에 MySQL 데이터베이스를 설치해 데이터베이스 서버로 사용할 것이다.
+
+## 0. oci-demo-db 가상 머신 인스턴스 원격 접속
+![image](OCI10_01.png)
+
+## 1. MySQL용 yum 리포지터리 다운
+
+1. MySQL용 yum 리포지터리 다운
+```shell
+sudo rpm -ivh https://dev.mysql.com/get/mysql80-community-release-el8-3.noarch.rpm
+```
+![image](OCI10_02.png)
+
+
+## 2. 언어팩 설치
+1. glib-langpack-en, glib-langpack-ko 언어팩 설치
+(yum 리포지터리를 활성화하거나 MySQL을 설치할 때 발생할 수 있는 언어 설정 관련 에러 "Failed to set locale, defaulting to C.UTF-8" 오류를 방지하기 위해)
+    ```bash
+    sudo yum install -y glibc-langpack-en glibc-langpack-ko
+    ```
+![image](OCI10_03.png)
+
+2. yum 리포지터리 활성화
+    ```shell
+    sudo yum-config-manager --enable mysql80-community
+    ```
+![image](OCI10_04.png)
+
+3. mysql80-community 활성화 확인
+    ```shell
+    sudo yum repolist all | grep mysql
+    ```
+![image](OCI10_05.png)
+
+## 3. 최신 MySQL 설치 전 기존 MySQL 모듈 비활성화
+1. 최신 버전의 MySQL 모듈을 다운 받기 위해 오라클 리눅스에 기본적으로 설치되어 있는 기존 MySQL 모듈을 비활성화
+    ```shell
+    sudo yum module -y disable mysql
+    ```
+![image](OCI10_06.png)
+
+## 4. MySQL 설치
+1. MySQL Community Server 설치
+![image](OCI10_07.png)
+
+#### ※ GPG 에러
+- MySQL 패키지가 제공한 GPG 키와 일치하지 않아서 발생하는 에러이다.
+\-> GPG 키를 가져와 시스템에 추가해야 한다.
+![image](OCI10_08.png)
+
+- RPM-GPG-KEY-mysql-2023이 새로 추가되어서 2023도 import 해주기
+![image](OCI10_09.png)
+
+- 설치 성공! 
+![image](OCI10_10.png)
+
+## 5. MySQL 데몬 실행 및 자동 시작 설정
+1. MysQL 데몬 실행 및 재부팅 시 자동 실행
+    ```shell
+    sudo systemctl start mysqld
+    sudo systemctl enable mysqld
+    sudo systemctl status mysqld
+    ```
+![image](OCI10_11.png)
+
+
+## 6. MySQL 접속 후 root 패스워드 설정
+1. root 접속을 위한 초기 패스워드 확인(/var/log/mysqld.log 파일에서 확인 가능)
+    ```shell
+    sudo grep 'temporary password' /var/log/mysqld.log
+    ```
+![image](OCI10_12.png)
+
+2. root 계정으로 MySQL 접속
+    ```shell
+    mysql -uroot -p \<확인한 초기 패스워드 입력>
+    ```
+![image](OCI10_13.png)
+OCI10_01
+3. SQL문을 이용해 root 계정 패스워드 변경
+    ```shell
+    ALTER USER 'root'@'localhost' IDENTIFIED BY '<변경할 패스워드 입력>';
+    ```
+![image](OCI10_14.png)
+
+## 7. 실습 데이터베이스 생성
+1. 실습용 데이터베이스 test 생성, user 유저 생성, 권한 부여 및 적용
+    ```shell
+    create database test;
+    create user 'root'@'%' identified by '<패스워드 입력>';
+    grant all privileges on \*.\* to 'root'@'%' with grant option;
+    flush privileges;
+    ```
+![image](OCI10_15.png)

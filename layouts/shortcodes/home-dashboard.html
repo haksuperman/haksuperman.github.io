@@ -1,4 +1,4 @@
-{{- $pages := where .Site.RegularPages "Section" "in" (slice "docs" "study") -}}
+{{- $pages := where .Site.RegularPages "Section" "in" (slice "docs" "series") -}}
 <div class="home-notebook">
   <header class="home-intro">
     <img class="home-intro__avatar" src="{{ "images/haksuperman.jpg" | relURL }}" alt="학수의 로봇 프로필 이미지">
@@ -9,7 +9,7 @@
       <p class="home-intro__quote">“Ever tried, Ever failed, No matter. Try again, Fail again, Fail better.”</p>
       <nav class="home-intro__links" aria-label="주요 메뉴">
         <a href="{{ "docs/" | relURL }}">문서 둘러보기 →</a>
-        <a href="{{ "study/" | relURL }}">Series 보기 →</a>
+        <a href="{{ "series/" | relURL }}">Series 보기 →</a>
       </nav>
     </div>
   </header>
@@ -50,53 +50,53 @@
             <span class="home-recent-list__title">{{ .LinkTitle }}</span>
             <span class="home-recent-list__meta">
               <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "2006.01.02" }}</time>
-              <span>{{ if eq .Section "study" }}Series{{ else }}{{ title .Section }}{{ end }}</span>
+              <span>{{ if eq .Section "series" }}Series{{ else }}{{ title .Section }}{{ end }}</span>
             </span>
           </a>
         {{- end }}
       </div>
     </section>
 
-    <section class="home-section home-study" aria-labelledby="study-title">
+    <section class="home-section home-series" aria-labelledby="series-title">
       <div class="home-section__title">
-        <h2 id="study-title">Series</h2>
-        <a href="{{ "study/" | relURL }}">전체 보기</a>
+        <h2 id="series-title">Series</h2>
+        <a href="{{ "series/" | relURL }}">전체 보기</a>
       </div>
-      <div class="home-study-list">
-        <a href="{{ "study/aws-security/" | relURL }}">
-          <span class="home-study-list__number">01</span>
+      <div class="home-series-list">
+        <a href="{{ "series/aws-security/" | relURL }}">
+          <span class="home-series-list__number">01</span>
           <span><strong>AWS Security Series</strong><small>강의·책을 따라 정리한 보안 학습 노트</small></span>
         </a>
-        <a href="{{ "study/aws-technical-essentials/" | relURL }}">
-          <span class="home-study-list__number">02</span>
+        <a href="{{ "series/aws-technical-essentials/" | relURL }}">
+          <span class="home-series-list__number">02</span>
           <span><strong>AWS Technical Essentials Series</strong><small>VPC 기반 기본 웹 서비스 인프라 실습</small></span>
         </a>
-        <a href="{{ "study/kubernetes-cluster/" | relURL }}">
-          <span class="home-study-list__number">03</span>
+        <a href="{{ "series/kubernetes-cluster/" | relURL }}">
+          <span class="home-series-list__number">03</span>
           <span><strong>Kubernetes Cluster Series</strong><small>순서대로 따라가는 클러스터 구축 학습</small></span>
         </a>
-        <a href="{{ "study/linux-fundamentals/" | relURL }}">
-          <span class="home-study-list__number">04</span>
+        <a href="{{ "series/linux-fundamentals/" | relURL }}">
+          <span class="home-series-list__number">04</span>
           <span><strong>Linux Fundamentals Series</strong><small>명령어, 권한과 기본 도구 학습</small></span>
         </a>
-        <a href="{{ "study/network-fundamentals/" | relURL }}">
-          <span class="home-study-list__number">05</span>
+        <a href="{{ "series/network-fundamentals/" | relURL }}">
+          <span class="home-series-list__number">05</span>
           <span><strong>Network Fundamentals Series</strong><small>네트워크 개념과 라우팅·스위칭 실습</small></span>
         </a>
-        <a href="{{ "study/network-security/" | relURL }}">
-          <span class="home-study-list__number">06</span>
+        <a href="{{ "series/network-security/" | relURL }}">
+          <span class="home-series-list__number">06</span>
           <span><strong>Network Security Series</strong><small>네트워크 공격과 방어 실습 학습</small></span>
         </a>
-        <a href="{{ "study/oci-foundations/" | relURL }}">
-          <span class="home-study-list__number">07</span>
+        <a href="{{ "series/oci-foundations/" | relURL }}">
+          <span class="home-series-list__number">07</span>
           <span><strong>OCI Foundations Series</strong><small>OCI 환경 구축 과정을 따라가는 실습</small></span>
         </a>
-        <a href="{{ "study/terraform-infrastructure/" | relURL }}">
-          <span class="home-study-list__number">08</span>
+        <a href="{{ "series/terraform-infrastructure/" | relURL }}">
+          <span class="home-series-list__number">08</span>
           <span><strong>Terraform Infrastructure Series</strong><small>코드형 인프라의 개념과 구축 실습</small></span>
         </a>
-        <a href="{{ "study/web-security/" | relURL }}">
-          <span class="home-study-list__number">09</span>
+        <a href="{{ "series/web-security/" | relURL }}">
+          <span class="home-series-list__number">09</span>
           <span><strong>Web Security Series</strong><small>안전한 실습 환경에서 정리한 웹 보안 학습</small></span>
         </a>
       </div>

@@ -33,7 +33,7 @@ Series 문서는 다음처럼 생성합니다.
 ```bash
 SERIES_NAME=aws-security
 SEQUENCE_SLUG=11-01-new-security-topic
-hugo new content --kind series "study/${SERIES_NAME}/${SEQUENCE_SLUG}/index.md"
+hugo new content --kind series "series/${SERIES_NAME}/${SEQUENCE_SLUG}/index.md"
 ```
 
 ## 마이그레이션
@@ -61,12 +61,12 @@ python3 scripts/migrate_posts.py \
 확정된 Series 묶음은 별도의 명세로 재생성합니다. 정확한 강의·책 출처가 확인되지 않은 문서는 front matter의 `sourceStatus: needs-review`로 추적합니다.
 
 ```bash
-python3 scripts/build_study_manifest.py
+python3 scripts/build_series_manifest.py
 
 python3 scripts/migrate_posts.py \
   --source /path/to/haksuperman.github.io/site \
   --target . \
-  --manifest migration/study-posts.json
+  --manifest migration/series-posts.json
 ```
 
 이관 후에는 Hugo 전체 빌드를 실행한 다음 다음 검증을 통과해야 합니다.
