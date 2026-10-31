@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="뭉게뭉게 학수의 클라우드 세상 로봇 아이콘">
+  <defs>
+    <linearGradient id="sky" x1="8" y1="4" x2="54" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7dd3fc"/>
+      <stop offset="1" stop-color="#0e7490"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="18" y1="15" x2="47" y2="49" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38bdf8"/>
+      <stop offset="0.5" stop-color="#0369a1"/>
+      <stop offset="1" stop-color="#0c4a6e"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="31" fill="url(#sky)"/>
+  <path d="M8 45c7-4 13-5 20-3l-5 13c-7-1-12-4-15-10Z" fill="#dc2626" stroke="#7f1d1d" stroke-width="2"/>
+  <path d="m32 7 3 8h-6l3-8Z" fill="#ef4444" stroke="#7f1d1d" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="13" y="26" width="8" height="14" rx="4" fill="#ef4444" stroke="#7f1d1d" stroke-width="2"/>
+  <rect x="43" y="26" width="8" height="14" rx="4" fill="#ef4444" stroke="#7f1d1d" stroke-width="2"/>
+  <rect x="17" y="14" width="30" height="36" rx="14" fill="url(#metal)" stroke="#082f49" stroke-width="2.5"/>
+  <circle cx="26" cy="29" r="6" fill="#e0f2fe" stroke="#082f49" stroke-width="2"/>
+  <circle cx="38" cy="29" r="6" fill="#e0f2fe" stroke="#082f49" stroke-width="2"/>
+  <circle cx="27" cy="29" r="2.5" fill="#082f49"/>
+  <circle cx="39" cy="29" r="2.5" fill="#082f49"/>
+  <circle cx="25" cy="27" r="1" fill="white"/>
+  <circle cx="37" cy="27" r="1" fill="white"/>
+  <path d="M24 41c5 4 11 4 16 0" fill="none" stroke="#e0f2fe" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M18 19c8-6 20-7 28 0" fill="none" stroke="#bae6fd" stroke-width="2" stroke-linecap="round" opacity=".8"/>
+  <circle cx="32" cy="32" r="31" fill="none" stroke="#082f49" stroke-width="2"/>
+</svg>
