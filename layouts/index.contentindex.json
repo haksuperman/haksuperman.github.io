@@ -1,5 +1,5 @@
 {{- $posts := slice -}}
 {{- range where site.RegularPages "Section" "posts" -}}
-  {{- $posts = $posts | append (dict "slug" .File.ContentBaseName "url" .RelPermalink "collection" .Params.collection "docCategory" (.Params.doccategory | default "") "seriesId" (.Params.seriesid | default "") "seriesOrder" (.Params.seriesorder | default 0) "title" .Title) -}}
+  {{- $posts = $posts | append (dict "slug" .File.ContentBaseName "url" .RelPermalink "collection" .Params.collection "docCategory" (.Params.doccategory | default "") "seriesId" (.Params.seriesid | default "") "seriesOrder" (.Params.seriesorder | default 0) "title" .Title "date" (.Date.Format "2006-01-02T15:04:05Z07:00") "lastmod" ((partial "content/lastmod.html" .).Format "2006-01-02T15:04:05Z07:00")) -}}
 {{- end -}}
 {{- dict "posts" $posts | jsonify -}}

@@ -4,6 +4,7 @@ import io
 import json
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -106,6 +107,41 @@ class RenderedWorkflowTests(unittest.TestCase):
             self.assertTrue((root / "public/posts/draft/index.html").exists())
             self.assertEqual(PageLinks((root / "public/study/sample/draft/index.html").read_text()).redirects, ["/posts/draft/"])
             self.assertEqual(PageLinks((root / "public/study/sample/doc/index.html").read_text()).redirects, ["/posts/doc/"])
+
+            # Reset only the existing revision. A later real edit must use Git dates again.
+            config.write_text(config.read_text().replace("enableGitInfo: false", "enableGitInfo: true"))
+            subprocess.run(["git", "-c", "init.defaultBranch=main", "init", "-q"], cwd=root, check=True)
+            subprocess.run(["git", "add", "content", "data", "hugo.yaml", "go.mod", "go.sum"], cwd=root, check=True)
+            identity = ["git", "-c", "user.name=Blog tests", "-c", "user.email=blog-test@example.invalid"]
+            commit_env = {**os.environ, "GIT_AUTHOR_DATE": "2026-01-15T12:00:00+09:00", "GIT_COMMITTER_DATE": "2026-01-15T12:00:00+09:00"}
+            subprocess.run([*identity, "commit", "-qm", "fixture baseline"], cwd=root, env=commit_env, check=True)
+            revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
+            (root / "data/lastmod_baseline.json").write_text(json.dumps({"commits": [revision]}))
+            hugo(root)
+            validate(root)
+            publication = json.loads((root / "public/content-index.json").read_text())["posts"]
+            self.assertTrue(all(post["lastmod"] == post["date"] for post in publication))
+            path = root / "content/posts/first/index.md"
+            original = path.read_text()
+            metadata, body = read_post(path)
+            metadata["lastmod"] = "2025-12-01T09:00:00+09:00"
+            write_post(path, metadata, body)
+            hugo(root)
+            validate(root)
+            publication = json.loads((root / "public/content-index.json").read_text())["posts"]
+            explicit = next(post for post in publication if post["slug"] == "first")
+            self.assertEqual(explicit["lastmod"], "2025-12-01T09:00:00+09:00")
+            path.write_text(original + "\n본문 수정 확인\n")
+            subprocess.run(["git", "add", "content/posts/first/index.md"], cwd=root, check=True)
+            commit_env.update(GIT_AUTHOR_DATE="2026-01-16T12:00:00+09:00", GIT_COMMITTER_DATE="2026-01-16T12:00:00+09:00")
+            subprocess.run([*identity, "commit", "-qm", "edit one article"], cwd=root, env=commit_env, check=True)
+            hugo(root)
+            validate(root)
+            publication = json.loads((root / "public/content-index.json").read_text())["posts"]
+            edited = next(post for post in publication if post["slug"] == "first")
+            self.assertEqual(edited["date"], "2020-01-01T00:00:00+09:00")
+            self.assertEqual(edited["lastmod"], "2026-01-16T12:00:00+09:00")
+            self.assertTrue(all(post["lastmod"] == post["date"] for post in publication if post["slug"] != "first"))
 
 
 if __name__ == "__main__":
