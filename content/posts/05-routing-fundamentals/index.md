@@ -14,6 +14,10 @@ draft: false
 collection: series
 seriesId: network-fundamentals
 seriesOrder: 50
+aliases:
+- /series/network-fundamentals/05-routing-fundamentals/
+- /posts/network05/
+- /study/network-fundamentals/05-routing-fundamentals/
 ---
 ## Routing
 

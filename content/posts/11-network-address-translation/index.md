@@ -10,6 +10,10 @@ draft: false
 collection: series
 seriesId: network-fundamentals
 seriesOrder: 110
+aliases:
+- /series/network-fundamentals/11-network-address-translation/
+- /posts/network11/
+- /study/network-fundamentals/11-network-address-translation/
 ---
 ### NAT(Network Address Translation)
 

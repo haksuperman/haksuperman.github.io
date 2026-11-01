@@ -16,6 +16,10 @@ draft: false
 collection: series
 seriesId: oci-foundations
 seriesOrder: 30
+aliases:
+- /series/oci-foundations/03-identity-compartments-groups-users-policies/
+- /posts/oci06/
+- /study/oci-foundations/03-identity-compartments-groups-users-policies/
 ---
 ## 1. 오라클 클라우드에서의 권한 관리
 

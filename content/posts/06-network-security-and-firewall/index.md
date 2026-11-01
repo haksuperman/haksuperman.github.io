@@ -15,6 +15,10 @@ draft: false
 collection: series
 seriesId: oci-foundations
 seriesOrder: 60
+aliases:
+- /series/oci-foundations/06-network-security-and-firewall/
+- /posts/oci09/
+- /study/oci-foundations/06-network-security-and-firewall/
 ---
 ## 1. 시큐리티 리스트 규칙 추가
 

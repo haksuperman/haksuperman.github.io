@@ -15,6 +15,10 @@ draft: false
 collection: series
 seriesId: terraform-infrastructure
 seriesOrder: 30
+aliases:
+- /series/terraform-infrastructure/03-aws-credentials-and-iam/
+- /posts/terraform03/
+- /study/terraform-infrastructure/03-aws-credentials-and-iam/
 ---
 ## 1. 테라폼 작업용 AWS IAM User 생성
 1. 새 IAM User 생성

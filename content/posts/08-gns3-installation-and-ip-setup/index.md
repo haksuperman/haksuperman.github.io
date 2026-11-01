@@ -10,6 +10,10 @@ draft: false
 collection: series
 seriesId: network-fundamentals
 seriesOrder: 80
+aliases:
+- /series/network-fundamentals/08-gns3-installation-and-ip-setup/
+- /posts/network08/
+- /study/network-fundamentals/08-gns3-installation-and-ip-setup/
 ---
 ### 서브넷팅 복습
 

@@ -16,6 +16,10 @@ draft: false
 collection: series
 seriesId: terraform-infrastructure
 seriesOrder: 60
+aliases:
+- /series/terraform-infrastructure/06-tfvars-and-credentials/
+- /posts/terraform06/
+- /study/terraform-infrastructure/06-tfvars-and-credentials/
 ---
 [[Terraform] 테라폼 동작을 위한 사전 준비 (with. AWS Credentials, IAM 등)]({{< relref "/posts/03-aws-credentials-and-iam/" >}})
 

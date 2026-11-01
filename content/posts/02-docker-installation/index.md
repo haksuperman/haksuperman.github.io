@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: kubernetes-cluster
 seriesOrder: 20
+aliases:
+- /series/kubernetes-cluster/02-docker-installation/
+- /posts/kubernetes02/
+- /study/kubernetes-cluster/02-docker-installation/
 ---
 ### 17. 도커 설치
 1. apt update

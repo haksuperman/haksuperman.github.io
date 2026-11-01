@@ -16,6 +16,10 @@ draft: false
 collection: series
 seriesId: aws-technical-essentials
 seriesOrder: 10
+aliases:
+- /series/aws-technical-essentials/01-vpc-web-infrastructure-lab/
+- /posts/aws02/
+- /study/aws-technical-essentials/01-vpc-web-infrastructure-lab/
 ---
 ## 1. VPC 생성
 

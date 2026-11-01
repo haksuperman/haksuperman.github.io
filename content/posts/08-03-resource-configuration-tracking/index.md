@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 830
+aliases:
+- /series/aws-security/08-03-resource-configuration-tracking/
+- /posts/aws34/
+- /study/aws-security/08-03-resource-configuration-tracking/
 ---
 ## 1. CloudTrail의 한계
 CloudTrail은 누군가 API를 호출한 행위(이벤트)의 타임라인을 제공하는 데는 적합하지만, 특정 리소스의 '상태(구성)가 정확히 언제 변경되었는지' 파악하는 데는 한계가 있다.

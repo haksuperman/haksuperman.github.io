@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 220
+aliases:
+- /series/aws-security/02-02-iam-common-patterns/
+- /posts/aws08/
+- /study/aws-security/02-02-iam-common-patterns/
 ---
 ## 1. AWS 관리형 정책
 ### 1.1. 관리형 정책

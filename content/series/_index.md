@@ -1,5 +1,6 @@
 ---
 title: Series
+aliases: ["/study/"]
 description: 강의와 책을 따라 순서대로 학습한 기록입니다.
 weight: 2
 type: docs

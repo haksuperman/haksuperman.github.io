@@ -9,6 +9,9 @@ tags:
 draft: false
 collection: docs
 docCategory: command-tool
+aliases:
+- /docs/command-tool/linux-commands/
+- /posts/linux06/
 ---
 {{< callout type="info" >}}
 리눅스의 가장 기본적인 명령어를 이해하는 데 도움이 되는 간단한 가이드 문서다.

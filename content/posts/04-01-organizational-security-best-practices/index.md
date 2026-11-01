@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 410
+aliases:
+- /series/aws-security/04-01-organizational-security-best-practices/
+- /posts/aws12/
+- /study/aws-security/04-01-organizational-security-best-practices/
 ---
 ## 1. 개요
 모든 보안 기능에는 장단점이 있으므로, 맹목적으로 적용하기 보다는 조직의 상황에 맞게 아래 사항들이 반드시 고려되어야 한다.

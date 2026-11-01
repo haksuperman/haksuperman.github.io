@@ -13,6 +13,10 @@ draft: false
 collection: series
 seriesId: network-security
 seriesOrder: 40
+aliases:
+- /series/network-security/04-banner-grabbing-hping3/
+- /posts/networksecurity04/
+- /study/network-security/04-banner-grabbing-hping3/
 ---
 Telnet과 같이 원격지의 시스템에 로그인을 시도하였을 때 나타나는 안내문을 배너(Banner)라고 한다. 이러한 배너는 기본적으로 애플리케이션의 버전 등을 나타내기 때문에 이를 통해 기본적인 정보 수집이 가능하다.
 

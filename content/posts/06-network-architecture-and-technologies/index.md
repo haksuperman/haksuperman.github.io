@@ -14,6 +14,10 @@ draft: false
 collection: series
 seriesId: network-fundamentals
 seriesOrder: 60
+aliases:
+- /series/network-fundamentals/06-network-architecture-and-technologies/
+- /posts/network06/
+- /study/network-fundamentals/06-network-architecture-and-technologies/
 ---
 ![image](Network06_01.png)
 의정부 을지대학교 병원 및 을지 대학교 캠퍼스 네트워크 제안요청서

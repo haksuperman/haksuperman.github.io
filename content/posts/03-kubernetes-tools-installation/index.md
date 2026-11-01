@@ -13,6 +13,10 @@ draft: false
 collection: series
 seriesId: kubernetes-cluster
 seriesOrder: 30
+aliases:
+- /series/kubernetes-cluster/03-kubernetes-tools-installation/
+- /posts/kubernetes03/
+- /study/kubernetes-cluster/03-kubernetes-tools-installation/
 ---
 ### 19. 쿠버네티스 설치
 

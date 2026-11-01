@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: web-security
 seriesOrder: 60
+aliases:
+- /series/web-security/06-file-upload-attacks/
+- /posts/websecurity06/
+- /study/web-security/06-file-upload-attacks/
 ---
 웹 애플리케이션 개발/운영 환경에서 공격자가 실행 가능한 언어로 작성된 공격 프로그램을 업로드한 후 원격 해당 파일에 접근하여 실행시키는 취약점이다.
 

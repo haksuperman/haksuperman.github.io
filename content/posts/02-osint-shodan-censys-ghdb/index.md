@@ -13,6 +13,10 @@ draft: false
 collection: series
 seriesId: web-security
 seriesOrder: 20
+aliases:
+- /series/web-security/02-osint-shodan-censys-ghdb/
+- /posts/websecurity02/
+- /study/web-security/02-osint-shodan-censys-ghdb/
 ---
 ## 1. 쇼단(Shodan)
 

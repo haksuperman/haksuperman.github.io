@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: network-fundamentals
 seriesOrder: 130
+aliases:
+- /series/network-fundamentals/13-l3-switching-and-vlan/
+- /posts/network13/
+- /study/network-fundamentals/13-l3-switching-and-vlan/
 ---
 ![image](Network13_01.png)
 

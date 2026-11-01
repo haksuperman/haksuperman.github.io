@@ -11,6 +11,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/aws-saa-c03-pass-review/
+- /posts/aws01/
 ---
 드디어 Solution Architect Associate를 땄다! 응시료가 만만치 않아서 덜덜 떨면서 접수했다...
 

@@ -14,6 +14,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/oci-lb-add-www/
+- /posts/oci18/
 ---
 {{< callout type="info" >}}
 [haksuperman-oci.site](https://haksuperman-oci.site) -> [www.haksuperman-oci.site](https://www.haksuperman-oci.site)

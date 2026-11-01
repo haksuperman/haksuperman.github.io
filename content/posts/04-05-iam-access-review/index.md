@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 450
+aliases:
+- /series/aws-security/04-05-iam-access-review/
+- /posts/aws16/
+- /study/aws-security/04-05-iam-access-review/
 ---
 ## 1. IAM 권한 검토
 - 수동  검토의 필요성 : 조직에서 모범 사례(규칙)를 만들었다면 이를 적용해야 하지만, 패스워드 정책 등을 제외한 대부분의 모범 사례는 자동으로 시스템에 강제하기 어렵다.

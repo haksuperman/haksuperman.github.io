@@ -19,6 +19,10 @@ draft: false
 collection: series
 seriesId: network-security
 seriesOrder: 30
+aliases:
+- /series/network-security/03-nmap-scanning/
+- /posts/networksecurity03/
+- /study/network-security/03-nmap-scanning/
 ---
 ## 1. nmap을 활용한 활성화 된 Host 스캔
 

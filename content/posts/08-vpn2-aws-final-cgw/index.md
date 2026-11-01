@@ -13,6 +13,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/aws-oci-bgp-vpn/08-vpn2-aws-final-cgw/
+- /posts/multicloud08/
 ---
 ## 8.1. Customer gateway
 

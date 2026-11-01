@@ -12,6 +12,10 @@ draft: false
 collection: series
 seriesId: network-fundamentals
 seriesOrder: 70
+aliases:
+- /series/network-fundamentals/07-ip-subnetting-and-cidr/
+- /posts/network07/
+- /study/network-fundamentals/07-ip-subnetting-and-cidr/
 ---
 ### 1. Intarnet/Extranet
 

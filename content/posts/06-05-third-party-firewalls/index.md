@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 650
+aliases:
+- /series/aws-security/06-05-third-party-firewalls/
+- /posts/aws25/
+- /study/aws-security/06-05-third-party-firewalls/
 ---
 ## 1. 웹 애플리케이션 및 차세대 방화벽
 AWS WAF가 훌륭한 기능을 제공함에도 불구하고, 굳이 외부 제휴 공급사의 웹 애플리케이션 방화벽이나 차세대 방화벽을 사용하는 이유는 크게 두 가지다.

@@ -12,6 +12,9 @@ tags:
 draft: false
 collection: docs
 docCategory: theory-reference
+aliases:
+- /docs/theory-reference/oke-persistent-volume-overview/
+- /posts/oci24/
 ---
 ## 1. 기본 개념
 

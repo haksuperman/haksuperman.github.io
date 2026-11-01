@@ -16,6 +16,10 @@ draft: false
 collection: series
 seriesId: terraform-infrastructure
 seriesOrder: 70
+aliases:
+- /series/terraform-infrastructure/07-single-server-deployment/
+- /posts/terraform07/
+- /study/terraform-infrastructure/07-single-server-deployment/
 ---
 [[Terraform] terraform.tfvars를 통한 변수 값 저장 (with. AWS Credentials)]({{< relref "/posts/06-tfvars-and-credentials/" >}})
 

@@ -11,6 +11,9 @@ tags:
 draft: false
 collection: docs
 docCategory: theory-reference
+aliases:
+- /docs/theory-reference/oci-services-compared-with-aws/
+- /posts/oci01/
 ---
 채택할 클라우드 서비스와 관련하여 보다 현명한 의사 결정을 내리려면 솔루션 설계자 및 CloudOps 관리자가 경쟁 업체의 서비스를 Oracle Cloud Infrastructure의 유사한 서비스와 비교해야 한다.
 

@@ -13,6 +13,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/aws-oci-bgp-vpn/04-vpn1-aws-final-cgw/
+- /posts/multicloud04/
 ---
 ## 4.1. Customer gateway
 

@@ -13,6 +13,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/aws-oci-bgp-vpn/11-dynamic-routing-retrospective/
+- /posts/multicloud11/
 ---
 ## 11.1. OCI 측 DRG Route table
 

@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 610
+aliases:
+- /series/aws-security/06-01-protecting-access-beyond-vpc/
+- /posts/aws21/
+- /study/aws-security/06-01-protecting-access-beyond-vpc/
 ---
 ## 1. VPC 엔드포인트 및 PrivateLink
 보안을 위해 Internet Gateway를 달고 싶지 않은 경우, AWS 서비스나 외부 API는 꼭 사용해야할 때 활용하는 기술이다.

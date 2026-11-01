@@ -13,6 +13,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/aws-oci-bgp-vpn/05-vpn1-validation/
+- /posts/multicloud05/
 ---
 ### 5.1. AWS VPN 및 BGP State
 ![image](MultiCloud05_01.png)

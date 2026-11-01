@@ -16,6 +16,10 @@ draft: false
 collection: series
 seriesId: terraform-infrastructure
 seriesOrder: 80
+aliases:
+- /series/terraform-infrastructure/08-configurable-server-variables/
+- /posts/terraform08/
+- /study/terraform-infrastructure/08-configurable-server-variables/
 ---
 [[Terraform] 단일 서버, 단일 웹 서버 배포]({{< relref "/posts/07-single-server-deployment/" >}})
 

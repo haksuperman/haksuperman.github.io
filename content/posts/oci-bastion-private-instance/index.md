@@ -15,6 +15,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/oci-bastion-private-instance/
+- /posts/oci31/
 ---
 {{< callout type="info" >}}
 ✅

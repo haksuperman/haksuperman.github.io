@@ -12,6 +12,9 @@ tags:
 draft: false
 collection: docs
 docCategory: theory-reference
+aliases:
+- /docs/theory-reference/oke-cni-plugin/
+- /posts/oci19/
 ---
 {{< callout type="info" >}}
 해당 가이드는 실제 Setup에 관련된 가이드가 아닌, OCI에서 Kubernetes 구축 시 필요한 CNI에 대한 정보를 담은 가이드입니다.

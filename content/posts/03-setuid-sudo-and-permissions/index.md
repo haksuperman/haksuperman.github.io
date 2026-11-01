@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: linux-fundamentals
 seriesOrder: 30
+aliases:
+- /series/linux-fundamentals/03-setuid-sudo-and-permissions/
+- /posts/linux03/
+- /study/linux-fundamentals/03-setuid-sudo-and-permissions/
 ---
 SetUID
 

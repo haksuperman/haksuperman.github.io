@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 430
+aliases:
+- /series/aws-security/04-03-least-privilege-access/
+- /posts/aws14/
+- /study/aws-security/04-03-least-privilege-access/
 ---
 ## 1. 개요
 ### 1.1. 최소 권한의 원칙

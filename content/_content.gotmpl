@@ -1,9 +1,9 @@
 {{- $catalog := os.ReadFile "data/navigation.json" | transform.Unmarshal -}}
 {{- range $index, $group := $catalog.docs -}}
   {{- $params := dict "collection" "docs" "docCategory" $group.id "editURL" "https://github.com/haksuperman/haksuperman.github.io/edit/main/data/navigation.json" -}}
-  {{- $.AddPage (dict "path" (printf "docs/%s" $group.id) "kind" "section" "type" "docs" "title" $group.title "weight" (mul (add $index 1) 10) "params" $params "content" (dict "mediaType" "text/markdown" "value" (printf "%s\n\n{{< section-list >}}" (printf "%s\n\n%s" $group.description ($group.notes | default ""))))) -}}
+  {{- $.AddPage (dict "path" (printf "docs/%s" $group.id) "kind" "section" "aliases" ($group.aliases | default slice) "type" "docs" "title" $group.title "weight" (mul (add $index 1) 10) "params" $params "content" (dict "mediaType" "text/markdown" "value" (printf "%s\n\n{{< section-list >}}" (printf "%s\n\n%s" $group.description ($group.notes | default ""))))) -}}
 {{- end -}}
 {{- range $index, $group := $catalog.series -}}
   {{- $params := dict "collection" "series" "seriesId" $group.id "editURL" "https://github.com/haksuperman/haksuperman.github.io/edit/main/data/navigation.json" -}}
-  {{- $.AddPage (dict "path" (printf "series/%s" $group.id) "kind" "section" "type" "docs" "title" $group.title "weight" (mul (add $index 1) 10) "params" $params "content" (dict "mediaType" "text/markdown" "value" (printf "%s\n\n{{< section-list >}}" (printf "%s\n\n%s" $group.description ($group.notes | default ""))))) -}}
+  {{- $.AddPage (dict "path" (printf "series/%s" $group.id) "kind" "section" "aliases" ($group.aliases | default slice) "type" "docs" "title" $group.title "weight" (mul (add $index 1) 10) "params" $params "content" (dict "mediaType" "text/markdown" "value" (printf "%s\n\n{{< section-list >}}" (printf "%s\n\n%s" $group.description ($group.notes | default ""))))) -}}
 {{- end -}}

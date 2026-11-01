@@ -14,6 +14,10 @@ draft: false
 collection: series
 seriesId: oci-foundations
 seriesOrder: 10
+aliases:
+- /series/oci-foundations/01-account-creation-free-tier-mfa/
+- /posts/oci04/
+- /study/oci-foundations/01-account-creation-free-tier-mfa/
 ---
 ## 오라클 클라우드 Free Tier
 

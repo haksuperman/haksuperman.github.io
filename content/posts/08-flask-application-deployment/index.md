@@ -16,6 +16,10 @@ draft: false
 collection: series
 seriesId: oci-foundations
 seriesOrder: 80
+aliases:
+- /series/oci-foundations/08-flask-application-deployment/
+- /posts/oci11/
+- /study/oci-foundations/08-flask-application-deployment/
 ---
 [[OCI] 데이터베이스 설치 및 기본 구성(with. MySQL)]({{< relref "/posts/07-mysql-database-setup/" >}})
 이전 게시물에 이어 진행

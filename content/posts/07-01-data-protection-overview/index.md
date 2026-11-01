@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 710
+aliases:
+- /series/aws-security/07-01-data-protection-overview/
+- /posts/aws26/
+- /study/aws-security/07-01-data-protection-overview/
 ---
 ## 1. 데이터 보호의 3가지 핵심 원칙
 - 기밀성 (Confidentiality) : 승인된 사용자(권한이 있는 사람)만 데이터를 읽을 수 있도록 접근을 통제한다.

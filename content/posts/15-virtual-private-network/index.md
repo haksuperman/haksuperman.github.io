@@ -12,6 +12,10 @@ draft: false
 collection: series
 seriesId: network-fundamentals
 seriesOrder: 150
+aliases:
+- /series/network-fundamentals/15-virtual-private-network/
+- /posts/network15/
+- /study/network-fundamentals/15-virtual-private-network/
 ---
 DHCP(Dynamic Host Configuration Protocol)
 

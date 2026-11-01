@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: network-fundamentals
 seriesOrder: 100
+aliases:
+- /series/network-fundamentals/10-default-routing/
+- /posts/network10/
+- /study/network-fundamentals/10-default-routing/
 ---
 SDN(Software Defined Network)
 

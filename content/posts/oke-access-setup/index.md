@@ -12,6 +12,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/oke-access-setup/
+- /posts/oci22/
 ---
 ## **1. Bastion 서버 생성**
 

@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 310
+aliases:
+- /series/aws-security/03-01-secure-cross-account-access/
+- /posts/aws10/
+- /study/aws-security/03-01-secure-cross-account-access/
 ---
 ## 1. 개요
 - 멀티 계정 간에 애플리케이션을 분할하면 보안을 강화할 수 있다. 그러나, 계정 간 통신이 이루어질 때에는 비용이 발생한다.<br>

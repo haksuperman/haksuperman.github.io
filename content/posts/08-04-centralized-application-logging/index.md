@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 840
+aliases:
+- /series/aws-security/08-04-centralized-application-logging/
+- /posts/aws35/
+- /study/aws-security/08-04-centralized-application-logging/
 ---
 ## 1. 분산 환경에서의 로깅 문제점
 1. 로그 파편화 : 트래픽이 많아 여러 대의 EC2 인스턴스가 실행 중일 때, 에러 로그를 찾으려면 모든 인스턴스에 일일이 접속해서 로그 파일을 가져와 결합해야 하는 번거로움이 있다.

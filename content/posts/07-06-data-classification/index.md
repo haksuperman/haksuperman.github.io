@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 760
+aliases:
+- /series/aws-security/07-06-data-classification/
+- /posts/aws31/
+- /study/aws-security/07-06-data-classification/
 ---
 ## 1. 데이터 분류 (Data Classification)
 ### 1.1. 개요

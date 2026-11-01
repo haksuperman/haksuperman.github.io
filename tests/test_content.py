@@ -124,6 +124,34 @@ class ContentWorkflowTests(unittest.TestCase):
             with self.subTest(slug=slug), self.assertRaises(ContentError):
                 self.create(slug, collection="docs", category="guide-lab")
 
+    def test_previous_addresses_survive_reclassification(self):
+        path = self.create(collection="docs", category="guide-lab")
+        metadata, body = read_post(path)
+        metadata["aliases"] = ["/study/old-series/example/", "/posts/old-example/"]
+        write_post(path, metadata, body)
+        validate_sources(self.root)
+        reclassify(self.root, "example", collection="series", series="first", order=10)
+        self.assertEqual(read_post(path)[0]["aliases"], metadata["aliases"])
+        reclassify(self.root, "example", collection="docs", category="command-tool")
+        self.assertEqual(read_post(path)[0]["aliases"], metadata["aliases"])
+        validate_sources(self.root)
+
+    def test_previous_addresses_reject_duplicates_and_collisions(self):
+        path = self.create(collection="docs", category="guide-lab")
+        other = self.create("other", collection="docs", category="command-tool")
+        metadata, body = read_post(path)
+        invalid = ["/study/old/", ["../escape/"], ["/posts/other/"], ["/docs/guide-lab/"], ["/tags/aws/"], ["/study/old/", "/study/old/"]]
+        for aliases in invalid:
+            with self.subTest(aliases=aliases):
+                write_post(path, {**metadata, "aliases": aliases}, body)
+                with self.assertRaises(ContentError):
+                    validate_sources(self.root)
+        write_post(path, {**metadata, "aliases": ["/study/shared/"]}, body)
+        second, second_body = read_post(other)
+        write_post(other, {**second, "aliases": ["/study/shared/"]}, second_body)
+        with self.assertRaisesRegex(ContentError, "중복"):
+            validate_sources(self.root)
+
     def test_duplicate_yaml_keys_rejected(self):
         path = self.create(collection="docs", category="guide-lab")
         path.write_text(path.read_text().replace("collection: docs", "collection: docs\ncollection: series"))

@@ -14,6 +14,10 @@ draft: false
 collection: series
 seriesId: network-fundamentals
 seriesOrder: 10
+aliases:
+- /series/network-fundamentals/01-cloud-environment-concepts/
+- /posts/network01/
+- /study/network-fundamentals/01-cloud-environment-concepts/
 ---
 ## 1. 퍼블릭 클라우드(Public Cloud)
 

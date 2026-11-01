@@ -13,6 +13,10 @@ draft: false
 collection: series
 seriesId: terraform-infrastructure
 seriesOrder: 10
+aliases:
+- /series/terraform-infrastructure/01-devops-and-infrastructure-as-code/
+- /posts/terraform01/
+- /study/terraform-infrastructure/01-devops-and-infrastructure-as-code/
 ---
 ## 1. 데브옵스(DevOps)의 등장
 

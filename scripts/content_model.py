@@ -127,7 +127,7 @@ def validate_sources(root=ROOT):
                         raise ContentError(f"{key}에 올바른 날짜를 입력하세요.")
             if not isinstance(metadata.get("tags", []), list) or any(not isinstance(tag, str) for tag in metadata.get("tags", [])):
                 raise ContentError("tags는 문자열 목록으로 입력하세요.")
-            for key in ("url", "slug", "aliases", "type", "layout", "weight", "categories", "params", "_build", "build"):
+            for key in ("url", "slug", "type", "layout", "weight", "categories", "params", "_build", "build"):
                 if key in metadata:
                     raise ContentError(f"{key}는 게시물에서 사용하지 않습니다. 분류는 collection과 세부 항목으로 지정하세요.")
             collection = metadata.get("collection")
@@ -161,4 +161,40 @@ def validate_sources(root=ROOT):
             errors.append(f"content/{group}: 게시물은 content/posts/<이름>/index.md에 저장하세요.")
     if errors:
         raise ContentError("\n".join(errors))
+    alias_routes(root, data, posts)
     return data, posts
+
+
+def alias_routes(root, data, posts):
+    """Known published addresses use native Hugo aliases; no historical inventory is needed."""
+    targets = {"/", "/docs/", "/series/", "/posts/", "/about/", "/tags/"}
+    entries = []
+    for path, metadata, _ in posts:
+        target = f"/posts/{path.parent.name}/"
+        targets.add(target)
+        entries.append((str(path.relative_to(root)), target, metadata.get("aliases", [])))
+    for collection in ("docs", "series"):
+        for group in data[collection]:
+            target = f"/{collection}/{group['id']}/"
+            targets.add(target)
+            entries.append((f"data/navigation.json: {group['id']}", target, group.get("aliases", [])))
+    for path in (root / "content").rglob("_index.md"):
+        metadata, _ = read_post(path)
+        relative = path.parent.relative_to(root / "content").as_posix()
+        target = "/" if relative == "." else f"/{relative}/"
+        targets.add(target)
+        entries.append((str(path.relative_to(root)), target, metadata.get("aliases", [])))
+    routes, owners = {}, {}
+    for label, target, aliases in entries:
+        if not isinstance(aliases, list):
+            raise ContentError(f"{label}: aliases는 이전 주소의 목록으로 입력하세요.")
+        for alias in aliases:
+            if not isinstance(alias, str) or not re.fullmatch(r"/(?:[a-z0-9]+(?:-[a-z0-9]+)*/)+", alias):
+                raise ContentError(f"{label}: aliases에는 /로 시작하고 끝나는 영문 경로를 입력하세요.")
+            if alias in targets or alias.startswith(("/tags/", "/images/")):
+                raise ContentError(f"{label}: 이전 주소가 현재 경로와 충돌합니다: {alias}")
+            if alias in routes:
+                raise ContentError(f"{label}: 이전 주소가 {owners[alias]}와 중복됩니다: {alias}")
+            routes[alias] = target
+            owners[alias] = label
+    return routes

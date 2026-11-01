@@ -14,6 +14,9 @@ tags:
 draft: false
 collection: docs
 docCategory: theory-reference
+aliases:
+- /docs/theory-reference/oci-foundations/
+- /posts/oci03/
 ---
 ## 1. 물리적 아키텍처 개념(Physical Architecture Concepts)
 

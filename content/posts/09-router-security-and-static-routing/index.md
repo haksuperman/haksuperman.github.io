@@ -12,6 +12,10 @@ draft: false
 collection: series
 seriesId: network-fundamentals
 seriesOrder: 90
+aliases:
+- /series/network-fundamentals/09-router-security-and-static-routing/
+- /posts/network09/
+- /study/network-fundamentals/09-router-security-and-static-routing/
 ---
 ### R & S(Routing & Switching)
 

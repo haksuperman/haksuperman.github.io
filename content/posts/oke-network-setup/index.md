@@ -12,6 +12,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/oke-network-setup/
+- /posts/oci20/
 ---
 {{< callout type="info" >}}
 해당 가이드는 아래 요건으로 구성되는 OKE Cluster 구축 가이드이며, 이외 다양한 시나리오가 가능합니다.

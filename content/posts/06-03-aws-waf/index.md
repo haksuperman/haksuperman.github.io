@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 630
+aliases:
+- /series/aws-security/06-03-aws-waf/
+- /posts/aws23/
+- /study/aws-security/06-03-aws-waf/
 ---
 ## 1. AWS WAF
 ### 1.1. 기존 방화벽의 한계와 WAF의 필요성

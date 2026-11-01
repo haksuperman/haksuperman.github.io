@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 420
+aliases:
+- /series/aws-security/04-02-iam-best-practices/
+- /posts/aws13/
+- /study/aws-security/04-02-iam-best-practices/
 ---
 ## 1. 모범 사례 시나리오
 - IAM을 설정할 때 동일한 목표를 달성할 수 있는 방법은 여러 가지가 있다. 각 방법은 난이도와 보안 수준이 모두 다르다.

@@ -12,6 +12,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/oke-file-storage-dynamic-provisioning/
+- /posts/oci27/
 ---
 ## 1. 개요
 ## 1.1. 프로비저닝 방식

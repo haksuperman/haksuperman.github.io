@@ -13,6 +13,10 @@ draft: false
 collection: series
 seriesId: network-fundamentals
 seriesOrder: 20
+aliases:
+- /series/network-fundamentals/02-lan-and-wan-fundamentals/
+- /posts/network02/
+- /study/network-fundamentals/02-lan-and-wan-fundamentals/
 ---
 ## Networking
 

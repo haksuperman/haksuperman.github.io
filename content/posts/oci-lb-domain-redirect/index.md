@@ -14,6 +14,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/oci-lb-domain-redirect/
+- /posts/oci17/
 ---
 {{< callout type="info" >}}
 **haksuperman.site → haksuperman-oci.site**

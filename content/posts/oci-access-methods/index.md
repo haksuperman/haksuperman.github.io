@@ -13,6 +13,9 @@ tags:
 draft: false
 collection: docs
 docCategory: command-tool
+aliases:
+- /docs/command-tool/oci-access-methods/
+- /posts/oci02/
 ---
 ## 1. Oracle Cloud Console
 

@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 720
+aliases:
+- /series/aws-security/07-02-data-security-challenges/
+- /posts/aws27/
+- /study/aws-security/07-02-data-security-challenges/
 ---
 ## 1. 데이터 흐름 다이어그램
 시스템을 겨냥하는 잠재적 공격에 대비하는 구조화된 브레인스토밍을 위협 모델링(Threat modeling)이라고 부른다. 여기서 가장 유용한 도구가 '데이터 흐름 다이어그램'이다.

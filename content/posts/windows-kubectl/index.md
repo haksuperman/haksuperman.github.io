@@ -11,6 +11,9 @@ tags:
 draft: false
 collection: docs
 docCategory: command-tool
+aliases:
+- /docs/command-tool/windows-kubectl/
+- /posts/kubernetes05/
 ---
 ### 1. 개요
 #### 1) 굳이 Windows에 kubectl을 설치하는 이유
