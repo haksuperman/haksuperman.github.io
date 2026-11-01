@@ -10,7 +10,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-from content_model import ROOT, SLUG, ContentError, catalog, read_post, validate_sources, write_post
+from content_model import (ROOT, SLUG, ContentError, catalog, find_post, post_path,
+                           read_post, validate_sources, write_post)
 
 
 def choose(prompt, entries):
@@ -32,7 +33,7 @@ def required(prompt, value=None):
 
 def next_order(root, series_id, exclude=None):
     orders = []
-    for path in (root / "content/posts").glob("*/index.md"):
+    for path in (root / "content/posts").rglob("index.md"):
         if path == exclude:
             continue
         metadata, _ = read_post(path)
@@ -75,7 +76,7 @@ def select_classification(root, collection=None, category=None, series=None, ord
             order = suggested
     if type(order) is not int or order <= 0:
         raise ContentError("시리즈 순서는 0보다 큰 정수여야 합니다.")
-    for path in (root / "content/posts").glob("*/index.md"):
+    for path in (root / "content/posts").rglob("index.md"):
         if path == exclude:
             continue
         metadata, _ = read_post(path)
@@ -89,10 +90,13 @@ def new_post(root=ROOT, *, title=None, slug=None, collection=None, category=None
     slug = required("저장할 영문 이름 (예: oke-cluster)", slug)
     if not SLUG.fullmatch(slug):
         raise ContentError("영문 이름에는 소문자, 숫자와 단어 사이의 하이픈만 사용하세요.")
-    path = root / "content/posts" / slug / "index.md"
+    existing = find_post(root, slug, required=False)
+    if existing is not None:
+        raise ContentError(f"이미 존재하는 게시물 폴더입니다: {existing.parent}")
+    classification = select_classification(root, collection, category, series, order)
+    path = post_path(root, slug, classification)
     if path.parent.exists():
         raise ContentError(f"이미 존재하는 게시물 폴더입니다: {path.parent}")
-    classification = select_classification(root, collection, category, series, order)
     metadata = {"title": title, "date": dt.datetime.now(dt.timezone(dt.timedelta(hours=9))).isoformat(timespec="seconds"), "draft": True, **classification, "tags": tags or []}
     body = "\n## 1. 개요\n\n글의 목적과 전제 조건을 작성합니다.\n\n## 2. 내용\n\n본문을 작성합니다.\n\n## 3. 정리\n\n결과와 참고 자료를 작성합니다.\n"
     path.parent.mkdir(parents=True, exist_ok=False)
@@ -104,14 +108,22 @@ def new_post(root=ROOT, *, title=None, slug=None, collection=None, category=None
 def reclassify(root, slug, **options):
     if not SLUG.fullmatch(slug):
         raise ContentError("게시물의 영문 이름을 입력하세요.")
-    path = root / "content/posts" / slug / "index.md"
+    path = find_post(root, slug)
     metadata, body = read_post(path)
     classification = select_classification(root, exclude=path, **options)
+    destination = post_path(root, slug, classification)
+    if destination != path and destination.parent.exists():
+        raise ContentError(f"이동할 폴더가 이미 존재합니다: {destination.parent}")
     for key in ("collection", "docCategory", "seriesId", "seriesOrder"):
         metadata.pop(key, None)
     metadata.update(classification)
     write_post(path, metadata, body)
-    print(f"분류를 변경했습니다: {path}\n파일 위치와 본문은 유지됩니다.")
+    if destination != path:
+        destination.parent.parent.mkdir(parents=True, exist_ok=True)
+        path.parent.rename(destination.parent)
+        path = destination
+    print(f"분류를 변경했습니다: {path}\n본문과 이미지를 함께 새 분류 폴더로 이동했습니다.")
+    return path
 
 
 def add_series(root=ROOT, series_id=None, title=None, description=None):
@@ -124,7 +136,10 @@ def add_series(root=ROOT, series_id=None, title=None, description=None):
         description = input("시리즈 소개 (생략 가능): ").strip()
     data["series"].append({"id": series_id, "title": title, "description": description})
     (root / "data/navigation.json").write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"시리즈를 등록했습니다: {title} ({series_id})\n목록과 메뉴는 다음 Hugo 빌드에서 자동 생성됩니다.")
+    folder = root / "content/posts/series" / series_id
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / ".gitkeep").touch()
+    print(f"시리즈를 등록했습니다: {title} ({series_id})\n게시물 폴더: {folder}\n목록과 메뉴는 다음 Hugo 빌드에서 자동 생성됩니다.")
     return series_id
 
 
@@ -180,7 +195,7 @@ def menu(root=ROOT):
                 new_post(root)
             elif action == "list":
                 list_posts(root, input("제목 또는 영문 이름 검색 (전체: Enter): "))
-                print("표시된 영문 이름의 content/posts/<이름>/index.md를 편집기로 여세요.")
+                print("표시된 영문 이름의 content/posts/<Docs 또는 Series>/<세부 분류>/<이름>/index.md를 편집기로 여세요.")
             elif action == "classify":
                 reclassify(root, required("변경할 게시물 영문 이름"))
             elif action == "series":

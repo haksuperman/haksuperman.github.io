@@ -32,6 +32,10 @@ class RenderedWorkflowTests(unittest.TestCase):
                 target = root / "content" / name
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(ROOT / "content" / name, target)
+            navigation = json.loads((root / "data/navigation.json").read_text())
+            for collection in ("docs", "series"):
+                for group in navigation[collection]:
+                    (root / "content/posts" / collection / group["id"]).mkdir(parents=True, exist_ok=True)
             def create(slug, collection, **kwargs):
                 with contextlib.redirect_stdout(io.StringIO()):
                     path = new_post(root, title=slug, slug=slug, collection=collection, **kwargs)
@@ -39,17 +43,17 @@ class RenderedWorkflowTests(unittest.TestCase):
                 metadata.update(date="2020-01-01T00:00:00+09:00", draft=False)
                 write_post(path, metadata, body)
                 return path
-            create("doc", "docs", category="guide-lab")
-            create("first", "series", series="kubernetes-cluster", order=10)
-            create("last", "series", series="kubernetes-cluster", order=30)
+            doc_path = create("doc", "docs", category="guide-lab")
+            first_path = create("first", "series", series="kubernetes-cluster", order=10)
+            last_path = create("last", "series", series="kubernetes-cluster", order=30)
             draft = create("draft", "series", series="kubernetes-cluster", order=20)
             metadata, body = read_post(draft)
             metadata["draft"] = True
             metadata["aliases"] = ["/study/sample/draft/"]
             write_post(draft, metadata, body)
             # New image and new draft must not depend on any historical inventory.
-            (root / "content/posts/doc/diagram.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"></svg>')
-            path = root / "content/posts/doc/index.md"
+            (doc_path.parent / "diagram.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"></svg>')
+            path = doc_path
             metadata, body = read_post(path)
             metadata["aliases"] = ["/study/sample/doc/", "/series/sample/doc/"]
             write_post(path, metadata, body + "\n![diagram](diagram.svg)\n")
@@ -77,10 +81,10 @@ class RenderedWorkflowTests(unittest.TestCase):
             self.assertEqual(initial_doc.sidebar_open["/docs/guide-lab/"], [True, True])
             self.assertNotIn("/posts/draft/", [link for _, link in first.pager])
             with contextlib.redirect_stdout(io.StringIO()):
-                reclassify(root, "doc", collection="docs", category="theory-reference")
-                reclassify(root, "last", collection="series", series="oci-foundations", order=10)
+                doc_path = reclassify(root, "doc", collection="docs", category="theory-reference")
+                last_path = reclassify(root, "last", collection="series", series="oci-foundations", order=10)
                 add_series(root, "new-series", "신규 시리즈", "자동 생성 확인")
-                reclassify(root, "first", collection="docs", category="command-tool")
+                first_path = reclassify(root, "first", collection="docs", category="command-tool")
             hugo(root)
             self.assertEqual(validate(root)["시리즈"], 10)
             moved = PageLinks((root / "public/posts/last/index.html").read_text())
@@ -92,8 +96,8 @@ class RenderedWorkflowTests(unittest.TestCase):
             theory = PageLinks((root / "public/docs/theory-reference/index.html").read_text())
             self.assertEqual(theory.lists, ["/posts/doc/"])
             with contextlib.redirect_stdout(io.StringIO()):
-                reclassify(root, "doc", collection="series", series="new-series", order=20)
-                reclassify(root, "first", collection="series", series="new-series", order=10)
+                doc_path = reclassify(root, "doc", collection="series", series="new-series", order=20)
+                first_path = reclassify(root, "first", collection="series", series="new-series", order=10)
             hugo(root)
             validate(root)
             group = PageLinks((root / "public/series/new-series/index.html").read_text())
@@ -121,7 +125,7 @@ class RenderedWorkflowTests(unittest.TestCase):
             validate(root)
             publication = json.loads((root / "public/content-index.json").read_text())["posts"]
             self.assertTrue(all(post["lastmod"] == post["date"] for post in publication))
-            path = root / "content/posts/first/index.md"
+            path = first_path
             original = path.read_text()
             metadata, body = read_post(path)
             metadata["lastmod"] = "2025-12-01T09:00:00+09:00"
@@ -132,7 +136,7 @@ class RenderedWorkflowTests(unittest.TestCase):
             explicit = next(post for post in publication if post["slug"] == "first")
             self.assertEqual(explicit["lastmod"], "2025-12-01T09:00:00+09:00")
             path.write_text(original + "\n본문 수정 확인\n")
-            subprocess.run(["git", "add", "content/posts/first/index.md"], cwd=root, check=True)
+            subprocess.run(["git", "add", str(path.relative_to(root))], cwd=root, check=True)
             commit_env.update(GIT_AUTHOR_DATE="2026-01-16T12:00:00+09:00", GIT_COMMITTER_DATE="2026-01-16T12:00:00+09:00")
             subprocess.run([*identity, "commit", "-qm", "edit one article"], cwd=root, env=commit_env, check=True)
             hugo(root)

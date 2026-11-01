@@ -21,7 +21,7 @@ aliases:
 - /posts/oci11/
 - /study/oci-foundations/08-flask-application-deployment/
 ---
-[[OCI] 데이터베이스 설치 및 기본 구성(with. MySQL)]({{< relref "/posts/07-mysql-database-setup/" >}})
+[[OCI] 데이터베이스 설치 및 기본 구성(with. MySQL)](/posts/07-mysql-database-setup/)
 이전 게시물에 이어 진행
 -   샘플 애플리케이션은 데이터베이스에서 샘플 데이터를 가져와 출력하는 기능을 갖고 있다. 이를 위해 애플리케이션 서버에도 MySQL 클라이언트를 설치해야 한다.
 -   파이썬 Flask 모듈을 사용해서 테스트용 웹 서버를 만들어 웹 응용 프로그램을 개발한다.
@@ -147,7 +147,7 @@ pip install faker
 ![image](OCI11_21.png)
 
 4. 해당 게시물에서 이미 시큐리티 리스트와 호스트 레벨에서의 자체 방화벽도 개방을 해놨기 때문에 접속 가능하다.
-[[OCI] 통신을 위한 네트워크 설정 (with. 시큐리티 리스트, Bastion 세션, 서버 자체 방화벽)]({{< relref "/posts/06-network-security-and-firewall/" >}})
+[[OCI] 통신을 위한 네트워크 설정 (with. 시큐리티 리스트, Bastion 세션, 서버 자체 방화벽)](/posts/06-network-security-and-firewall/)
 
 5. 별도의 애플리케이션 서버에 접속하는 터미널을 하나 더 열어서 이용중인 포트 정보 확인<br>
 \-> 5000번 포트가 인터넷으로 서비스 중인 것 확인 가능

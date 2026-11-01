@@ -3,10 +3,11 @@
 Hugo/Hextra 기반 기술 블로그입니다.
 
 - 공개 사이트: https://haksuperman.github.io/
-- 모든 게시물: `content/posts/<영문-이름>/index.md`
+- Docs 게시물: `content/posts/docs/<문서-분류>/<영문-이름>/index.md`
+- Series 게시물: `content/posts/series/<시리즈-ID>/<영문-이름>/index.md`
 - Docs: Theory & Reference / Command & Tool / Guide & Lab / Issue & Troubleshooting
 - Series: 등록된 시리즈별로 순서대로 읽는 게시물
-- 글의 소속과 순서는 글 상단 정보로 관리하며, 분류 변경에 파일 이동은 필요하지 않습니다.
+- 글의 소속과 순서는 글 상단 정보로 관리하며, 운영 도우미가 분류에 맞는 폴더로 글과 이미지를 함께 이동합니다.
 - 이미지와 첨부 파일은 해당 글과 같은 폴더에 저장합니다.
 
 ## 시작하기

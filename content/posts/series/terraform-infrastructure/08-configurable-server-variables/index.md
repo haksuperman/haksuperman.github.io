@@ -21,7 +21,7 @@ aliases:
 - /posts/terraform08/
 - /study/terraform-infrastructure/08-configurable-server-variables/
 ---
-[[Terraform] 단일 서버, 단일 웹 서버 배포]({{< relref "/posts/07-single-server-deployment/" >}})
+[[Terraform] 단일 서버, 단일 웹 서버 배포](/posts/07-single-server-deployment/)
 
 이전 게시물에 이어 진행.
 

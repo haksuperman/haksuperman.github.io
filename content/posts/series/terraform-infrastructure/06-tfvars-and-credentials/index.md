@@ -21,7 +21,7 @@ aliases:
 - /posts/terraform06/
 - /study/terraform-infrastructure/06-tfvars-and-credentials/
 ---
-[[Terraform] 테라폼 동작을 위한 사전 준비 (with. AWS Credentials, IAM 등)]({{< relref "/posts/03-aws-credentials-and-iam/" >}})
+[[Terraform] 테라폼 동작을 위한 사전 준비 (with. AWS Credentials, IAM 등)](/posts/03-aws-credentials-and-iam/)
 
 
 ## 1. terraform.tfvars의 필요성

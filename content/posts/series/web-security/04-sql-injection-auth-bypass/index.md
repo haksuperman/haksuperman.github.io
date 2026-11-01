@@ -25,7 +25,7 @@ aliases:
 
 ※ 이전 게시물에 이어 진행(여기서부턴 다시 진행하면서 캡처한 내용이 아닌, 캡쳐본을 따온 사진들이기 때문에 말끔하지 못함..)
 
-[[Web Security] SQL Injection(1)_Burp Suite, 프록시 설정, CA인증서 등]({{< relref "/posts/03-sql-injection-proxy-setup/" >}})
+[[Web Security] SQL Injection(1)_Burp Suite, 프록시 설정, CA인증서 등](/posts/03-sql-injection-proxy-setup/)
 
 
 ## 1. 취약점 개요

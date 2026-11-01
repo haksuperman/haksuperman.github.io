@@ -1,6 +1,6 @@
 # Hugo 게시물 등록·수정 가이드
 
-이 블로그는 글을 `content/posts/<영문-이름>/index.md`에 저장하고, 글 상단의 정보로 **Docs / Series와 세부 분류**를 결정합니다. 분류를 바꿀 때 파일이나 이미지를 옮기지 않습니다.
+이 블로그는 Docs 글을 `content/posts/docs/<문서-분류>/<영문-이름>/index.md`, Series 글을 `content/posts/series/<시리즈-ID>/<영문-이름>/index.md`에 저장합니다. 글 상단 정보와 실제 폴더가 항상 같은 분류를 가리켜야 하며, 운영 도우미로 분류를 바꾸면 글과 이미지가 함께 이동합니다.
 
 ## 1. 처음 한 번 환경 준비
 
@@ -28,7 +28,7 @@ python3 -m venv .venv
 | --- | --- |
 | 새 글 만들기 | 제목·영문 이름을 입력하고 Docs/Series 및 세부 분류를 선택 |
 | 기존 글 찾기 | 제목이나 영문 이름으로 파일을 찾음 |
-| 게시물 분류 / 시리즈 순서 변경 | 파일을 옮기지 않고 소속·분류·순서를 변경 |
+| 게시물 분류 / 시리즈 순서 변경 | 소속·분류·순서를 변경하고 글 묶음을 해당 폴더로 이동 |
 | 새 시리즈 만들기 | 시리즈를 등록하고 목록·메뉴 자동 생성 |
 | 미리보기 | 초안까지 포함한 사이트 실행 |
 | 게시 전 확인 | 모든 글의 분류, 공개 결과, 이미지·링크와 시리즈 이동 검사 |
@@ -61,10 +61,17 @@ AWS, OCI, Kubernetes 같은 기술 키워드는 `tags`로 입력합니다. Docs�
 3. Docs 또는 Series
 4. Docs라면 네 가지 문서 분류, Series라면 시리즈와 순서
 
-다음 파일이 만들어집니다.
+Docs의 Guide & Lab을 선택하면 다음 파일이 만들어집니다.
 
 ```text
-content/posts/oke-cluster/
+content/posts/docs/guide-lab/oke-cluster/
+└── index.md
+```
+
+Series의 Kubernetes Cluster를 선택하면 다음 위치에 만들어집니다.
+
+```text
+content/posts/series/kubernetes-cluster/kubernetes-bootstrap/
 └── index.md
 ```
 
@@ -86,11 +93,11 @@ Series 예시:
 
 필요하면 `--order 40`으로 순서를 직접 지정합니다. 기존 파일과 폴더를 덮어쓰지 않습니다.
 
-Hugo 명령을 직접 사용해도 됩니다. 두 종류 모두 동일한 `content/posts/` 아래에 생성합니다.
+Hugo 명령을 직접 사용할 때도 분류 폴더까지 정확히 지정합니다.
 
 ```bash
-hugo new content --kind docs posts/oke-cluster/index.md
-hugo new content --kind series posts/kubernetes-bootstrap/index.md
+hugo new content --kind docs posts/docs/guide-lab/oke-cluster/index.md
+hugo new content --kind series posts/series/kubernetes-cluster/kubernetes-bootstrap/index.md
 ```
 
 생성 후 Docs는 `docCategory`를 확인하고, Series는 빈 `seriesId`와 `seriesOrder`를 지정하세요. 분류를 선택해서 자동으로 입력하려면 `./blog new`를 사용합니다.
@@ -145,7 +152,7 @@ tags: ["Kubernetes"]
 본문은 Markdown으로 작성합니다. 이미지는 글과 같은 폴더에 넣고 파일 이름으로 연결합니다.
 
 ```text
-content/posts/oke-cluster/
+content/posts/docs/guide-lab/oke-cluster/
 ├── index.md
 ├── architecture.png
 └── result.png
@@ -157,10 +164,10 @@ content/posts/oke-cluster/
 
 이미지를 자유롭게 추가·삭제할 수 있습니다. 삭제한 이미지가 본문에서 참조되고 있으면 게시 전 확인에서 알려줍니다. 이미지와 본문에 계정 비밀번호·인증 키 같은 민감정보가 없는지도 확인하세요.
 
-다른 게시물로 연결할 때는 Hugo의 `relref`를 사용합니다. 삭제되거나 없는 게시물을 가리키면 빌드에서 확인할 수 있습니다.
+다른 게시물로 연결할 때는 분류 이동에도 바뀌지 않는 공개 주소 `/posts/<영문-이름>/`를 사용합니다. 삭제되거나 없는 게시물을 가리키면 게시 전 검사에서 확인할 수 있습니다.
 
 ```markdown
-[클러스터 초기화]({{< relref "/posts/kubernetes-bootstrap/" >}})
+[클러스터 초기화](/posts/kubernetes-bootstrap/)
 ```
 
 ## 7. 기존 글 찾기·분류 변경
@@ -169,7 +176,7 @@ content/posts/oke-cluster/
 ./blog list --search OKE
 ```
 
-검색 결과의 `content/posts/<영문-이름>/index.md`를 편집기로 엽니다. 제목·본문·태그 수정은 이 파일에서 수행합니다.
+검색 결과에 표시되는 `content/posts/docs/...` 또는 `content/posts/series/...` 경로의 `index.md`를 편집기로 엽니다. 제목·본문·태그 수정은 이 파일에서 수행합니다.
 
 분류는 관리 메뉴 또는 다음 명령으로 바꿀 수 있습니다.
 
@@ -177,7 +184,7 @@ content/posts/oke-cluster/
 ./blog classify oke-cluster
 ```
 
-새로운 Docs/Series 소속과 세부 분류를 선택하면 불필요해진 이전 분류 정보는 자동으로 제거됩니다. 파일 위치·본문·이미지는 유지됩니다.
+새로운 Docs/Series 소속과 세부 분류를 선택하면 불필요해진 이전 분류 정보는 자동으로 제거되고, 게시물 폴더와 그 안의 이미지가 새 분류 폴더로 함께 이동합니다. 공개 주소 `/posts/<영문-이름>/`는 유지됩니다.
 
 ```bash
 # Docs의 다른 분류로 변경
@@ -187,7 +194,7 @@ content/posts/oke-cluster/
 ./blog classify oke-cluster --collection series --series oci-foundations --order 120
 ```
 
-직접 글 상단을 수정해도 됩니다. **Docs에는 `docCategory`만, Series에는 `seriesId`와 `seriesOrder`만** 남기세요. 저장 후 미리보기를 확인하면 분류 목록·왼쪽 메뉴·현재 위치·시리즈 이전/다음 글이 새 정보에 맞게 반영됩니다.
+직접 글 상단을 수정한다면 **Docs에는 `docCategory`만, Series에는 `seriesId`와 `seriesOrder`만** 남기고 게시물 폴더도 같은 분류 경로로 이동해야 합니다. 누락을 방지하려면 `./blog classify` 사용을 권장합니다. 저장 후 미리보기를 확인하면 분류 목록·왼쪽 메뉴·현재 위치·시리즈 이전/다음 글이 새 정보에 맞게 반영됩니다.
 
 ## 8. 시리즈 등록·이름 변경
 
@@ -195,7 +202,7 @@ content/posts/oke-cluster/
 ./blog series-add --id oke-operations --title "OKE 운영" --description "OKE 운영 절차를 순서대로 정리합니다."
 ```
 
-이 명령은 **분류 정의 파일 `data/navigation.json` 한곳만 수정**합니다. Hugo가 목록 페이지와 메뉴를 자동으로 만드므로 별도 폴더나 메뉴를 추가하지 않습니다.
+이 명령은 **분류 정의 파일 `data/navigation.json`**을 수정하고 `content/posts/series/<시리즈-ID>/` 폴더를 함께 만듭니다. Hugo가 목록 페이지와 메뉴는 자동으로 생성합니다.
 
 이 파일에서 Docs·Series의 `title`과 `description`을 수정할 수 있습니다. `subtitle`은 기존 카드의 짧은 소개, `homeSubtitle`은 홈의 짧은 소개, `icon`은 카드 아이콘입니다. 새 시리즈에서는 생략할 수 있습니다. 시리즈의 배열 순서는 메뉴와 홈의 표시 순서입니다. **이름만 바꿀 때는 `id`를 유지**하세요. ID를 바꾸거나 시리즈를 삭제할 경우에는 소속된 글의 `seriesId`도 함께 변경해야 합니다. Docs 네 분류의 ID는 고정입니다.
 

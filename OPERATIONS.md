@@ -6,7 +6,8 @@
 
 | 위치 | 역할 |
 | --- | --- |
-| `content/posts/<이름>/index.md` | 모든 게시물의 본문과 분류 정보 |
+| `content/posts/docs/<분류>/<이름>/index.md` | Docs 게시물의 본문과 분류 정보 |
+| `content/posts/series/<시리즈>/<이름>/index.md` | Series 게시물의 본문과 순서 정보 |
 | 글과 같은 폴더 | 이미지와 첨부 파일 |
 | `data/navigation.json` | Docs 네 분류와 시리즈의 이름·소개·표시 순서 |
 | `content/docs/`, `content/series/` | Docs/Series 첫 화면 |
@@ -17,7 +18,7 @@
 
 기존 게시물의 표시 수정일은 2026년 11월 1일에 등록일로 한 번 보정했습니다. 보정 기준은 `data/lastmod_baseline.json`에 기록되어 있으며, 이후 새 커밋으로 수정된 글에는 기존 Git 수정일 계산이 그대로 적용됩니다.
 
-게시물의 폴더 위치는 분류를 결정하지 않습니다. 메뉴와 목록은 글 상단의 `collection`, `docCategory`, `seriesId`, `seriesOrder`를 사용합니다. 분류 검사는 현재 게시물 전체에 적용하며 글 수나 이미지 개수를 고정하지 않습니다.
+게시물 폴더와 글 상단의 `collection`, `docCategory`, `seriesId`, `seriesOrder`는 같은 분류를 가리켜야 합니다. 메뉴와 목록은 글 상단 정보를 사용하고, 게시 전 검사는 실제 폴더도 일치하는지 확인합니다. 분류 변경은 `./blog classify`를 사용하면 글과 이미지를 함께 이동합니다.
 
 ## 2. 작업 시작
 
@@ -72,7 +73,7 @@ Hugo가 설치되지 않은 환경에서는 `./blog check`가 Docker를 사용�
 
 ```bash
 git status
-git add content/posts/oke-cluster
+git add content/posts/docs/guide-lab/oke-cluster
 # 분류 정의도 변경했다면 다음 줄 실행
 git add data/navigation.json
 git diff --cached

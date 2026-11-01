@@ -102,19 +102,49 @@ def is_published(metadata, include_drafts=False, now=None):
             and (not metadata.get("expiryDate") or as_time(metadata["expiryDate"]) > now))
 
 
+def post_path(root, slug, classification):
+    """Return the physical bundle path for a classified post."""
+    if classification.get("collection") == "docs":
+        group = classification.get("docCategory")
+    elif classification.get("collection") == "series":
+        group = classification.get("seriesId")
+    else:
+        raise ContentError("collection은 docs 또는 series로 입력하세요.")
+    if not isinstance(group, str) or not SLUG.fullmatch(group):
+        raise ContentError("게시물의 세부 분류를 확인하세요.")
+    return root / "content/posts" / classification["collection"] / group / slug / "index.md"
+
+
+def find_post(root, slug, required=True):
+    """Find one post bundle by its globally unique slug."""
+    matches = [path for path in (root / "content/posts").rglob("index.md") if path.parent.name == slug]
+    if not matches:
+        if required:
+            raise ContentError(f"게시물을 찾을 수 없습니다: {slug}")
+        return None
+    if len(matches) > 1:
+        raise ContentError(f"같은 영문 이름의 게시물이 여러 개 있습니다: {slug}")
+    return matches[0]
+
+
 def validate_sources(root=ROOT):
     """Validate drafts too; publication and historical inventory are independent."""
     data = catalog(root)
     errors, posts, positions = [], [], {}
     series_ids = {item["id"] for item in data["series"]}
+    for collection in ("docs", "series"):
+        for group in data[collection]:
+            folder = root / "content/posts" / collection / group["id"]
+            if not folder.is_dir():
+                errors.append(f"분류 폴더가 없습니다: {folder.relative_to(root)}")
     for path in sorted((root / "content/posts").rglob("*.md")):
         if path.name == "_index.md":
             continue
         label = str(path.relative_to(root))
         try:
             metadata, body = read_post(path)
-            if path.name != "index.md" or path.parent.parent != root / "content/posts" or not SLUG.fullmatch(path.parent.name):
-                raise ContentError("게시물은 content/posts/<영문-이름>/index.md에 저장하세요.")
+            if path.name != "index.md" or not SLUG.fullmatch(path.parent.name):
+                raise ContentError("게시물은 지정된 Docs/Series 분류 폴더의 <영문-이름>/index.md에 저장하세요.")
             if not isinstance(metadata.get("title"), str) or not metadata["title"].strip():
                 raise ContentError("title에 제목을 입력하세요.")
             if type(metadata.get("draft")) is not bool:
@@ -150,6 +180,9 @@ def validate_sources(root=ROOT):
                 positions[position] = label
             else:
                 raise ContentError("collection은 docs 또는 series로 입력하세요.")
+            expected = post_path(root, path.parent.name, metadata)
+            if path != expected:
+                raise ContentError(f"분류에 맞는 폴더로 이동하세요: {expected.relative_to(root)}")
             if not body.strip():
                 raise ContentError("본문을 작성하세요.")
             posts.append((path, metadata, body))
@@ -158,7 +191,7 @@ def validate_sources(root=ROOT):
     # Files left outside the uniform post location must not silently disappear from menus.
     for group in ("docs", "series"):
         if any(path.name != "_index.md" for path in (root / f"content/{group}").rglob("*.md")):
-            errors.append(f"content/{group}: 게시물은 content/posts/<이름>/index.md에 저장하세요.")
+            errors.append(f"content/{group}: 게시물은 content/posts/{group}/<세부 분류>/<이름>/index.md에 저장하세요.")
     if errors:
         raise ContentError("\n".join(errors))
     alias_routes(root, data, posts)
