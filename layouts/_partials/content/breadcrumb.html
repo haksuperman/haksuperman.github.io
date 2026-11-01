@@ -1,14 +1,22 @@
-{{- $collection := .Params.collection -}}
-<nav class="content-breadcrumb" aria-label="현재 위치">
-  <a href="{{ "/" | relURL }}">홈</a>
-  {{- if $collection }}
-    <span aria-hidden="true">›</span><a href="{{ printf "%s/" $collection | relURL }}">{{ if eq $collection "docs" }}Docs{{ else }}Series{{ end }}</a>
-    {{- $id := .Params.doccategory | default .Params.seriesid -}}
-    {{- if $id -}}
-      {{- range index site.Data.navigation $collection -}}
-        {{- if eq .id $id }}<span aria-hidden="true">›</span><a href="{{ printf "%s/%s/" $collection .id | relURL }}">{{ .title }}</a>{{ end -}}
-      {{- end -}}
+{{- $page := . -}}
+{{- $parents := slice -}}
+{{- with .Params.collection -}}
+  {{- with site.GetPage (printf "/%s" .) -}}
+    {{- if ne .RelPermalink $page.RelPermalink -}}{{- $parents = $parents | append . -}}{{- end -}}
+  {{- end -}}
+  {{- $id := $page.Params.doccategory | default $page.Params.seriesid -}}
+  {{- with $id -}}
+    {{- with site.GetPage (printf "/%s/%s" $page.Params.collection .) -}}
+      {{- if ne .RelPermalink $page.RelPermalink -}}{{- $parents = $parents | append . -}}{{- end -}}
     {{- end -}}
-  {{- else }}<span aria-hidden="true">›</span><a href="{{ "posts/" | relURL }}">전체 게시물</a>{{ end -}}
-  {{- if .IsPage }}<span aria-hidden="true">›</span><span aria-current="page">{{ .LinkTitle }}</span>{{ end -}}
+  {{- end -}}
+{{- end -}}
+<nav aria-label="현재 위치" class="hx:mt-1.5 hx:flex hx:items-center hx:gap-1 hx:overflow-hidden hx:text-sm hx:text-gray-500 hx:dark:text-gray-400 hx:contrast-more:text-current">
+  {{- range $parents }}
+    <div class="hx:whitespace-nowrap hx:transition-colors hx:min-w-[24px] hx:overflow-hidden hx:text-ellipsis hx:hover:text-gray-900 hx:dark:hover:text-gray-100">
+      <a href="{{ .RelPermalink }}" class="hx:inline-block hx:rounded-sm hx:hextra-focus-visible-inset">{{ partial "utils/title" . }}</a>
+    </div>
+    {{ partial "utils/icon.html" (dict "name" "chevron-right" "attributes" "class=\"hx:w-3.5 hx:shrink-0 hx:rtl:-rotate-180\"") }}
+  {{- end }}
+  <div class="hx:whitespace-nowrap hx:transition-colors hx:font-medium hx:text-gray-700 hx:contrast-more:font-bold hx:contrast-more:text-current hx:dark:text-gray-100 hx:contrast-more:dark:text-current">{{ partial "utils/title" . }}</div>
 </nav>

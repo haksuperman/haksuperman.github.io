@@ -427,24 +427,12 @@ main#content:has(.home-notebook) {
   font-size: 0.75rem;
 }
 
-/* Metadata-driven Docs / Series navigation. */
-.content-breadcrumb { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem; margin: .8rem 0 1.5rem; font-size: .8rem; color: #64748b; }
-.content-sidebar { font-size: .85rem; }
-.content-sidebar-tabs { display: flex; gap: 1.2rem; padding: .5rem 0 1rem; font-weight: 650; }
-.content-sidebar a { text-decoration: none; }
-.content-sidebar [aria-current] { color: #0284c7; font-weight: 650; }
-.content-sidebar details { border-top: 1px solid rgba(148,163,184,.18); padding: .65rem 0; }
-.content-sidebar summary { cursor: pointer; line-height: 1.6; overflow-wrap: anywhere; }
-.content-sidebar summary small { opacity: .6; font-variant-numeric: tabular-nums; }
-.content-sidebar ul { list-style: none; margin: .4rem 0 0; padding-left: .65rem; }
-.content-sidebar li a { display: block; padding: .4rem .15rem; line-height: 1.5; overflow-wrap: anywhere; }
-.content-sidebar-overview { display: block; margin: .6rem 0 .3rem .65rem; color: #64748b; font-size: .75rem; }
-.content-sidebar-links { display: flex; gap: 1rem; padding-top: 1.2rem; }
-.content-series-pager { display: flex; justify-content: space-between; gap: 1.5rem; border-top: 1px solid rgba(148,163,184,.24); padding: 1.5rem 0; margin-top: 2rem; }
-.content-series-pager a { display: flex; flex-direction: column; max-width: 48%; gap: .4rem; }
-.content-series-pager [rel="next"] { margin-left: auto; text-align: right; }
-.content-series-pager small { color: #64748b; font-size: .75rem; }
-.collection-group { border-bottom: 1px solid rgba(148,163,184,.2); padding: .4rem 0 1.25rem; }
-.collection-group small { color: #64748b; font-size: .75rem; font-weight: 400; }
-.content-draft-notice { border: 1px solid #d97706; padding: .7rem 1rem; border-radius: .4rem; color: #b45309; font-size: .85rem; margin-bottom: 1rem; }
+.content-draft-notice {
+  border: 1px solid #d97706;
+  padding: .7rem 1rem;
+  border-radius: .4rem;
+  color: #b45309;
+  font-size: .85rem;
+  margin-bottom: 1rem;
+}
 .dark .content-draft-notice { color: #fbbf24; }

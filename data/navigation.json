@@ -3,22 +3,34 @@
     {
       "id": "theory-reference",
       "title": "Theory & Reference",
-      "description": "기술의 정의와 동작 원리, 아키텍처를 독립적으로 찾아보기 위한 문서입니다."
+      "description": "기술의 정의와 동작 원리, 아키텍처를 독립적으로 찾아보기 위한 문서입니다.",
+      "icon": "book-open",
+      "subtitle": "기술 정의, 원리, 참고 문서",
+      "homeSubtitle": "기술 정의, 원리와 참고 문서"
     },
     {
       "id": "command-tool",
       "title": "Command & Tool",
-      "description": "명령어와 도구 사용법을 빠르게 찾아보기 위한 문서입니다."
+      "description": "명령어와 도구 사용법을 빠르게 찾아보기 위한 문서입니다.",
+      "icon": "terminal",
+      "subtitle": "명령어와 도구 사용법",
+      "homeSubtitle": "명령어와 도구 사용법"
     },
     {
       "id": "guide-lab",
       "title": "Guide & Lab",
-      "description": "설치와 구축 절차, 테스트 과정과 결과를 재현할 수 있도록 정리한 문서입니다."
+      "description": "설치와 구축 절차, 테스트 과정과 결과를 재현할 수 있도록 정리한 문서입니다.",
+      "icon": "document-text",
+      "subtitle": "설치, 구축, 테스트 매뉴얼",
+      "homeSubtitle": "설치, 구축과 테스트 매뉴얼"
     },
     {
       "id": "issue-troubleshooting",
       "title": "Issue & Troubleshooting",
-      "description": "문제 현상, 조사 과정, 원인과 해결 방법, 재발 방지를 정리한 문서입니다."
+      "description": "문제 현상, 조사 과정, 원인과 해결 방법, 재발 방지를 정리한 문서입니다.",
+      "icon": "exclamation-circle",
+      "subtitle": "문제 분석, 해결, 재발 방지",
+      "homeSubtitle": "문제 분석, 해결과 재발 방지"
     }
   ],
   "series": [
@@ -26,55 +38,82 @@
       "id": "aws-security",
       "title": "AWS Security Series",
       "description": "AWS 보안 강의와 책을 따라 권한과 보안 설계를 단계별로 학습한 기록입니다.",
-      "notes": "> 정확한 강의명·책 이름·저자 또는 강사 정보는 원문 기준으로 확인 중이며 정식 공개 전에 보완합니다."
+      "notes": "> 정확한 강의명·책 이름·저자 또는 강사 정보는 원문 기준으로 확인 중이며 정식 공개 전에 보완합니다.",
+      "icon": "shield-check",
+      "subtitle": "AWS 권한과 보안 설계 학습",
+      "homeSubtitle": "강의·책을 따라 정리한 보안 학습 노트"
     },
     {
       "id": "aws-technical-essentials",
       "title": "AWS Technical Essentials Series",
       "description": "AWS Technical Essentials 공인 교육에서 다룬 VPC, 보안 그룹, 웹·데이터베이스 서버와 NAT 구성을 하나의 실습 흐름으로 정리한 기록입니다.",
-      "notes": "> 교육 제공 자료를 참고한 부분은 개인 학습과 재현 결과를 중심으로 정리했으며, 세부 과정 링크와 강사 정보는 정식 공개 전에 보완합니다."
+      "notes": "> 교육 제공 자료를 참고한 부분은 개인 학습과 재현 결과를 중심으로 정리했으며, 세부 과정 링크와 강사 정보는 정식 공개 전에 보완합니다.",
+      "icon": "cloud",
+      "subtitle": "VPC 기반 기본 웹 서비스 인프라 실습",
+      "homeSubtitle": "VPC 기반 기본 웹 서비스 인프라 실습"
     },
     {
       "id": "kubernetes-cluster",
       "title": "Kubernetes Cluster Series",
       "description": "Kubernetes 클러스터 구축 과정을 순서대로 학습하고 실습한 기록입니다.",
-      "notes": "> 정확한 강의명·책 이름·저자 또는 강사 정보는 원문 기준으로 확인 중이며 정식 공개 전에 보완합니다."
+      "notes": "> 정확한 강의명·책 이름·저자 또는 강사 정보는 원문 기준으로 확인 중이며 정식 공개 전에 보완합니다.",
+      "icon": "cube",
+      "subtitle": "클러스터 구축 과정 학습",
+      "homeSubtitle": "순서대로 따라가는 클러스터 구축 학습"
     },
     {
       "id": "linux-fundamentals",
       "title": "Linux Fundamentals Series",
       "description": "리눅스 파일과 경로, 권한, vi 편집기, 패키지와 텍스트 처리 도구를 실습 순서대로 정리한 기초 학습 기록입니다.",
-      "notes": "> 정확한 교육 과정명과 강사 정보는 원문 기준으로 확인 중이며 정식 공개 전에 보완합니다."
+      "notes": "> 정확한 교육 과정명과 강사 정보는 원문 기준으로 확인 중이며 정식 공개 전에 보완합니다.",
+      "icon": "terminal",
+      "subtitle": "명령어, 권한과 기본 도구 학습",
+      "homeSubtitle": "명령어, 권한과 기본 도구 학습"
     },
     {
       "id": "network-fundamentals",
       "title": "Network Fundamentals Series",
       "description": "클라우드와 네트워크 기초부터 Packet Tracer·GNS3, 라우팅, NAT, ACL, VLAN, DHCP와 VPN까지 이어지는 학습·실습 기록입니다.",
-      "notes": "> 학원 실습 환경을 바탕으로 작성된 연속 학습 기록이며, 정확한 교육 과정명과 강사 정보는 정식 공개 전에 보완합니다."
+      "notes": "> 학원 실습 환경을 바탕으로 작성된 연속 학습 기록이며, 정확한 교육 과정명과 강사 정보는 정식 공개 전에 보완합니다.",
+      "icon": "server",
+      "subtitle": "네트워크 개념과 라우팅·스위칭 실습",
+      "homeSubtitle": "네트워크 개념과 라우팅·스위칭 실습"
     },
     {
       "id": "network-security",
       "title": "Network Security Series",
       "description": "Start-Up K-Shield Jr. 과정에서 다룬 네트워크 공격과 방어 실습을 목차 순서대로 정리한 기록입니다.",
-      "notes": "> 세부 과정명과 강사 정보는 원문 기준으로 확인 중이며 정식 공개 전에 보완합니다."
+      "notes": "> 세부 과정명과 강사 정보는 원문 기준으로 확인 중이며 정식 공개 전에 보완합니다.",
+      "icon": "server",
+      "subtitle": "네트워크 공격과 방어 실습 학습",
+      "homeSubtitle": "네트워크 공격과 방어 실습 학습"
     },
     {
       "id": "oci-foundations",
       "title": "OCI Foundations Series",
       "description": "Oracle Cloud 계정 생성부터 네트워크, 컴퓨트, 데이터베이스, 애플리케이션과 운영 자동화까지 하나의 환경을 순서대로 구축한 학습 기록입니다.",
-      "notes": "> 정확한 강의명·책 이름·저자 또는 강사 정보는 원문 기준으로 확인 중이며 정식 공개 전에 보완합니다."
+      "notes": "> 정확한 강의명·책 이름·저자 또는 강사 정보는 원문 기준으로 확인 중이며 정식 공개 전에 보완합니다.",
+      "icon": "cloud",
+      "subtitle": "OCI 환경 구축 과정을 따라가는 실습",
+      "homeSubtitle": "OCI 환경 구축 과정을 따라가는 실습"
     },
     {
       "id": "terraform-infrastructure",
       "title": "Terraform Infrastructure Series",
       "description": "Infrastructure as Code의 개념부터 Terraform으로 AWS 서버와 Auto Scaling Group을 구성하는 과정까지 순서대로 정리한 학습 기록입니다.",
-      "notes": "> 정확한 강의명·책 이름·저자 또는 강사 정보는 원문 기준으로 확인 중이며 정식 공개 전에 보완합니다."
+      "notes": "> 정확한 강의명·책 이름·저자 또는 강사 정보는 원문 기준으로 확인 중이며 정식 공개 전에 보완합니다.",
+      "icon": "code",
+      "subtitle": "코드형 인프라의 개념과 구축 실습",
+      "homeSubtitle": "코드형 인프라의 개념과 구축 실습"
     },
     {
       "id": "web-security",
       "title": "Web Security Series",
       "description": "웹 보안 강의에서 다룬 개념과 실습을 안전한 환경에서 순서대로 학습한 기록입니다.",
-      "notes": "> 실습은 허가된 개인 환경에서만 수행해야 합니다. 정확한 강의명과 강사 정보는 정식 공개 전에 보완합니다."
+      "notes": "> 실습은 허가된 개인 환경에서만 수행해야 합니다. 정확한 강의명과 강사 정보는 정식 공개 전에 보완합니다.",
+      "icon": "lock-closed",
+      "subtitle": "웹 보안 개념과 실습 학습",
+      "homeSubtitle": "안전한 실습 환경에서 정리한 웹 보안 학습"
     }
   ]
 }

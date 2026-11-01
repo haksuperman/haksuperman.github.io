@@ -22,7 +22,7 @@
     <div class="home-category-list">
       {{- range site.Data.navigation.docs }}
       <a href="{{ printf "docs/%s/" .id | relURL }}">
-        <span><strong>{{ .title }}</strong><small>{{ .description }}</small></span>
+        <span><strong>{{ .title }}</strong><small>{{ .homeSubtitle | default .description }}</small></span>
         <span aria-hidden="true">→</span>
       </a>
       {{- end }}
@@ -40,7 +40,7 @@
             <span class="home-recent-list__title">{{ .LinkTitle }}</span>
             <span class="home-recent-list__meta">
               <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "2006.01.02" }}</time>
-              <span>{{ if eq .Params.collection "series" }}Series{{ else }}{{ title .Section }}{{ end }}</span>
+              <span>{{ if eq .Params.collection "series" }}Series{{ else }}Docs{{ end }}</span>
             </span>
           </a>
         {{- end }}
@@ -56,7 +56,7 @@
         {{- range $index, $group := site.Data.navigation.series }}
         <a href="{{ printf "series/%s/" $group.id | relURL }}">
           <span class="home-series-list__number">{{ printf "%02d" (add $index 1) }}</span>
-          <span><strong>{{ $group.title }}</strong><small>{{ $group.description }}</small></span>
+          <span><strong>{{ $group.title }}</strong><small>{{ $group.homeSubtitle | default $group.description }}</small></span>
         </a>
         {{- end }}
       </div>
