@@ -5,11 +5,12 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
-from content_model import ROOT, ContentError, alias_routes, is_published, validate_sources
+from content_model import ROOT, ContentError, alias_routes, as_time, is_published, validate_sources
 
 
 class PageLinks(HTMLParser):
@@ -17,6 +18,8 @@ class PageLinks(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.references, self.lists, self.breadcrumbs, self.pager = [], [], [], []
         self.redirects = []
+        self.updated_dates = []
+        self.modified_dates = []
         self.sidebar_open = {}
         self._in_sidebar = False
         self._sidebar_lists = []
@@ -25,6 +28,10 @@ class PageLinks(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
+        if tag == "time" and "data-last-updated" in attrs:
+            self.updated_dates.append(attrs.get("datetime", ""))
+        if tag == "meta" and attrs.get("property") == "article:modified_time":
+            self.modified_dates.append(attrs.get("content", ""))
         if tag == "aside" and "hextra-sidebar-container" in attrs.get("class", "").split():
             self._in_sidebar = True
         if self._in_sidebar and tag == "li":
@@ -104,6 +111,21 @@ def validate(root=ROOT, include_drafts=False):
             target = local_target(public, html, url)
             if target is not None and not target.exists():
                 errors.append(f"{html.relative_to(public)}: 연결 대상이 없습니다: {url}")
+    try:
+        namespace = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+        sitemap = {urlsplit(item.findtext("s:loc", namespaces=namespace)).path:
+                   item.findtext("s:lastmod", namespaces=namespace)
+                   for item in ET.parse(public / "sitemap.xml").findall("s:url", namespace)}
+        for url, metadata in actual.items():
+            page = parsed.get(public / url.lstrip("/") / "index.html")
+            updated = as_time(metadata["lastmod"])
+            if (page is None or len(page.updated_dates) != 1 or len(page.modified_dates) != 1
+                    or as_time(page.updated_dates[0]) != updated
+                    or as_time(page.modified_dates[0]) != updated
+                    or as_time(sitemap.get(url)) != updated):
+                errors.append(f"{url}: 화면·검색 정보·사이트맵의 수정일이 일치하지 않습니다.")
+    except (OSError, ValueError, TypeError, KeyError, ET.ParseError) as error:
+        errors.append(f"게시물 수정일 검사에 필요한 출력이 올바르지 않습니다: {error}")
     for collection in ("docs", "series"):
         for group in data[collection]:
             url = f"/{collection}/{group['id']}/"

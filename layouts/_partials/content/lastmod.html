@@ -1,0 +1,10 @@
+{{- $page := . -}}
+{{- $updated := .Lastmod -}}
+{{- if eq .Section "posts" -}}
+  {{- $commits := slice -}}
+  {{- with site.Data.lastmod_baseline -}}{{- $commits = .commits | default slice -}}{{- end -}}
+  {{- with .GitInfo -}}
+    {{- if and (in $commits .Hash) (eq $page.Lastmod.Unix .AuthorDate.Unix) -}}{{- $updated = $page.Date -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $updated -}}
