@@ -1,4 +1,4 @@
-{{- $pages := where .Site.RegularPages "Section" "in" (slice "docs" "series") -}}
+{{- $pages := where .Site.RegularPages "Section" "posts" -}}
 <div class="home-notebook">
   <header class="home-intro">
     <img class="home-intro__avatar" src="{{ "images/haksuperman.jpg" | relURL }}" alt="학수의 로봇 프로필 이미지">
@@ -20,22 +20,12 @@
       <a href="{{ "docs/" | relURL }}">전체 문서</a>
     </div>
     <div class="home-category-list">
-      <a href="{{ "docs/theory-reference/" | relURL }}">
-        <span><strong>Theory &amp; Reference</strong><small>기술 정의, 원리와 참고 문서</small></span>
+      {{- range site.Data.navigation.docs }}
+      <a href="{{ printf "docs/%s/" .id | relURL }}">
+        <span><strong>{{ .title }}</strong><small>{{ .homeSubtitle | default .description }}</small></span>
         <span aria-hidden="true">→</span>
       </a>
-      <a href="{{ "docs/command-tool/" | relURL }}">
-        <span><strong>Command &amp; Tool</strong><small>명령어와 도구 사용법</small></span>
-        <span aria-hidden="true">→</span>
-      </a>
-      <a href="{{ "docs/guide-lab/" | relURL }}">
-        <span><strong>Guide &amp; Lab</strong><small>설치, 구축과 테스트 매뉴얼</small></span>
-        <span aria-hidden="true">→</span>
-      </a>
-      <a href="{{ "docs/issue-troubleshooting/" | relURL }}">
-        <span><strong>Issue &amp; Troubleshooting</strong><small>문제 분석, 해결과 재발 방지</small></span>
-        <span aria-hidden="true">→</span>
-      </a>
+      {{- end }}
     </div>
   </section>
 
@@ -50,7 +40,7 @@
             <span class="home-recent-list__title">{{ .LinkTitle }}</span>
             <span class="home-recent-list__meta">
               <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "2006.01.02" }}</time>
-              <span>{{ if eq .Section "series" }}Series{{ else }}{{ title .Section }}{{ end }}</span>
+              <span>{{ if eq .Params.collection "series" }}Series{{ else }}Docs{{ end }}</span>
             </span>
           </a>
         {{- end }}
@@ -63,42 +53,12 @@
         <a href="{{ "series/" | relURL }}">전체 보기</a>
       </div>
       <div class="home-series-list">
-        <a href="{{ "series/aws-security/" | relURL }}">
-          <span class="home-series-list__number">01</span>
-          <span><strong>AWS Security Series</strong><small>강의·책을 따라 정리한 보안 학습 노트</small></span>
+        {{- range $index, $group := site.Data.navigation.series }}
+        <a href="{{ printf "series/%s/" $group.id | relURL }}">
+          <span class="home-series-list__number">{{ printf "%02d" (add $index 1) }}</span>
+          <span><strong>{{ $group.title }}</strong><small>{{ $group.homeSubtitle | default $group.description }}</small></span>
         </a>
-        <a href="{{ "series/aws-technical-essentials/" | relURL }}">
-          <span class="home-series-list__number">02</span>
-          <span><strong>AWS Technical Essentials Series</strong><small>VPC 기반 기본 웹 서비스 인프라 실습</small></span>
-        </a>
-        <a href="{{ "series/kubernetes-cluster/" | relURL }}">
-          <span class="home-series-list__number">03</span>
-          <span><strong>Kubernetes Cluster Series</strong><small>순서대로 따라가는 클러스터 구축 학습</small></span>
-        </a>
-        <a href="{{ "series/linux-fundamentals/" | relURL }}">
-          <span class="home-series-list__number">04</span>
-          <span><strong>Linux Fundamentals Series</strong><small>명령어, 권한과 기본 도구 학습</small></span>
-        </a>
-        <a href="{{ "series/network-fundamentals/" | relURL }}">
-          <span class="home-series-list__number">05</span>
-          <span><strong>Network Fundamentals Series</strong><small>네트워크 개념과 라우팅·스위칭 실습</small></span>
-        </a>
-        <a href="{{ "series/network-security/" | relURL }}">
-          <span class="home-series-list__number">06</span>
-          <span><strong>Network Security Series</strong><small>네트워크 공격과 방어 실습 학습</small></span>
-        </a>
-        <a href="{{ "series/oci-foundations/" | relURL }}">
-          <span class="home-series-list__number">07</span>
-          <span><strong>OCI Foundations Series</strong><small>OCI 환경 구축 과정을 따라가는 실습</small></span>
-        </a>
-        <a href="{{ "series/terraform-infrastructure/" | relURL }}">
-          <span class="home-series-list__number">08</span>
-          <span><strong>Terraform Infrastructure Series</strong><small>코드형 인프라의 개념과 구축 실습</small></span>
-        </a>
-        <a href="{{ "series/web-security/" | relURL }}">
-          <span class="home-series-list__number">09</span>
-          <span><strong>Web Security Series</strong><small>안전한 실습 환경에서 정리한 웹 보안 학습</small></span>
-        </a>
+        {{- end }}
       </div>
     </section>
   </div>

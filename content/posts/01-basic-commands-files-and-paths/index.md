@@ -1,0 +1,281 @@
+---
+title: 리눅스 기본 명령어와 파일·경로
+linkTitle: 01. 리눅스 기본 명령어와 파일·경로
+date: '2024-01-02T01:19:00+09:00'
+tags:
+- linux
+- ubuntu
+- etc
+- command
+sourceStatus: needs-review
+draft: false
+collection: series
+seriesId: linux-fundamentals
+seriesOrder: 10
+---
+![image](Linux01_01.png)
+
+리눅스는 대소문자를 구분함
+
+![image](Linux01_02.png)
+
+시스코에서 사용하던 축약은 불가, tab으로 자동완성은 가능
+
+![image](Linux01_03.png)
+
+파일명도 대소문자 구분
+
+
+
+![image](Linux01_04.png)
+
+/usr/bin 디렉터리에 명령어들 저장
+
+
+
+![image](Linux01_05.png)
+
+맨 앞의 l은 링크파일임을 의미
+
+
+![image](Linux01_06.png)
+
+맨 앞의 l은 링크파일임을 의미
+
+
+![image](Linux01_07.png)
+
+/usr/sbin 디렉터리는 시스템 관련 명령어들 저장
+
+
+![image](Linux01_08.png)
+
+심볼릭 링크로 /usr/sbin을 /sbin으로 사용
+
+리눅스는 파일, 디렉터리 구조기 때문에 파일 생성, 변경, 복사, 이동, 삭제 등의 작업이 자유로워야 함
+
+(디렉터리는 윈도우의 폴더라고 생각하면 됨)
+
+이때, 절대경로와 상대경로의 개념이 중요함
+
+1\. 절대 경로, 상대 경로(Absolute & Relative Pathnames)
+
+\- 상대경로
+
+ex) rm sbin : 현재 디렉터리에 있는 sbin 디렉터리(파일) 삭제
+
+\- 절대경로
+
+절대값(/)을 사용하여 경로 지정
+
+ex) rm /sbin : 최상위 디렉터리(/) 밑에 있는 sbin 디렉터리(파일) 삭제
+
+![image](Linux01_09.png)
+
+sudo apt install tree
+
+tree 패키지 설치
+
+![image](Linux01_10.png)
+
+트리형태로 디렉터리 구조 확인
+
+최상위 디렉터리(/) 밑에 bin 디렉터리, boot 디렉터리, dev 디렉터리 등등이 존재함
+
+(/bin은 /usr/bin이 원본, 링크파일)
+
+\-> tree 1레벨까지 more(한 페이지씩) 표현
+
+![image](Linux01_11.png)
+
+Path화
+
+같은 레벨에서는 이동이 불가. 상위 레벨의 디렉터리로 이동 후 동일 레벨의 디렉터리로 이동해야 함(트리 구조의 특징)
+
+![image](Linux01_12.png)
+
+최상위 디렉터리(/)부터 페이지형태로 10줄씩 2레벨까지 출력
+
+![image](Linux01_13.png)
+
+파일이 아닌 디렉터리만 출력(-d)
+
+![image](Linux01_14.png)
+
+/bin ( -> /usr/bin) : 외부 명령어 위치(명령어 실행 전에 fork(서브 프로세스)가 실행됨)
+
+/boot : OS 부팅에 사용되는 파일을 담는 디렉터리(GRUB, lost+found)
+
+/dev : 마운트 지점을 제공, 시스템에 장착되어 있는 주변 장치(마우스, 키보드 등)을 말함
+
+\- ex) /dev/cdrom, /etc/sdb1
+
+/etc : 시스템 설정 파일이 들어 있는 디렉터리, 사용자 정보를 가지고 있는 passwd(/etc/shadow에 저장), 그룹 정의 파일은 group, 그외 printcap, fstap, 각종 네트워크 관련 파일과 시스템 환경 파일이 있음
+
+\- ex) /etc/passwd
+
+/home : 일반 사용자의 기본 홈 디렉터리
+
+/lib ( -> /usr/lib) : 시스템과 응용프로그램에서 사용하는 대부분의 라이브러리가 들어 있는 디렉터리
+
+/lib32 ( -> /usr/lib32) :
+
+/lib64 ( -. /usr/lib64) :
+
+/lost+found : 결함이 있는 파일에 대한 정보가 저장되는 디렉터리, 휴지통 같은 개념
+
+/media : CD-ROM, USB와 같은 외부 장치가 연결하는 디렉터리
+
+/mnt : 파일 시스템을 일시적으로 마운트할 때 사용
+
+/opt : Add-on(응용)소프트웨어 패키지가 설치됨, 레드햇 리눅스는 x
+
+/proc : 시스템 정보 디렉터리, 현재 실행되는 프로세스와 실제로 사용되는 장치, 하드웨어 정보 저장
+
+/root : root 사용자의 홈 디렉터리
+
+/run : 부팅한 후의 시스템 정보를 관리하는 디렉터리(런레벨?)
+
+/sbin ( -> /usr/sbin) : 파일 시스템 처리명령, 네트워크 인터페이스 설정 명령, 시스템 초기화 명령 등 시스템의 전반적인 관리 명령어들이 들어 있는 디렉터리(root만 사용 가능)
+
+/snap : 패키지 관리 시스템
+
+/srv : 서비스 디렉터리로 주로 ftp, http, cvs 등의 데이터가 존재하는 디렉터리
+
+/sys : 시스템이 필요로 하는 파일(디렉터리)
+
+/tmp : temporary(일시적인), 어떠한 작업을 통해 임시로 파일이 생성하는 공간, 기본적으로 Sticky-Bit가 설정됨
+
+/usr :
+
+/var : 시스템을 가동하면서 생기는 각종 임시 파일을 저장하는 디렉터리(로그파일, 전자메일, 프린트파일)
+
+![image](Linux01_15.png)
+
+현재 커서
+
+![image](Linux01_16.png)
+
+현재 커서가 위치한 위치(Current Directory)
+
+\- ~ : 로그인 중인 사용자의 홈 디렉터리를 의미
+
+\* login process : 인증과정을 거쳐 ip/pw가 매칭되면 인증에 성공,
+
+쉘(Shell)을 획득하는 과정, 공간 디렉터리(홈 디렉터리)를 할당 받음
+
+\- 절대 경로 표기법
+
+\-- /(최상위 디렉터리) 밑으로 하나하나 적어준 경로
+
+\-- 최상위로부터 하나하나 찾아가는 방법(절대적인 방법)
+
+\- 상대 경로 표기법
+
+\-- /(최상위 디렉터리)를 생략하고 현재 디렉터리를 기준으로 적어준 경로
+
+\-- 현재 디렉터리를 기준으로 이동하는 방법(상대적인 방법)
+
+![image](Linux01_17.png)
+
+파란라인 : 상대 경로 방법
+
+초록라인 : 절대 경로 방법
+
+![image](Linux01_18.png)
+
+로그인 중인 계정명
+
+![image](Linux01_19.png)
+
+로그인한 시스템의 호스트명(이 호스트는 DNS와 연관)
+
+\- [www.labs.com](https://www.labs.com/)
+
+\* FQDN(URL, 시스템적인 측면에서는 FQDN이 맞음) : Domain Name + Host Name
+
+![image](Linux01_20.png)
+
+일반 사용자임을 나타냄
+
+(#은 super user를 나타냄)
+
+![image](Linux01_21.png)
+
+prompt
+
+![image](Linux01_22.png)
+
+\* . 디렉터리와 .. 디렉터리가 기본적으로 자동 생성
+
+( . 디렉터리는 현재 디렉터리를 의미 ), ( .. 디렉터리는 상위 디렉터리를 의미 )
+
+![image](Linux01_23.png)
+
+pwd(Print Working Directory)
+
+\- 현재 디렉터리를 절대 경로의 방식으로 표시해주는 명령어
+
+cd(Change Directory)
+
+\- 현재 디렉터리의 위치를 변경
+
+![image](Linux01_24.png)
+
+ls(list)
+
+\- 현재 디렉터리의 목록 출력
+
+​
+
+​
+
+cp(copy)
+
+\- 지정한 파일/디렉터리의 복사
+
+mv(move)
+
+\- 지정한 파일/디렉터리의 이동
+
+rm(remove)
+
+\- 지정한 파일/디렉터리의 삭제
+
+mkdir(make directory)
+
+\- 새로운 디렉터리 생성
+
+![image](Linux01_25.png)
+
+ls 명령의 -a 옵션
+
+\- 숨김파일 표시(all)
+
+![image](Linux01_26.png)
+
+지정한 파일/디렉터리만 출력 가능
+
+![image](Linux01_27.png)
+
+지정한 파일/디렉터리의 자세한 정보 확인
+
+​
+
+![image](Linux01_28.png)
+
+현재위치를 먼저 찾아가고 그 하위에 생성
+
+![image](Linux01_29.png)
+
+ids 디렉터리가 존재하니 현재 디렉터리 이동도 가능
+
+![image](Linux01_30.png)
+
+현재 디렉터리를 먼저 찾아가 kevin 디렉터리에 생성,
+
+~/(홈디렉터리)를 찾아가고 그 하위에 data 디렉터리 생성
+
+04-기본명령어 - Google Docs
+
+해당 파일 실습해보기

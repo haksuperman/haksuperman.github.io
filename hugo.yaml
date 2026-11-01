@@ -3,6 +3,7 @@ title: 뭉게뭉게 학수의 클라우드 세상
 copyright: "© 2026 Haksu."
 languageCode: ko-kr
 defaultContentLanguage: ko
+timeZone: Asia/Seoul
 enableRobotsTXT: true
 enableGitInfo: true
 titleCaseStyle: none
@@ -11,7 +12,7 @@ frontmatter:
   lastmod: [lastmod, ":git", date, publishDate]
 
 outputs:
-  home: [HTML, RSS]
+  home: [HTML, RSS, ContentIndex]
   section: [HTML, RSS]
 
 module:
@@ -80,3 +81,14 @@ params:
     autoCollapse: true
   displayUpdatedDate: true
   dateFormat: "2006년 1월 2일"
+
+# Machine-readable publication list used by the current-content validator.
+outputFormats:
+  ContentIndex:
+    mediaType: application/json
+    baseName: content-index
+    isPlainText: true
+    notAlternative: true
+
+taxonomies:
+  tag: tags

@@ -1,0 +1,208 @@
+---
+title: 'OKE Block Volume 구성: iSCSI'
+linkTitle: OKE Block Volume — iSCSI
+date: '2026-05-27T22:02:00+09:00'
+tags:
+- oci
+- cloud
+- oraclecloud
+- oracle cloud infrastructure
+- oke
+- kubernetes
+draft: false
+collection: docs
+docCategory: guide-lab
+---
+## 1. IAM
+
+- OKE Cluster와 Workder node(Node pool 서브넷)가 서로 다른 Compartment에 있는 경우
+
+```text
+ALLOW any-user to manage volumes in TENANCY where request.principal.type = 'cluster'
+ALLOW any-user to manage volume-attachments in TENANCY where request.principal.type = 'cluster'
+```
+
+- OKE Cluster와 Workder node가 서로 같은 Compartment에 있는 경우
+  - IAM 별도 설정 x
+
+## 2. StorageClass
+
+- Block Volume을 동적으로 생성하기 위한 ‘설정 템플릿’ 역할
+- 사용자 : PVC를 통해 필요한 용량과 접근 권한만 요청
+- StorageClass : 클라우드 인프라와 통신하여 구체적인 생성 규칙(성능, Attachment type 등)에 따라서 처리  
+  -> **기본 구성된 oci-bv는 iSCSI 타입의 Attachment를 기본 값으로 구성하고 있음**
+
+## 3. PVC(Persistent Volume Claim)
+
+## 3.1. PVC 정의 파일(YAML) 작성
+1. 사용할 볼륨의 크기와 특성 정의
+2. 파일명 : \<적절한 이름 입력\>  
+   (여기서는 csi-bv-pvc.yaml)
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mynginxclaim
+spec:
+  storageClassName: "oci-bv" # CSI 볼륨 플러그인 지정
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi # 최소 50GB 이상 지정
+```
+
+![image](OCI25_01.png)
+
+## 3.2. PVC 생성 및 상태 확인
+
+```bash
+# PVC 생성
+kubectl apply -f csi-bvs-pvc.yaml
+
+# PVC 상태 확인
+kubectl get pvc
+```
+
+![image](OCI25_02.png)
+{{< callout type="info" >}}
+아래와 같이 Pending 상태이다. 이는 oci-bv StorageClass 정의에 `volumeBindingMode: WaitForFirstConsumer`가 포함되어 있기 때문이다.
+
+해당 설정은 **이 PVC를 실제로 사용하는 파드(Pod)가 생성될 때까지 실제 볼륨 생성을 대기**한다.
+
+```bash
+[k8s-admin@oke-bastion persistentvolume]$ kubectl get pvc
+NAME           STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+mynginxclaim   Pending                                      oci-bv         \<unset\>                 18s
+```
+
+![image](OCI25_03.png)
+{{< /callout >}}
+
+## 4. Pod
+
+## 4.1. 정의 파일(YAML) 작성
+1. 생성한 PVC를 마운트하여 사용할 파드 생성
+2. 파일명 : \<적절한 이름 입력\>  
+   (여기서는 nginx-pod.yaml)
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+    - name: nginx
+      image: docker.io/library/nginx:latest
+      ports:
+        - name: http
+          containerPort: 80
+      volumeMounts:
+        - name: data
+          mountPath: /usr/share/nginx/html # 컨테이너 내부의 마운트 경로
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: mynginxclaim # 2.1.에서 생성한 PVC 이름
+```
+
+![image](OCI25_04.png)
+
+## 4.2. 파드 생성 및 확인
+
+```bash
+# 파드 생성
+kubectl apply -f ./nginx-pod.yaml
+
+# 파드 생성 확인
+kubectl get pods
+```
+
+![image](OCI25_05.png)
+{{< callout type="warning" >}}
+Pod 생성 시, image 경로를 명확히 지정하지 않으면 아래와 같은 에러로 이미지 Pull 실패  
+(2026-02-25 기준, 공식문서에 명시된 예시 정의 파일(yaml) 미반영)
+
+![image](OCI25_06.png)
+
+- 공식문서 예시 정의 파일 (YAML)
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+      ports:
+        - name: http
+          containerPort: 80
+      volumeMounts:
+        - name: data
+          mountPath: /usr/share/nginx/html # 컨테이너 내부의 마운트 경로
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: mynginxclaim # 2.1.에서 생성한 PVC 이름
+```
+{{< /callout >}}
+
+## 5. 결과 확인
+{{< callout type="info" >}}
+파드 생성되도록 요청되면 아래의 두 작업이 자동으로 수행된다.
+- OCI에서 실제 Block Volume이 생성
+- 파드가 위치한 노드에 자동 Attach
+{{< /callout >}}
+{{< callout type="info" >}}
+**객체 수동 삭제**
+
+매니페스트 파일을 통해 수월하게 삭제 가능  
+단, 수동으로 객체들(Pod, PV, PVC, Block Volume 등)을 삭제하는 경우 정확한 순서를 지켜야 한다.
+
+1. StorageClass의 Reclaim Policy (회수 정책)이 Delete로 설정된 경우
+   1. 파드 삭제 (볼륨 마운트 해제)
+   2. PVC 삭제  
+      (PV와 Block Volume은 자동으로 삭제)
+
+  ```bash
+  # 파드 삭제
+  kubectl delete pod nginx
+  
+  # PVC 삭제
+  kubectl delete pvc mynginxclaim
+  
+  # 삭제 확인
+  kubectl get pod,pvc,pv
+  ```
+
+2. StorageClass의 Reclaim Policy(회수 정책)이 Retain으로 설정되어 있는 경우 / 시스템 오류로 수동 삭제해야 하는 경우
+   1. 파드 삭제 (볼륨 마운트 해제)
+   2. PVC 삭제
+   3. PV 삭제
+   4. Block Volume 삭제
+
+  ```bash
+  # 파드 삭제
+  kubectl delete pod nginx
+  
+  # PVC 삭제
+  kubectl delete pvc mynginxclaim
+  
+  # PV 삭제
+  kubectl delete pv csi-d577e928-095a-44d7-8a3a-2aef69d20b8a
+  
+  # Block Volume 삭제
+  # (OCI Console 내 삭제)
+  
+  # 삭제 확인
+  kubectl get pod,pvc,pv
+  ```
+{{< /callout >}}
+
+---
+
+<https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingpersistentvolumeclaim_topic-Provisioning_PVCs_on_BV.htm>

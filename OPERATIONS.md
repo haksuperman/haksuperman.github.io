@@ -1,198 +1,161 @@
-# 블로그 운영 및 복구 가이드
+# Hugo 블로그 운영·배포 가이드
 
-이 문서는 게시물 작성 이후의 Pull Request 검증, GitHub Pages 배포, 실패 대응, 롤백과 로컬 저장소 동기화 절차를 설명합니다.
+글 등록·수정·분류 변경은 [작성 가이드](AUTHORING.md)를 따릅니다. 이 문서는 작업 브랜치부터 배포 확인·복구까지 설명합니다.
 
-## 1. 배포 구조
+## 1. 저장소와 파일의 역할
 
-`.github/workflows/pages.yaml`은 다음 조건으로 실행됩니다.
+| 위치 | 역할 |
+| --- | --- |
+| `content/posts/<이름>/index.md` | 모든 게시물의 본문과 분류 정보 |
+| 글과 같은 폴더 | 이미지와 첨부 파일 |
+| `data/navigation.json` | Docs 네 분류와 시리즈의 이름·소개·표시 순서 |
+| `content/docs/`, `content/series/` | Docs/Series 첫 화면 |
+| `content/_content.gotmpl` | 분류 정의에서 목록 페이지를 만드는 Hugo 템플릿 |
+| `./blog` | 등록·분류·미리보기·검사 도우미 |
+| `hugo.yaml` | 테마·사이트 주소·검색과 출력 설정 |
+| `public/` | Hugo가 만드는 결과물. 편집·커밋하지 않음 |
 
-| 실행 조건 | build | validate | deploy |
-| --- | --- | --- | --- |
-| `main` 대상 Pull Request | 실행 | 실행 | 건너뜀 |
-| `main` 브랜치 push 또는 PR 병합 | 실행 | 실행 | 실행 |
-| 수동 실행(`workflow_dispatch`) | 실행 | 실행 | 건너뜀 |
+게시물의 폴더 위치는 분류를 결정하지 않습니다. 메뉴와 목록은 글 상단의 `collection`, `docCategory`, `seriesId`, `seriesOrder`를 사용합니다. 분류 검사는 현재 게시물 전체에 적용하며 글 수나 이미지 개수를 고정하지 않습니다.
 
-Pull Request에서는 사이트를 공개하지 않고 Hugo 빌드와 `scripts/validate_build.py` 검증만 수행합니다. 실제 GitHub Pages 배포는 `main` 브랜치가 변경될 때만 수행합니다.
+## 2. 작업 시작
 
-## 2. 원격 저장소 이름 확인
-
-Git 명령을 실행하기 전에 원격 저장소 이름을 확인합니다.
+저장소 루트에서 현재 작업 상태와 원격 저장소 이름을 확인합니다.
 
 ```bash
+cd /Users/haksu/Projects/haksuperman.github.io/site
+git status
 git remote -v
 ```
 
-새로 복제한 저장소는 보통 `origin`이지만 현재 로컬 공식 저장소는 `blog`를 사용합니다. 아래 예시는 현재 공식 저장소 기준입니다. `git remote -v`에 `origin`만 표시되면 `REMOTE_NAME=origin`으로 바꿉니다.
+현재 공식 로컬 저장소의 원격 이름은 `blog`입니다. 새로 복제한 환경에 `origin`만 있다면 아래의 `REMOTE_NAME`을 바꿉니다.
 
-## 3. 일상적인 게시 절차
+**미완료 변경이 없는 상태에서** 최신 main을 받고 작업 브랜치를 만듭니다.
 
 ```bash
 REMOTE_NAME=blog
-git status
 git switch main
 git pull --ff-only "$REMOTE_NAME" main
-git switch -c docs/update-oke-guide
+git switch -c docs/update-posts
 ```
 
-문서를 작성하거나 수정한 뒤 로컬에서 확인합니다.
+이미 작성 중인 브랜치가 있다면 그 브랜치에서 계속 작업합니다. 다른 변경이 있을 때는 먼저 해당 작업을 별도 커밋이나 브랜치에 보존하세요.
+
+## 3. 작성·검사
 
 ```bash
-hugo server --buildDrafts --navigateToChanged
+./blog
 ```
 
-검수가 끝나면 `draft: false`로 변경하고 전체 검증을 실행합니다.
+글을 작성하거나 수정한 뒤:
 
 ```bash
-hugo --gc --minify --cleanDestinationDir
-python3 scripts/validate_build.py
+./blog preview
+# 브라우저 확인 후 Ctrl+C로 종료
+./blog check
 ```
 
-변경 파일만 커밋해 브랜치를 올립니다.
+도우미 없이 Hugo와 Python으로 직접 확인할 수도 있습니다.
+
+```bash
+.venv/bin/python scripts/validate_build.py --sources-only
+hugo --gc --minify --cleanDestinationDir --printPathWarnings
+.venv/bin/python scripts/validate_build.py
+```
+
+Hugo가 설치되지 않은 환경에서는 `./blog check`가 Docker를 사용합니다. Python 의존성 준비는 작성 가이드 1절을 따릅니다.
+
+## 4. PR로 게시 요청
+
+변경한 글 폴더만 추가합니다. 시리즈를 새로 만들거나 표시 이름을 변경했다면 `data/navigation.json`도 추가합니다.
 
 ```bash
 git status
-git add content/docs/guide-lab/oke-version-upgrade
+git add content/posts/oke-cluster
+# 분류 정의도 변경했다면 다음 줄 실행
+git add data/navigation.json
 git diff --cached
-git commit -m "Describe the document change"
+git commit -m "docs: update OKE cluster guide"
 git push -u "$REMOTE_NAME" HEAD
 ```
 
-GitHub에서 `main` 대상 Pull Request를 생성하거나 GitHub CLI를 사용합니다.
+GitHub 저장소에서 현재 브랜치의 **Compare & pull request**를 눌러 `main` 대상 PR을 만듭니다. GitHub CLI가 있다면:
 
 ```bash
-gh pr create --base main --fill
+gh pr create --repo haksuperman/haksuperman.github.io --base main --fill
 gh pr checks --watch
 ```
 
-`build`가 성공한 뒤 변경 내용을 검토하고 병합합니다. 병합 후에는 `main`용 실행에서 `build`와 `deploy`가 모두 성공했는지 확인합니다.
+PR의 **build 성공**과 실제 변경 내용을 확인한 후 병합합니다. PR 생성만으로 사이트에 공개되지는 않습니다. **main에 병합될 때 실제 배포**가 실행됩니다.
 
-## 4. GitHub Actions 확인
+## 5. 자동 검사와 배포
 
-GitHub 화면에서는 저장소의 **Actions → Deploy Hugo site to Pages**에서 확인합니다.
+GitHub **Actions → Deploy Hugo site to Pages**에서 확인합니다.
+
+| 실행 조건 | 검사·빌드 | 공개 배포 |
+| --- | --- | --- |
+| main 대상 PR | 실행 | 안 함 |
+| main에 병합 또는 push | 실행 | 실행 |
+| 수동 워크플로 실행 | 실행 | 안 함 |
+
+검사 내용:
+
+- Docs/Series 및 세부 분류의 필수값·잘못된 조합·없는 시리즈
+- 같은 시리즈 안의 순서 중복과 잘못된 날짜·초안 값
+- 모든 현재 게시물의 공개 여부와 생성 결과
+- 분류별 글 목록·시리즈 목차·현재 위치·이전/다음 연결
+- 생성된 HTML의 내부 링크와 이미지·첨부 파일 참조
+- 등록·분류 변경 기능의 자동 테스트
+
+CLI로 확인하려면:
 
 ```bash
-gh run list --workflow pages.yaml --limit 5
-RUN_ID=1234567890
-gh run view "$RUN_ID"
-gh run view "$RUN_ID" --log-failed
+gh run list --repo haksuperman/haksuperman.github.io --workflow pages.yaml --limit 5
+gh run view RUN_ID --repo haksuperman/haksuperman.github.io --log-failed
 ```
 
-정상적인 Pull Request 실행에서는 `build`가 성공하고 `deploy`는 `skipped`로 표시됩니다. `deploy`가 건너뛰어진 것은 오류가 아니라 공개 배포 방지 장치입니다.
+배포 성공 후 실제 사이트에서 수정한 글, 메뉴, 이미지, 검색과 모바일 화면을 확인합니다. 내용이 예전으로 보이면 새로고침하고 Actions에서 해당 커밋의 배포 성공 여부를 확인하세요.
 
-## 5. 실패 유형별 대응
+## 6. 자주 발생하는 문제
 
-### Hugo 설치 또는 모듈 다운로드 실패
+| 현상 | 해결 |
+| --- | --- |
+| Python 의존성 안내 | 작성 가이드 1절의 가상환경·의존성 설치 실행 |
+| Docker 연결 실패 | Docker Desktop을 실행한 뒤 다시 시도 |
+| 분류가 없거나 두 종류가 섞임 | `./blog classify <영문-이름>`으로 다시 선택 |
+| 시리즈 순서 중복 | 해당 글의 `seriesOrder`를 빈 번호로 변경 |
+| 이미지가 없음 | 파일 이름·대소문자·본문 경로 확인 |
+| 공개할 글이 안 보임 | `draft: false` 여부와 미래 날짜 여부 확인 |
+| 목록 이름이 바뀌지 않음 | `data/navigation.json`의 title 수정 여부와 Hugo 재빌드 확인 |
+| 공개 빌드에서 초안 링크 오류 | 공개 글에서 초안으로 연결한 링크를 제거하거나 대상 글도 공개 준비 |
+| 수정일이 예전 날짜 | lastmod 고정값을 제거하고 해당 파일을 커밋한 뒤 배포 |
+| PR build 실패 | 병합 전에 오류 메시지의 파일을 수정하고 다시 push |
+| deploy 실패 | Actions 로그와 공개 사이트를 확인하고 일시적 실패이면 작업 재실행 |
 
-- 일시적인 GitHub 또는 네트워크 오류인지 확인합니다.
-- 같은 커밋으로 실패한 작업만 한 번 재실행합니다.
-- 반복되면 `go.mod`, `go.sum`과 워크플로의 Hugo 버전을 확인합니다.
+초안은 저장해도 공개 빌드에 포함되지 않습니다. 초안의 분류·순서 입력 오류는 미리 검사하지만, 초안 본문의 실제 이미지 렌더링은 `./blog preview`로 확인하세요.
 
-### Build with Hugo 실패
+## 7. 복구
 
-- Actions의 실패 로그에서 파일 경로와 줄 번호를 확인합니다.
-- 로컬에서 `hugo --gc --minify --cleanDestinationDir`를 실행합니다.
-- front matter 문법, shortcode, Markdown 링크와 이미지 파일 이름을 확인합니다.
-- 브랜치에서 수정해 다시 push하고 새 검증 결과를 기다립니다.
-
-### Validate generated site 실패
-
-- `python3 scripts/validate_build.py`를 로컬에서 실행합니다.
-- 게시물 수, 기존 URL alias, 생성된 HTML 링크 중 어떤 검증이 실패했는지 확인합니다.
-- 검증 스크립트를 우회하거나 삭제하지 않고 원인이 된 문서 또는 경로를 수정합니다.
-
-### Deploy to GitHub Pages 실패
-
-- `build` 성공 여부를 먼저 확인합니다.
-- GitHub Pages 환경의 이전 배포 상태를 확인합니다.
-- 일시적인 오류라면 실패한 작업을 한 번 재실행합니다.
-- 반복되거나 공개 사이트가 비정상이면 7절의 롤백 절차를 사용합니다.
-
-## 6. 게시 후 확인
-
-배포가 성공하면 다음 항목을 확인합니다.
-
-- `https://haksuperman.github.io/`가 열리는가
-- 새 문서의 실제 URL이 열리는가
-- Docs 또는 Series의 올바른 위치와 순서에 표시되는가
-- 이미지와 내부 링크가 정상인가
-- 검색에서 제목을 찾을 수 있는가
-- 기존 `/posts/.../` 주소가 새 문서로 이동하는가
-
-## 7. 안전한 롤백
-
-`main`을 강제로 이전 커밋으로 되돌리거나 force push하지 않습니다. 문제가 된 변경을 되돌리는 새 Pull Request를 만듭니다.
-
-GitHub PR 화면에 **Revert** 버튼이 있으면 이를 사용해 되돌림 Pull Request를 생성하는 방법이 가장 간단합니다.
-
-명령줄에서 일반 커밋 또는 squash merge를 되돌릴 때는 다음 절차를 사용합니다.
+배포된 변경에 문제가 있으면 해당 PR의 **Revert**로 되돌림 PR을 만들고 검사 후 병합합니다. 일반 커밋이나 squash merge는 다음처럼 되돌릴 수 있습니다.
 
 ```bash
-REMOTE_NAME=blog
-COMMIT_SHA=abc1234
 git switch main
 git pull --ff-only "$REMOTE_NAME" main
-git switch -c rollback/site-deployment
-git revert "$COMMIT_SHA"
+git switch -c rollback/post-update
+git revert COMMIT_SHA
 git push -u "$REMOTE_NAME" HEAD
-gh pr create --base main --fill
+gh pr create --repo haksuperman/haksuperman.github.io --base main --fill
 ```
 
-PR이 merge commit으로 병합된 경우에는 부모를 지정합니다.
+merge commit은 필요하면 `git revert -m 1 MERGE_COMMIT_SHA`를 사용합니다. main을 강제로 덮어쓰는 대신 되돌림 커밋을 사용합니다.
+
+## 8. 배포 후 동기화
+
+로컬 변경이 없는지 확인한 뒤 main을 갱신합니다.
 
 ```bash
-MERGE_COMMIT_SHA=abc1234
-git revert -m 1 "$MERGE_COMMIT_SHA"
-```
-
-최초 Hugo 전환 전 사이트는 다음 태그로 보존되어 있습니다.
-
-```text
-pre-hugo-migration-2026-10-31
-```
-
-태그를 확인하고 현재 상태와 비교할 수 있습니다.
-
-```bash
-git fetch "$REMOTE_NAME" --tags
-git show pre-hugo-migration-2026-10-31
-git diff pre-hugo-migration-2026-10-31..main
-```
-
-이 태그는 복구 기준점입니다. 태그를 `main`에 force push하지 않고 revert PR을 사용합니다.
-
-## 8. 배포 후 로컬 저장소 동기화
-
-로컬 변경이 없으면 다음처럼 동기화합니다.
-
-```bash
-REMOTE_NAME=blog
 git status
 git switch main
 git pull --ff-only "$REMOTE_NAME" main
 ```
 
-`git status`에 수정 파일이 있다면 pull 전에 변경을 별도 브랜치에 보존합니다.
-
-```bash
-git switch -c backup/local-before-sync
-git add -A
-git commit -m "Preserve local changes before Hugo sync"
-git switch main
-git pull --ff-only "$REMOTE_NAME" main
-```
-
-동기화 후 다음을 실행해 새 Hugo 구조가 정상인지 확인합니다.
-
-```bash
-hugo --gc --minify --cleanDestinationDir
-python3 scripts/validate_build.py
-```
-
-## 9. 운영 원칙
-
-- 게시물 크기와 관계없이 작업 브랜치와 Pull Request를 기본으로 사용합니다.
-- Pull Request의 build가 실패한 상태로 병합하지 않습니다.
-- `public/` 디렉터리를 직접 수정하거나 커밋하지 않습니다.
-- 공개된 URL을 변경할 때는 기존 경로를 `aliases`에 남깁니다.
-- 비밀번호, API Key, 인증서 개인 키와 VPN Pre-Shared Key를 문서나 이미지에 포함하지 않습니다.
-- `main`에 force push하거나 복구를 위해 `git reset --hard`를 사용하지 않습니다.
+다음 글을 작성할 때는 새 작업 브랜치를 만듭니다. 게시물 수와 관계없이 같은 작성·검사·PR·배포 절차를 사용합니다.

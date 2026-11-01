@@ -1,0 +1,135 @@
+---
+title: Oracle Cloud 계정 생성과 2단계 인증
+linkTitle: 01. Oracle Cloud 계정 생성과 2단계 인증
+date: '2024-06-15T22:18:00+09:00'
+tags:
+- oci
+- cloud
+- oraclecloud
+- oracle cloud infrastructure
+- mfa
+- freetier
+sourceStatus: needs-review
+draft: false
+collection: series
+seriesId: oci-foundations
+seriesOrder: 10
+---
+## 오라클 클라우드 Free Tier
+
+오라클 클라우드 Free Tier는 두 가지 옵션을 제공한다. 처음 Free Tier 계정을 신청하면 두 가지 옵션을 모두 사용할 수 있다. 그러나 "Always Free 서비스"는 항상 무료로 사용할 수 있지만, "30-Day Free Trial" 옵션은 계정을 생성한 후 30일이 지나거나 300달러를 모두 소진하면 더 이상 사용할 수 없게 된다.
+
+1.Always Free 서비스
+
+-   오라클 APEX 및 SQL Developer와 같은 도구가 포함된 Autonomous 데이터베이스 2개
+-   AMD 컴퓨팅 가상 머신 2개
+-   ARM 기반 Ampere A1 컴퓨트 인스턴스 최대 4개 지원
+-   블록 스토리지, 오브젝트 스토리지, 아카이브 스토리지, 로드밸런서 및 데이터 송신, Monitoring 및 Notifications
+
+2\. 30-Day Free Trial
+
+-   데이터베이스, 분석 컴퓨팅 및 Container Engine for Kubernetes를 포함한 30일 동안 다양한 오라클 클라우드 서비스에 액세스
+-   사용이 가능한 모든 서비스에서 최대 8개의 인스턴스
+-   최대 5TB 스토리지
+
+---
+
+## 오라클 클라우드 Free Tier 계정 신청
+
+[https://www.oracle.com/kr/cloud/free/](https://www.oracle.com/kr/cloud/free/)
+
+1. 무료로 시작하기 선택
+![image](OCI04_01.png)
+
+2. 국적, 이름, 이메일 입력
+![image](OCI04_02.png)
+
+
+3. 입력한 메일 인증 요청
+![image](OCI04_03.png)
+
+4. Verify email을 클릭해 메일 인증을 완료한다.
+![image](OCI04_04.png)
+
+5. 추가 정보 입력
+- 대체 이름 : 영문 성명 입력
+- 비밀번호
+- 클라우드 계정 이름 : 생성하는 클라우드를 대표하는 이름으로 클라우드에 로그인을 위해 꼭 필요한 정보이다. 추후 변경이 가능하다.
+- 홈 영역 : 오라클 클라우드에 로그인 했을 때 기본적으로 선택되는 리전이다. 처음 등록을 하고 나면 변경할 수 없다.
+![image](OCI04_05.png)
+
+
+6. 주소와 휴대폰 번호 입력  
+(휴대폰 번호는 2 Factor 인증에 사용됨)  
+\-> +82 10 xxxx xxxx 의 형태로 적어야 함!
+![image](OCI04_06.png)
+
+
+7. 지급 검증 방법 추가
+![image](OCI04_07.png)
+
+8. Credit Card 선택
+![image](OCI04_08.png)
+
+9. 신용카드 정보 입력  
+(별도 비용이 청구되지 않는데 검증 시 싱가포르 달러로 $1.38가 결제 승인됐다가 취소된다)
+![image](OCI04_09.png)
+
+
+10. 입력한 카드 등록 완료
+![image](OCI04_10.png)
+
+
+11. 싱가포르 달러로 결제 되었다가 다시 취소 처리로 확인
+![image](OCI04_11.png)
+
+
+12. 동의에 체크하고 '내 무료 체험판 시작하기' 클릭
+![image](OCI04_12.png)
+![image](OCI04_13.png)
+
+13. 오라클 클라우드 로그인 화면이 뜨면 완료된 것이다.
+![image](OCI04_14.png)
+
+14. Free Tier 계정에 대한 배포가 완료되면 "Getting started now with Oracle Cloud"라는 제목의 이메일을 수신한다.  
+클라우드 계정(테넌시), 유저 정보 등 앞서 생성한 오라클 클라우드 접속 정보가 담겨 있다.
+![image](OCI04_15.png)
+
+
+---
+
+## 오라클 클라우드 접속
+
+1. URL로 접속  
+[https://cloud.oracle.com/](https://cloud.oracle.com)
+![image](OCI04_16.png)
+{{< callout type="tip" >}}
+아래와 같이 입력하면 즉시 계정 로그인 창으로 넘어간다.  
+https://cloud.oracle.com/?tenant=<테넌시명>?region=<리전코드>
+{{< /callout >}}
+
+2. 이메일로 전송받은(사전 입력한) 클라우드 계정 이름 입력
+![image](OCI04_17.png)
+
+3. Free Tier 계정 배포 시 입력했던 사용자 이름과 비밀번호 입력
+![image](OCI04_18.png)
+
+---
+
+## 2단계 인증 설정
+1. 새로 가입한 계정이라 2차 보안 확인 설정
+![image](OCI04_19.png)
+
+2. 모바일 애플리케이션으로 진행
+![image](OCI04_20.png)
+
+3. Oracle Mobile Authenticator 어플을 이용해 2단계 인증 받기
+![image](OCI04_21.png)
+![image](OCI04_22.png)
+
+
+4. 정상 로그인 성공
+![image](OCI04_23.png)
+
+5. 완전히 프로비저닝 되었다는 "Oracle Cloud Account is Fully Provisioned" 제목의 메일 수신
+![image](OCI04_24.png)

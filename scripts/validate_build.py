@@ -1,173 +1,138 @@
 #!/usr/bin/env python3
-"""Validate the generated staging site without external dependencies."""
-
+"""Check current Hugo content, navigation and generated local references."""
 from __future__ import annotations
 
-import csv
+import argparse
 import json
-import re
-import sys
+from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
-
-ROOT = Path(__file__).resolve().parents[1]
-PUBLIC = ROOT / "public"
-BASE_PATH = "/"
-REFERENCE = re.compile(r'''(?:href|src)=["']([^"']+)["']''')
-REDACTED_IMAGE_COUNTS = {
-    "_posts/AWS/2024-06-09-AWS02.md": 1,
-    "_posts/Network/2024-01-01-Network09.md": 1,
-}
+from content_model import ROOT, ContentError, is_published, validate_sources
 
 
-def local_target(html: Path, raw_url: str) -> Path | None:
-    if raw_url.startswith(("#", "mailto:", "tel:", "data:", "javascript:")):
+class PageLinks(HTMLParser):
+    def __init__(self, text):
+        super().__init__(convert_charrefs=True)
+        self.references, self.lists, self.breadcrumbs, self.pager = [], [], [], []
+        self._contexts = []
+        self.feed(text)
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == "nav":
+            kind = ("list" if "data-content-list" in attrs else
+                    "breadcrumb" if attrs.get("aria-label") == "현재 위치" else
+                    "pager" if "data-series-pager" in attrs else "other")
+            self._contexts.append(kind)
+        for key in ("href", "src", "poster"):
+            if attrs.get(key):
+                self.references.append(attrs[key])
+        if tag == "a" and attrs.get("href") and self._contexts:
+            if self._contexts[-1] == "list":
+                self.lists.append(attrs["href"])
+            elif self._contexts[-1] == "breadcrumb":
+                self.breadcrumbs.append(attrs["href"])
+            elif self._contexts[-1] == "pager":
+                self.pager.append((attrs.get("rel"), attrs["href"]))
+
+    def handle_endtag(self, tag):
+        if tag == "nav" and self._contexts:
+            self._contexts.pop()
+
+
+def local_target(public, html, url):
+    parts = urlsplit(url)
+    if not parts.path or (parts.scheme and parts.scheme not in {"http", "https"}):
         return None
-    parts = urlsplit(raw_url)
-    if parts.scheme or parts.netloc:
+    if parts.netloc and parts.netloc != "haksuperman.github.io":
         return None
     path = unquote(parts.path)
-    if not path:
-        return None
-    if path.startswith(BASE_PATH):
-        candidate = PUBLIC / path.removeprefix(BASE_PATH)
-    elif path.startswith("/"):
-        return None
-    else:
-        candidate = html.parent / path
-    if path.endswith("/"):
-        candidate /= "index.html"
-    elif not candidate.suffix and candidate.is_dir():
-        candidate /= "index.html"
-    return candidate
+    target = public / path.lstrip("/") if path.startswith("/") else html.parent / path
+    if path.endswith("/") or target.is_dir():
+        target /= "index.html"
+    return target
 
 
-def main() -> int:
-    errors: list[str] = []
-    with (ROOT / "migration" / "inventory.csv").open(encoding="utf-8") as handle:
-        inventory = list(csv.DictReader(handle))
-    sample_manifest = json.loads(
-        (ROOT / "migration" / "sample-posts.json").read_text(encoding="utf-8")
-    )
-    ready_manifest = json.loads(
-        (ROOT / "migration" / "ready-docs.json").read_text(encoding="utf-8")
-    )
-    series_manifest = json.loads(
-        (ROOT / "migration" / "series-posts.json").read_text(encoding="utf-8")
-    )
-    manifests_by_source = {
-        item["source"]: item
-        for item in [*sample_manifest, *ready_manifest, *series_manifest]
-    }
-    planned_by_source = {
-        item["source"]: item
-        for item in json.loads(
-            (ROOT / "migration" / "full-plan.json").read_text(encoding="utf-8")
-        )["items"]
-    }
-    migrated_inventory = {
-        row["source"]: row
-        for row in inventory
-        if row["status"] in {"sample-migrated", "migrated"}
-    }
-
-    if len(inventory) != 132:
-        errors.append(f"expected 132 inventory rows, found {len(inventory)}")
-    if migrated_inventory.keys() != manifests_by_source.keys():
-        errors.append("migrated inventory and manifests do not contain the same sources")
-    destinations = [str(item["destination"]) for item in manifests_by_source.values()]
-    if len(destinations) != len(set(destinations)):
-        errors.append("migration manifests contain duplicate destinations")
-
-    for item in manifests_by_source.values():
-        destination = ROOT / item["destination"]
-        if not destination.exists():
-            errors.append(f"missing migrated page: {destination.relative_to(ROOT)}")
-            continue
-        body = destination.read_text(encoding="utf-8")
-        if "/assets/img/posts/" in body:
-            errors.append(f"legacy image reference remains: {destination.relative_to(ROOT)}")
-        if re.search(r"(?:\{:\s*|:\{\s*)\.prompt-", body):
-            errors.append(f"legacy prompt syntax remains: {destination.relative_to(ROOT)}")
-        if re.search(
-            r"\]\((?:https?://haksuperman\.github\.io)?/posts/", body
-        ):
-            errors.append(f"legacy internal link remains: {destination.relative_to(ROOT)}")
-        if re.search(r"!\[[^]]*\]\[/assets/img/posts/", body):
-            errors.append(f"legacy square image syntax remains: {destination.relative_to(ROOT)}")
-        exposed_psk = re.search(
-            r"(?im)^\s*-\s*Pre-Shared Key\s*:\s*(?!<REDACTED)[^\s<].+$", body
-        )
-        if exposed_psk:
-            errors.append(f"unredacted pre-shared key remains: {destination.relative_to(ROOT)}")
-        if re.search(r"(?i)hackers|ciscosec|\btoor\b|dkagh1", body):
-            errors.append(f"known training credential remains: {destination.relative_to(ROOT)}")
-        if "AWS02_57.png" in body or "Network09_04.png" in body:
-            errors.append(f"credential-bearing screenshot remains: {destination.relative_to(ROOT)}")
-        inventory_destination = migrated_inventory.get(item["source"], {}).get("destination")
-        if inventory_destination != item["destination"]:
-            errors.append(f"inventory destination mismatch: {item['source']}")
-        expected_images = int(planned_by_source[item["source"]]["image_reference_count"])
-        expected_images -= REDACTED_IMAGE_COUNTS.get(item["source"], 0)
-        copied_images = len(
-            [path for path in destination.parent.iterdir() if path.name != "index.md"]
-        )
-        if copied_images != expected_images:
-            errors.append(
-                f"image count mismatch: {item['source']} "
-                f"expected {expected_images}, found {copied_images}"
-            )
-
-    for html in PUBLIC.rglob("*.html"):
-        text = html.read_text(encoding="utf-8")
-        for raw_url in REFERENCE.findall(text):
-            target = local_target(html, raw_url)
+def validate(root=ROOT, include_drafts=False):
+    data, posts = validate_sources(root)
+    public = root / "public"
+    errors = []
+    try:
+        index = json.loads((public / "content-index.json").read_text(encoding="utf-8"))["posts"]
+    except (OSError, ValueError, KeyError) as error:
+        raise ContentError("Hugo 빌드 결과가 없습니다. ./blog check를 실행하세요.") from error
+    expected = {f"/posts/{path.parent.name}/": metadata for path, metadata, _ in posts if is_published(metadata, include_drafts)}
+    actual = {item["url"]: item for item in index}
+    if len(actual) != len(index):
+        errors.append("동일한 공개 주소가 여러 게시물에 사용됩니다.")
+    if actual.keys() != expected.keys():
+        for url in expected.keys() - actual.keys():
+            errors.append(f"공개되어야 할 글이 빌드되지 않았습니다: {url}")
+        for url in actual.keys() - expected.keys():
+            errors.append(f"공개 대상이 아닌 글이 빌드에 포함됐습니다: {url}")
+    for url in actual.keys() & expected.keys():
+        metadata = expected[url]
+        for field in ("collection", "docCategory", "seriesId", "seriesOrder"):
+            if actual[url].get(field) != metadata.get(field, 0 if field == "seriesOrder" else ""):
+                errors.append(f"{url}: 빌드된 {field}가 글 상단 정보와 다릅니다.")
+    parsed = {}
+    for html in public.rglob("*.html"):
+        page = PageLinks(html.read_text(encoding="utf-8"))
+        parsed[html] = page
+        for url in page.references:
+            target = local_target(public, html, url)
             if target is not None and not target.exists():
-                errors.append(
-                    f"broken local reference: {html.relative_to(PUBLIC)} -> {raw_url}"
-                )
-
-    aliases = list((PUBLIC / "posts").glob("*/index.html"))
-    if len(aliases) != len(manifests_by_source):
-        errors.append(
-            f"expected {len(manifests_by_source)} legacy aliases, found {len(aliases)}"
-        )
-
-    series_sources = list((ROOT / "content" / "series").rglob("*.md"))
-    series_aliases: list[Path] = []
-    for source in series_sources:
-        relative = source.relative_to(ROOT / "content" / "series")
-        page_path = relative.parent
-        canonical = PUBLIC / "series" / page_path / "index.html"
-        legacy_alias = PUBLIC / "study" / page_path / "index.html"
-        if not canonical.exists():
-            errors.append(f"missing Series page: {canonical.relative_to(PUBLIC)}")
-        if not legacy_alias.exists():
-            errors.append(
-                f"missing legacy Study alias: {legacy_alias.relative_to(PUBLIC)}"
-            )
-        series_aliases.append(legacy_alias)
-
+                errors.append(f"{html.relative_to(public)}: 연결 대상이 없습니다: {url}")
+    for collection in ("docs", "series"):
+        for group in data[collection]:
+            url = f"/{collection}/{group['id']}/"
+            page = parsed.get(public / url.lstrip("/") / "index.html")
+            if page is None:
+                errors.append(f"분류 목록이 생성되지 않았습니다: {url}")
+                continue
+            field = "docCategory" if collection == "docs" else "seriesId"
+            selected = [link for link, metadata in expected.items() if metadata["collection"] == collection and metadata.get(field) == group["id"]]
+            if set(page.lists) != set(selected) or len(page.lists) != len(selected):
+                errors.append(f"{url}: 분류에 속한 글 목록이 일치하지 않습니다.")
+            if collection == "series":
+                selected.sort(key=lambda link: expected[link]["seriesOrder"])
+                if page.lists != selected:
+                    errors.append(f"{url}: 시리즈 목차 순서가 올바르지 않습니다.")
+            for position, link in enumerate(selected):
+                article = parsed.get(public / link.lstrip("/") / "index.html")
+                if article is None:
+                    errors.append(f"게시물 HTML이 없습니다: {link}")
+                    continue
+                if f"/{collection}/" not in article.breadcrumbs or url not in article.breadcrumbs:
+                    errors.append(f"{link}: 현재 위치에 올바른 분류가 표시되지 않습니다.")
+                if collection == "series":
+                    neighbors = []
+                    if position > 0:
+                        neighbors.append(("prev", selected[position - 1]))
+                    if position + 1 < len(selected):
+                        neighbors.append(("next", selected[position + 1]))
+                    if article.pager != neighbors:
+                        errors.append(f"{link}: 시리즈 이전/다음 연결이 올바르지 않습니다.")
     if errors:
-        print("\n".join(errors))
-        return 1
+        raise ContentError("\n".join(errors))
+    return {"게시물": len(posts), "공개 글": len(actual), "Docs 분류": len(data["docs"]), "시리즈": len(data["series"]), "검사한 HTML": len(parsed)}
 
-    print(
-        json.dumps(
-            {
-                "inventory": len(inventory),
-                "migrated_posts": len(manifests_by_source),
-                "legacy_aliases": len(aliases),
-                "series_legacy_aliases": len(series_aliases),
-                "html_pages_checked": len(list(PUBLIC.rglob("*.html"))),
-            },
-            ensure_ascii=False,
-            indent=2,
-        )
-    )
-    return 0
+
+def main():
+    parser = argparse.ArgumentParser(description="Hugo 게시물과 생성 결과 검증")
+    parser.add_argument("--sources-only", action="store_true", help="초안을 포함한 게시물 정보만 검사")
+    parser.add_argument("--include-drafts", action="store_true", help="hugo --buildDrafts 결과 검사")
+    args = parser.parse_args()
+    try:
+        if args.sources_only:
+            _, posts = validate_sources()
+            print(f"게시물 {len(posts)}개의 분류와 작성 정보를 확인했습니다.")
+        else:
+            print(json.dumps(validate(include_drafts=args.include_drafts), ensure_ascii=False, indent=2))
+    except (ContentError, OSError) as error:
+        parser.exit(1, f"확인해 주세요:\n{error}\n")
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

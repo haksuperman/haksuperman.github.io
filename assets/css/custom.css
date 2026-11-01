@@ -426,3 +426,13 @@ main#content:has(.home-notebook) {
   flex: 0 0 auto;
   font-size: 0.75rem;
 }
+
+.content-draft-notice {
+  border: 1px solid #d97706;
+  padding: .7rem 1rem;
+  border-radius: .4rem;
+  color: #b45309;
+  font-size: .85rem;
+  margin-bottom: 1rem;
+}
+.dark .content-draft-notice { color: #fbbf24; }

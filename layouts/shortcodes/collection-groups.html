@@ -1,0 +1,8 @@
+{{- $collection := .Page.Params.collection -}}
+{{- $page := .Page -}}
+{{- $cards := "" -}}
+{{- range index site.Data.navigation $collection -}}
+  {{- $card := partial "shortcodes/card" (dict "page" $page "link" (printf "/%s/%s/" $collection .id) "title" .title "subtitle" (.subtitle | default .description) "icon" (.icon | default "book-open")) -}}
+  {{- $cards = printf "%s%s" $cards $card -}}
+{{- end -}}
+{{- partial "shortcodes/cards" (dict "cols" 3 "content" ($cards | safeHTML)) -}}
