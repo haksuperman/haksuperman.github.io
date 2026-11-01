@@ -17,11 +17,20 @@ class PageLinks(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.references, self.lists, self.breadcrumbs, self.pager = [], [], [], []
         self.redirects = []
+        self.sidebar_open = {}
+        self._in_sidebar = False
+        self._sidebar_lists = []
         self._contexts = []
         self.feed(text)
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
+        if tag == "aside" and "hextra-sidebar-container" in attrs.get("class", "").split():
+            self._in_sidebar = True
+        if self._in_sidebar and tag == "li":
+            self._sidebar_lists.append("open" in attrs.get("class", "").split())
+        if self._in_sidebar and tag == "a" and attrs.get("href") and self._sidebar_lists:
+            self.sidebar_open.setdefault(attrs["href"], []).append(self._sidebar_lists[-1])
         if tag == "meta" and attrs.get("http-equiv", "").lower() == "refresh":
             match = re.search(r"(?i)\burl\s*=\s*(.*)", attrs.get("content", ""))
             if match:
@@ -43,6 +52,11 @@ class PageLinks(HTMLParser):
                 self.pager.append((attrs.get("rel"), attrs["href"]))
 
     def handle_endtag(self, tag):
+        if tag == "li" and self._in_sidebar and self._sidebar_lists:
+            self._sidebar_lists.pop()
+        if tag == "aside":
+            self._in_sidebar = False
+            self._sidebar_lists = []
         if tag == "nav" and self._contexts:
             self._contexts.pop()
 
@@ -112,6 +126,9 @@ def validate(root=ROOT, include_drafts=False):
                     continue
                 if f"/{collection}/" not in article.breadcrumbs or url not in article.breadcrumbs:
                     errors.append(f"{link}: 현재 위치에 올바른 분류가 표시되지 않습니다.")
+                opened = article.sidebar_open.get(url, [])
+                if not opened or not all(opened):
+                    errors.append(f"{link}: 현재 분류의 왼쪽 목차가 접혀 있습니다: {url}")
                 if collection == "series":
                     neighbors = []
                     if position > 0:

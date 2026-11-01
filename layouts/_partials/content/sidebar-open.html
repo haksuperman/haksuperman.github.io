@@ -1,0 +1,13 @@
+{{- $item := .item -}}
+{{- $page := .page -}}
+{{- $contains := or ($item.IsAncestor $page) (eq $item.RelPermalink $page.RelPermalink) -}}
+{{- if and $item.IsSection $item.Params.collection (eq $item.Params.collection $page.Params.collection) -}}
+  {{- if $item.Params.seriesid -}}
+    {{- $contains = eq $item.Params.seriesid $page.Params.seriesid -}}
+  {{- else if $item.Params.doccategory -}}
+    {{- $contains = eq $item.Params.doccategory $page.Params.doccategory -}}
+  {{- else -}}
+    {{- $contains = true -}}
+  {{- end -}}
+{{- end -}}
+{{- return (or $item.Params.sidebar.open $contains) -}}
