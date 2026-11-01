@@ -22,7 +22,7 @@ aliases:
 - /study/oci-foundations/09-https-vault-ca-certificates/
 ---
 ## 1. HTTP와 HTTPS
-[[OCI] 애플리케이션 배포(with. Flask, PyMySQL, Faker)]({{< relref "/posts/08-flask-application-deployment/" >}})
+[[OCI] 애플리케이션 배포(with. Flask, PyMySQL, Faker)](/posts/08-flask-application-deployment/)
 
 HTTS 프로토콜을 사용해 "http://\<애플리케이션 퍼블릭 IP 주소>:5000"의 형식으로 접속했다. 그러나 브라우저와 서버 간의 데이터 통신을 더 안전하게 보호하려면 HTTPS 프로토콜을 사용하는 것이 좋다. 아니 꼭 이렇게 해야 한다.
 

@@ -11,6 +11,11 @@ titleCaseStyle: none
 frontmatter:
   lastmod: [lastmod, ":git", date, publishDate]
 
+# Keep published post URLs stable while source bundles are grouped by Docs/Series.
+permalinks:
+  page:
+    posts: /posts/:contentbasename/
+
 outputs:
   home: [HTML, RSS, ContentIndex]
   section: [HTML, RSS]

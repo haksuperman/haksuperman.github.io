@@ -19,7 +19,7 @@ aliases:
 - /posts/oci10/
 - /study/oci-foundations/07-mysql-database-setup/
 ---
-[[OCI] 통신을 위한 네트워크 설정 (with. 시큐리티 리스트, Bastion 세션, 서버 자체 방화벽)]({{< relref "/posts/06-network-security-and-firewall/" >}})
+[[OCI] 통신을 위한 네트워크 설정 (with. 시큐리티 리스트, Bastion 세션, 서버 자체 방화벽)](/posts/06-network-security-and-firewall/)
 이렇게 진행한 가상 머신 인스턴스 중 프라이빗 서브넷에 생성한 oci-demo-db 가상 머신에 MySQL 데이터베이스를 설치해 데이터베이스 서버로 사용할 것이다.
 
 ## 0. oci-demo-db 가상 머신 인스턴스 원격 접속

@@ -20,7 +20,7 @@ aliases:
 - /posts/oci13/
 - /study/oci-foundations/10-load-balancer-autoscaling/
 ---
-[[OCI] 애플리케이션 배포(with. Flask, PyMySQL, Faker)]({{< relref "/posts/08-flask-application-deployment/" >}})
+[[OCI] 애플리케이션 배포(with. Flask, PyMySQL, Faker)](/posts/08-flask-application-deployment/)
 
 이렇게 배포한 애플리케이션에 접속하는 사용자 수가 증가하면서 애플리케이션 서버를 확장해야 하는 상황을 대비해 오토스케일링이 필요하다. 그리고 이 오토스케일링이 동작하는 상황에서 부하 분산을 하기 위한 로드밸런서 또한 필수적으로 구성해야 한다.
 
@@ -390,7 +390,7 @@ Port : 5000
 
 \[참고\]
 - [https://docs.oracle.com/en-us/iaas/Content/Billing/Tasks/changingpaymentmethod.htm](https://docs.oracle.com/en-us/iaas/Content/Billing/Tasks/changingpaymentmethod.htm)
-- [[OCI] 오라클 클라우드 계정 생성 (with. Free Tier 및 2단계 인증)]({{< relref "/posts/01-account-creation-free-tier-mfa/" >}})
+- [[OCI] 오라클 클라우드 계정 생성 (with. Free Tier 및 2단계 인증)](/posts/01-account-creation-free-tier-mfa/)
 
 5. 결제 정보가 등록 되었지만, 하단의 계정 업그레이드를 선택해야 업그레이드가 된다.
 ![image](OCI13_61.png)

@@ -20,6 +20,9 @@ class ContentWorkflowTests(unittest.TestCase):
         (self.root / "data").mkdir()
         self.data = {"docs": [{"id": key, "title": key} for key in sorted(DOC_IDS)], "series": [{"id": "first", "title": "First"}, {"id": "second", "title": "Second"}]}
         self.save_catalog()
+        for collection in ("docs", "series"):
+            for group in self.data[collection]:
+                (self.root / "content/posts" / collection / group["id"]).mkdir(parents=True)
         self.output = contextlib.redirect_stdout(io.StringIO())
         self.output.__enter__()
         self.addCleanup(self.output.__exit__, None, None, None)
@@ -33,6 +36,7 @@ class ContentWorkflowTests(unittest.TestCase):
     def test_docs_all_four_categories(self):
         for category in DOC_IDS:
             path = self.create(category, collection="docs", category=category)
+            self.assertEqual(path, self.root / "content/posts/docs" / category / category / "index.md")
             metadata, _ = read_post(path)
             self.assertEqual(metadata["docCategory"], category)
             self.assertTrue(metadata["draft"])
@@ -44,23 +48,26 @@ class ContentWorkflowTests(unittest.TestCase):
         self.assertEqual(read_post(path)[0]["seriesOrder"], 20)
         validate_sources(self.root)
 
-    def test_reclassification_keeps_body_assets_and_path(self):
+    def test_reclassification_moves_bundle_and_keeps_body_assets(self):
         path = self.create(collection="docs", category="guide-lab")
         image = path.parent / "diagram.png"
         image.write_bytes(b"image")
         body = read_post(path)[1]
-        reclassify(self.root, "example", collection="docs", category="command-tool")
+        previous = path.parent
+        path = reclassify(self.root, "example", collection="docs", category="command-tool")
+        self.assertFalse(previous.exists())
+        self.assertEqual(path, self.root / "content/posts/docs/command-tool/example/index.md")
         self.assertEqual(read_post(path)[0]["docCategory"], "command-tool")
-        reclassify(self.root, "example", collection="series", series="first", order=20)
+        path = reclassify(self.root, "example", collection="series", series="first", order=20)
         self.assertNotIn("docCategory", read_post(path)[0])
-        reclassify(self.root, "example", collection="series", series="second", order=30)
+        path = reclassify(self.root, "example", collection="series", series="second", order=30)
         self.assertEqual(read_post(path)[0]["seriesId"], "second")
-        reclassify(self.root, "example", collection="docs", category="theory-reference")
+        path = reclassify(self.root, "example", collection="docs", category="theory-reference")
         metadata, result = read_post(path)
         self.assertNotIn("seriesId", metadata)
         self.assertNotIn("seriesOrder", metadata)
         self.assertEqual(body, result)
-        self.assertEqual(image.read_bytes(), b"image")
+        self.assertEqual((path.parent / "diagram.png").read_bytes(), b"image")
         validate_sources(self.root)
 
     def test_duplicate_slug_and_order_do_not_overwrite(self):
@@ -71,10 +78,11 @@ class ContentWorkflowTests(unittest.TestCase):
         with self.assertRaises(ContentError):
             self.create("other", collection="series", series="first", order=10)
         self.assertEqual(path.read_text(), original)
-        self.assertFalse((path.parent.parent / "other").exists())
+        self.assertFalse((self.root / "content/posts/series/first/other").exists())
 
     def test_new_series_is_single_catalog_entry(self):
         add_series(self.root, "new-series", "새 시리즈", "소개")
+        self.assertTrue((self.root / "content/posts/series/new-series/.gitkeep").exists())
         self.create(collection="series", series="new-series", order=10)
         validate_sources(self.root)
         self.assertEqual(len(json.loads((self.root / "data/navigation.json").read_text())["series"]), 3)
@@ -130,11 +138,19 @@ class ContentWorkflowTests(unittest.TestCase):
         metadata["aliases"] = ["/study/old-series/example/", "/posts/old-example/"]
         write_post(path, metadata, body)
         validate_sources(self.root)
-        reclassify(self.root, "example", collection="series", series="first", order=10)
+        path = reclassify(self.root, "example", collection="series", series="first", order=10)
         self.assertEqual(read_post(path)[0]["aliases"], metadata["aliases"])
-        reclassify(self.root, "example", collection="docs", category="command-tool")
+        path = reclassify(self.root, "example", collection="docs", category="command-tool")
         self.assertEqual(read_post(path)[0]["aliases"], metadata["aliases"])
         validate_sources(self.root)
+
+    def test_post_in_wrong_physical_group_is_rejected(self):
+        path = self.create(collection="docs", category="guide-lab")
+        wrong = self.root / "content/posts/docs/command-tool/example"
+        wrong.parent.mkdir(parents=True, exist_ok=True)
+        path.parent.rename(wrong)
+        with self.assertRaisesRegex(ContentError, "분류에 맞는 폴더"):
+            validate_sources(self.root)
 
     def test_previous_addresses_reject_duplicates_and_collisions(self):
         path = self.create(collection="docs", category="guide-lab")
