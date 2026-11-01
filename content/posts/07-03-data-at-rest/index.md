@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 730
+aliases:
+- /series/aws-security/07-03-data-at-rest/
+- /posts/aws28/
+- /study/aws-security/07-03-data-at-rest/
 ---
 ## 1. 저장 데이터 보안 및 암호화
 저장 데이터란 Amazon S3, DynamoDB, EBS 등 디스크에 기록되어 보관 중인 데이터를 말한다. 이 저장 데이터의 기밀성을 보호하는 가장 확실한 방법은 데이터 암호화이다.

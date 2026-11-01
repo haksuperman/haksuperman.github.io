@@ -12,6 +12,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/oke-sample-workload/
+- /posts/oci23/
 ---
 ## **1. manifest 환경 구성**
 

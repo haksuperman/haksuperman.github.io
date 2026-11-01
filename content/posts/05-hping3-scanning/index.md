@@ -14,6 +14,10 @@ draft: false
 collection: series
 seriesId: network-security
 seriesOrder: 50
+aliases:
+- /series/network-security/05-hping3-scanning/
+- /posts/networksecurity05/
+- /study/network-security/05-hping3-scanning/
 ---
 홈페이지의 경우 보안상의 이유로 ICMP 패킷을 차단하는 경우도 존재한다. 이러한 경우 서버가 구동이 되고 있는지 확인하기 위해서는 활성화 된 서비스가 있는 포트를 대상으로 서버가 존재하고 실행되고 있는지 스캔할 수 있다. 예를 들면 웹 서버에 HTTP 패킷을 보내 확인하는 방법이 있다.
 

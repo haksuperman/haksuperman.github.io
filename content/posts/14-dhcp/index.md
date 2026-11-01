@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: network-fundamentals
 seriesOrder: 140
+aliases:
+- /series/network-fundamentals/14-dhcp/
+- /posts/network14/
+- /study/network-fundamentals/14-dhcp/
 ---
 L2 Switch
 

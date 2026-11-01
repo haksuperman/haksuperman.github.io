@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 620
+aliases:
+- /series/aws-security/06-02-vpc-endpoints-and-privatelink/
+- /posts/aws22/
+- /study/aws-security/06-02-vpc-endpoints-and-privatelink/
 ---
 ## 1. EC2가 SQS에 접근하는 두가지 방법
 1. 과거 (Internet Gateway 사용)

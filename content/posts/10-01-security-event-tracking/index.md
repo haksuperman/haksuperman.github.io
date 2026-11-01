@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 1010
+aliases:
+- /series/aws-security/10-01-security-event-tracking/
+- /posts/aws39/
+- /study/aws-security/10-01-security-event-tracking/
 ---
 ## 1. SIEM 및 형상 관리도구
 Amazon Inspector (호스트 취약점), Amazon GuardDuty(네트워크/로그 위협), Prowler(인프라 구성 취약점) 등 다양한 도구에서 보안 경고가 발생한다.

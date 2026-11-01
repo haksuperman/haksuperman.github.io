@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 750
+aliases:
+- /series/aws-security/07-05-data-access-logging/
+- /posts/aws30/
+- /study/aws-security/07-05-data-access-logging/
 ---
 ## 1. Amazon S3에 대한 접근 로깅
 Amazon S3 접근 로그는 특정 S3 버킷에 대한 모든 요청(읽기, 쓰기, 삭제 등)을 추적하는 데 유용하다.

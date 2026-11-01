@@ -12,6 +12,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/oke-cluster-deployment/
+- /posts/oci21/
 ---
 ## **1. OKE Cluster 배포**
 

@@ -13,6 +13,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/oci-console-network-perimeters/
+- /posts/oci30/
 ---
 ## 1. 개요
 

@@ -10,6 +10,10 @@ draft: false
 collection: series
 seriesId: linux-fundamentals
 seriesOrder: 40
+aliases:
+- /series/linux-fundamentals/04-vi-editor/
+- /posts/linux04/
+- /study/linux-fundamentals/04-vi-editor/
 ---
 h, j, k, l의 키로 좌, 하, 상, 우 방향으로 커서 이동 가능
 

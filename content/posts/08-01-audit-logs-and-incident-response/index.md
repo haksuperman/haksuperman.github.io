@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 810
+aliases:
+- /series/aws-security/08-01-audit-logs-and-incident-response/
+- /posts/aws32/
+- /study/aws-security/08-01-audit-logs-and-incident-response/
 ---
 ## 1. 개요
 방어막을 아무리 잘 구축해도 보안 침해(사고)는 언제든 발생할 수 있다. 2016년 우버(Uber)에서 5,000만 명의 고객 데이터가 유출되어 해커가 몸값을 요구했던 사건처럼, 최악의 상황이 발생했을 때 가장 먼저 열어봐야 하는 것이 바로 감사 로그(Audit Log)다.

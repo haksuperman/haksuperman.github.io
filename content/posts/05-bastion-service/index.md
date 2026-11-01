@@ -14,6 +14,10 @@ draft: false
 collection: series
 seriesId: oci-foundations
 seriesOrder: 50
+aliases:
+- /series/oci-foundations/05-bastion-service/
+- /posts/oci08/
+- /study/oci-foundations/05-bastion-service/
 ---
 ## 1. OCI에서의 Bastion 서버
 

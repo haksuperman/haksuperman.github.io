@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 210
+aliases:
+- /series/aws-security/02-01-iam-foundations/
+- /posts/aws07/
+- /study/aws-security/02-01-iam-foundations/
 ---
 ## 1. 사용자 (IAM User)
 ### 1.1. 인증과 권한 부여

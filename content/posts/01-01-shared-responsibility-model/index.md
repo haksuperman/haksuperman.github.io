@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 110
+aliases:
+- /series/aws-security/01-01-shared-responsibility-model/
+- /posts/aws04/
+- /study/aws-security/01-01-shared-responsibility-model/
 ---
 ## 1. 개요
 AWS 클라우드에서 애플리케이션을 실행하는 경우, AWS에서는 공동 책임 모델에 따라 일정 수준 이상의 보안을 제공하는 것에 동의한다.

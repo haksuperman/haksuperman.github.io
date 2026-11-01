@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 640
+aliases:
+- /series/aws-security/06-04-aws-shield-ddos/
+- /posts/aws24/
+- /study/aws-security/06-04-aws-shield-ddos/
 ---
 ## 1. DDoS 공격
 분산 서비스 거부(DDoS, Distributed Denial of Service) 공격은 일반적인 서비스 거부(DoS) 공격의 진화된 형태이다.

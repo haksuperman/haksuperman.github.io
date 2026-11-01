@@ -14,6 +14,10 @@ draft: false
 collection: series
 seriesId: oci-foundations
 seriesOrder: 20
+aliases:
+- /series/oci-foundations/02-vcn-foundations/
+- /posts/oci05/
+- /study/oci-foundations/02-vcn-foundations/
 ---
 ## 1. 가상 클라우드 네트워크(VCN, Virtual Cloud Network)
 

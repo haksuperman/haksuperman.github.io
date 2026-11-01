@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 230
+aliases:
+- /series/aws-security/02-03-tag-based-access-control/
+- /posts/aws09/
+- /study/aws-security/02-03-tag-based-access-control/
 ---
 ## 1. 개요
 - 속성 기반 접근 제어(ABAC, Attribute-Based Access Control)는 호출자와 리소스의 속성에 따라 달라지는 동적 권한을 허용하는 모델이다.

@@ -13,6 +13,10 @@ draft: false
 collection: series
 seriesId: web-security
 seriesOrder: 50
+aliases:
+- /series/web-security/05-reflected-xss/
+- /posts/websecurity05/
+- /study/web-security/05-reflected-xss/
 ---
 XSS 취약점은 외부의 공격자가 클라이언트 스크립트를 악용하여 웹 사이트에 접속하려는 일반 사용자로 하여금 공격자가 의도한 명령이나 작업을 수행하도록 하는 공격이다. 공격자는 이 공격을 이용해서 악성 서버 유도, 사용자 쿠키 정보 추출을 통한 세션 가로채기 공격 등을 수행할 수 있다.
 

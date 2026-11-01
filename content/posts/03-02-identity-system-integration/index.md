@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 320
+aliases:
+- /series/aws-security/03-02-identity-system-integration/
+- /posts/aws11/
+- /study/aws-security/03-02-identity-system-integration/
 ---
 ## 1. 개요
 - 이미 Active Directory와 같은 다른 ID 또는 접근관리시스템을 사용하고 있을 수 있다. 이러한 시스템을 IAM과 통합해 시스템 간의 중복 작업량을 줄일 수 있는 방법이 있다.<br>

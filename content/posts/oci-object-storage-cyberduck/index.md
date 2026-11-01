@@ -12,6 +12,9 @@ tags:
 draft: false
 collection: docs
 docCategory: command-tool
+aliases:
+- /docs/command-tool/oci-object-storage-cyberduck/
+- /posts/oci16/
 ---
 ## 1. 사전 준비
 

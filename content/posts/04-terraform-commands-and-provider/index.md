@@ -17,6 +17,10 @@ draft: false
 collection: series
 seriesId: terraform-infrastructure
 seriesOrder: 40
+aliases:
+- /series/terraform-infrastructure/04-terraform-commands-and-provider/
+- /posts/terraform04/
+- /study/terraform-infrastructure/04-terraform-commands-and-provider/
 ---
 ## 1. Terraform 기본 명령
 

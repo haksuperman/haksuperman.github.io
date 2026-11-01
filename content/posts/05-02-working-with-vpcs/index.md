@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 520
+aliases:
+- /series/aws-security/05-02-working-with-vpcs/
+- /posts/aws18/
+- /study/aws-security/05-02-working-with-vpcs/
 ---
 ## 1. 개요
 ### 1.1. VPC와 서브넷

@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: web-security
 seriesOrder: 40
+aliases:
+- /series/web-security/04-sql-injection-auth-bypass/
+- /posts/websecurity04/
+- /study/web-security/04-sql-injection-auth-bypass/
 ---
 {{< callout type="warning" >}}
 **이러한 실습은 항상 단순 실습용으로, 공부용으로만 진행하기!**<br>

@@ -12,6 +12,9 @@ tags:
 draft: false
 collection: docs
 docCategory: theory-reference
+aliases:
+- /docs/theory-reference/oke-node-cycling/
+- /posts/oci29/
 ---
 ## 1. Node Cycling 개념
 

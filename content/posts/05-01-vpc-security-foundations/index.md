@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 510
+aliases:
+- /series/aws-security/05-01-vpc-security-foundations/
+- /posts/aws17/
+- /study/aws-security/05-01-vpc-security-foundations/
 ---
 ## 1. IAM과 VPC의 유사점과 차이점
 - IAM 규칙 (정책) : 특정 사용자나 그룹이 API 또는 AWS Console에서 **"어떤 작업을 수행할 수 있을지"**를 제어한다.

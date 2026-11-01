@@ -13,6 +13,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/aws-oci-bgp-vpn/06-vpn2-aws-temporary-cgw/
+- /posts/multicloud06/
 ---
 ## 6.1. 임시 Customer Gateway
 

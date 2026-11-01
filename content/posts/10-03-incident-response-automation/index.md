@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 1030
+aliases:
+- /series/aws-security/10-03-incident-response-automation/
+- /posts/aws41/
+- /study/aws-security/10-03-incident-response-automation/
 ---
 ## 1. 사고 대응 자동화 및 플레이북 스크립팅
 모든 검사 결과를 추적할 수 있는 플레이북을 확보한 후에는 이를 자동화하여 문제 해결 속도를 높일 수 있다.<br>

@@ -12,6 +12,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/oke-block-volume-iscsi/
+- /posts/oci25/
 ---
 ## 1. IAM
 

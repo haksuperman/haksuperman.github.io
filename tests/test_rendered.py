@@ -44,14 +44,24 @@ class RenderedWorkflowTests(unittest.TestCase):
             draft = create("draft", "series", series="kubernetes-cluster", order=20)
             metadata, body = read_post(draft)
             metadata["draft"] = True
+            metadata["aliases"] = ["/study/sample/draft/"]
             write_post(draft, metadata, body)
             # New image and new draft must not depend on any historical inventory.
             (root / "content/posts/doc/diagram.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"></svg>')
             path = root / "content/posts/doc/index.md"
             metadata, body = read_post(path)
+            metadata["aliases"] = ["/study/sample/doc/", "/series/sample/doc/"]
             write_post(path, metadata, body + "\n![diagram](diagram.svg)\n")
             hugo(root)
             self.assertEqual(validate(root)["공개 글"], 3)
+            legacy = root / "public/study/sample/doc/index.html"
+            self.assertEqual(PageLinks(legacy.read_text()).redirects, ["/posts/doc/"])
+            original_redirect = legacy.read_text()
+            legacy.unlink()
+            with self.assertRaisesRegex(ContentError, "이전 주소 연결"):
+                validate(root)
+            legacy.write_text(original_redirect)
+            self.assertFalse((root / "public/study/sample/draft/index.html").exists())
             image = root / "public/posts/doc/diagram.svg"
             original_image = image.read_bytes()
             image.unlink()
@@ -82,6 +92,8 @@ class RenderedWorkflowTests(unittest.TestCase):
             hugo(root, include_drafts=True)
             self.assertEqual(validate(root, include_drafts=True)["공개 글"], 4)
             self.assertTrue((root / "public/posts/draft/index.html").exists())
+            self.assertEqual(PageLinks((root / "public/study/sample/draft/index.html").read_text()).redirects, ["/posts/draft/"])
+            self.assertEqual(PageLinks((root / "public/study/sample/doc/index.html").read_text()).redirects, ["/posts/doc/"])
 
 
 if __name__ == "__main__":

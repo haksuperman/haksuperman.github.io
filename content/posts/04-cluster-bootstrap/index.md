@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: kubernetes-cluster
 seriesOrder: 40
+aliases:
+- /series/kubernetes-cluster/04-cluster-bootstrap/
+- /posts/kubernetes04/
+- /study/kubernetes-cluster/04-cluster-bootstrap/
 ---
 ### 1. Control Plane 구성(마스터 노드에서만 진행)
 

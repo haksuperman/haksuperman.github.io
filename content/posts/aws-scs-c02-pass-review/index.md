@@ -11,6 +11,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/aws-scs-c02-pass-review/
+- /posts/aws03/
 ---
 나는 지난 AWS SAA-C03 합격된 후 취업에 성공해 클라우드 엔지니어로 일하고 있다.
 

@@ -12,6 +12,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/oci-development-vm-docker/
+- /posts/oci15/
 ---
 개발 가상 환경을 만들고, 마이크로서비스 개발과 컨테이너 빌드, 쿠버네티스 접속 환경 설정 등 추후 진행할 모든 실습을 생성할 가상 머신에서 진행할 예정이다.
 

@@ -21,6 +21,10 @@ draft: false
 collection: series
 seriesId: network-security
 seriesOrder: 60
+aliases:
+- /series/network-security/06-scanning-defense/
+- /posts/networksecurity06/
+- /study/network-security/06-scanning-defense/
 ---
 OS 설치 시 기본적으로 탑재되어 실행 되는 서비스 중에는 보안에 취약한 서비스들이 있다. 그러한 서비스를 중지하는 것만으로도 어느 정도 방어가 가능하다.
 

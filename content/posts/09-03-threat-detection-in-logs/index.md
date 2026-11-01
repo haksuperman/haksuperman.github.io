@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 930
+aliases:
+- /series/aws-security/09-03-threat-detection-in-logs/
+- /posts/aws38/
+- /study/aws-security/09-03-threat-detection-in-logs/
 ---
 ## 1. Amazon GuardDuty
 매일 수만 줄 씩 쌓이는 로그를 관리자가 직접 모니터링 하다가 공격을 조기에 발견하는 것은 불가능에 가깝다.<br>

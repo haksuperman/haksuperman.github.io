@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 130
+aliases:
+- /series/aws-security/01-03-modern-operating-model/
+- /posts/aws06/
+- /study/aws-security/01-03-modern-operating-model/
 ---
 ## 1. 새로운 운영 방식
 온프레미스 보안과 비교할 때 클라우드에서의 보안은 일반적이거나 가능했던 방식보다는 새롭고 다양한 방식으로 인프라를 운영한다는 점에서 차이가 있다.

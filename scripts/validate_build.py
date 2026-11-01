@@ -4,22 +4,28 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
-from content_model import ROOT, ContentError, is_published, validate_sources
+from content_model import ROOT, ContentError, alias_routes, is_published, validate_sources
 
 
 class PageLinks(HTMLParser):
     def __init__(self, text):
         super().__init__(convert_charrefs=True)
         self.references, self.lists, self.breadcrumbs, self.pager = [], [], [], []
+        self.redirects = []
         self._contexts = []
         self.feed(text)
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
+        if tag == "meta" and attrs.get("http-equiv", "").lower() == "refresh":
+            match = re.search(r"(?i)\burl\s*=\s*(.*)", attrs.get("content", ""))
+            if match:
+                self.redirects.append(urlsplit(match.group(1).strip(" \"'")).path)
         if tag == "nav":
             kind = ("list" if "data-content-list" in attrs else
                     "breadcrumb" if attrs.get("aria-label") == "현재 위치" else
@@ -114,9 +120,16 @@ def validate(root=ROOT, include_drafts=False):
                         neighbors.append(("next", selected[position + 1]))
                     if article.pager != neighbors:
                         errors.append(f"{link}: 시리즈 이전/다음 연결이 올바르지 않습니다.")
+    post_urls = {f"/posts/{path.parent.name}/" for path, _, _ in posts}
+    aliases = {alias: target for alias, target in alias_routes(root, data, posts).items()
+               if target not in post_urls or target in expected}
+    for alias, target in aliases.items():
+        page = parsed.get(public / alias.lstrip("/") / "index.html")
+        if page is None or page.redirects != [target]:
+            errors.append(f"이전 주소 연결이 없거나 잘못됐습니다: {alias} -> {target}")
     if errors:
         raise ContentError("\n".join(errors))
-    return {"게시물": len(posts), "공개 글": len(actual), "Docs 분류": len(data["docs"]), "시리즈": len(data["series"]), "검사한 HTML": len(parsed)}
+    return {"게시물": len(posts), "공개 글": len(actual), "Docs 분류": len(data["docs"]), "시리즈": len(data["series"]), "검사한 HTML": len(parsed), "이전 주소 연결": len(aliases)}
 
 
 def main():

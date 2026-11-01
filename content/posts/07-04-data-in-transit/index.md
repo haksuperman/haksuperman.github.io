@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 740
+aliases:
+- /series/aws-security/07-04-data-in-transit/
+- /posts/aws29/
+- /study/aws-security/07-04-data-in-transit/
 ---
 ## 1. 개요
 데이터가 클라이언트와 서버 사이, 혹은 내부 리소스 간에 네트워크를 타고 이동할 때는 중간자 공격(MiTM)이나 패킷 스니핑 등을 통해 탈취되거나 변조될 위험이 있다. 이를 막기 위한 핵심은 **보안 전송 프로토콜(TLS/HTTPS)의 적용**과 **네트워크 접근 제어**다.

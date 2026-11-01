@@ -12,6 +12,10 @@ draft: false
 collection: series
 seriesId: kubernetes-cluster
 seriesOrder: 10
+aliases:
+- /series/kubernetes-cluster/01-vmware-node-setup/
+- /posts/kubernetes01/
+- /study/kubernetes-cluster/01-vmware-node-setup/
 ---
 ### 1. 준비사항
 

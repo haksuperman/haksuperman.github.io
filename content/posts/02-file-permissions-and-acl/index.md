@@ -10,6 +10,10 @@ draft: false
 collection: series
 seriesId: linux-fundamentals
 seriesOrder: 20
+aliases:
+- /series/linux-fundamentals/02-file-permissions-and-acl/
+- /posts/linux02/
+- /study/linux-fundamentals/02-file-permissions-and-acl/
 ---
 permission
 

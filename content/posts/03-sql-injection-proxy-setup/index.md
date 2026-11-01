@@ -14,6 +14,10 @@ draft: false
 collection: series
 seriesId: web-security
 seriesOrder: 30
+aliases:
+- /series/web-security/03-sql-injection-proxy-setup/
+- /posts/websecurity03/
+- /study/web-security/03-sql-injection-proxy-setup/
 ---
 웹 서버와 DB 서버가 연동되는 웹 서비스 중 사용자의 입력을 받는 화면이(로그인, 검색 입력 창 등) 존재하고 입력 받는 문자열에 별도의 처리 없이 데이터베이스 조회를 위한 SQL 구문이 사용될 경우 정상적인 SQL 구문 인자 값의 변조를 통해 데이터베이스 접근 및 임의의 SQL Query문을 실행할 수 있다.
 

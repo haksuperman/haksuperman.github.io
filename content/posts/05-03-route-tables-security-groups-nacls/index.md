@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 530
+aliases:
+- /series/aws-security/05-03-route-tables-security-groups-nacls/
+- /posts/aws19/
+- /study/aws-security/05-03-route-tables-security-groups-nacls/
 ---
 ## 1. 라우팅 테이블 (Route table)
 라우팅 테이블은 VPC 전체에서 '전송된 IP 주소'를 기반으로 트래픽이 전달되어야 하는 목적지를 정의하는 규칙 집합이다.

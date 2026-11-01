@@ -13,6 +13,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/aws-oci-bgp-vpn/07-vpn2-oci/
+- /posts/multicloud07/
 ---
 ## 7.1. CPE
 

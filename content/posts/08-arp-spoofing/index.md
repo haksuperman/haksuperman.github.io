@@ -21,6 +21,10 @@ draft: false
 collection: series
 seriesId: network-security
 seriesOrder: 80
+aliases:
+- /series/network-security/08-arp-spoofing/
+- /posts/networksecurity08/
+- /study/network-security/08-arp-spoofing/
 ---
 ARP 스푸핑은 근거리 네트워크에서 사용되는 대표적인 중간자 공격으로 두 단말 간의 통신을 속여 자신을 통해 통신하도록 만들어 중간에서 네트워크 통신 내용을 스니핑 또는 스푸핑 하도록 하는 기술이다.
 

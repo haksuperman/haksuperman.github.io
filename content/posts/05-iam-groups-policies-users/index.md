@@ -17,6 +17,10 @@ draft: false
 collection: series
 seriesId: terraform-infrastructure
 seriesOrder: 50
+aliases:
+- /series/terraform-infrastructure/05-iam-groups-policies-users/
+- /posts/terraform05/
+- /study/terraform-infrastructure/05-iam-groups-policies-users/
 ---
 ## 1. IAM Group 생성
 

@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 540
+aliases:
+- /series/aws-security/05-04-private-network-segmentation/
+- /posts/aws20/
+- /study/aws-security/05-04-private-network-segmentation/
 ---
 ## 1. 네트워크 격리를 위한 멀티 VPC 사용
 ### 1.1. 멀티 VPC를 사용하는 이유: 논리적 분리

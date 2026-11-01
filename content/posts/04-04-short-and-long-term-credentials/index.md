@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 440
+aliases:
+- /series/aws-security/04-04-short-and-long-term-credentials/
+- /posts/aws15/
+- /study/aws-security/04-04-short-and-long-term-credentials/
 ---
 ## 1. 자격증명의 종류와 수명
 - IAM 사용자 (장기) : 일반적으로 며칠, 몇 달, 몇 년 단위로 만료되거나 아예 만료되지 않는 수명이 긴 자격 증명(패스워드, 액세스 키)

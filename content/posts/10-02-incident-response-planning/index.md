@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 1020
+aliases:
+- /series/aws-security/10-02-incident-response-planning/
+- /posts/aws40/
+- /study/aws-security/10-02-incident-response-planning/
 ---
 ## 1. 사고 대응 계획
 보안 이벤트가 발생했을 때 공격자가 피해를 입히기 전에 가능한 한 빨리 위협을 완화하는 것이 중요하다.<br>

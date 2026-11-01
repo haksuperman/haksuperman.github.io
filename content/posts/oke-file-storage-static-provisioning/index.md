@@ -12,6 +12,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/oke-file-storage-static-provisioning/
+- /posts/oci28/
 ---
 ## 1. 개요
 ## 1.1. 프로비저닝 방식

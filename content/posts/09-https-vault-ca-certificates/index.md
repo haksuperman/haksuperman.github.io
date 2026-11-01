@@ -16,6 +16,10 @@ draft: false
 collection: series
 seriesId: oci-foundations
 seriesOrder: 90
+aliases:
+- /series/oci-foundations/09-https-vault-ca-certificates/
+- /posts/oci12/
+- /study/oci-foundations/09-https-vault-ca-certificates/
 ---
 ## 1. HTTP와 HTTPS
 [[OCI] 애플리케이션 배포(with. Flask, PyMySQL, Faker)]({{< relref "/posts/08-flask-application-deployment/" >}})

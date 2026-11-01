@@ -19,6 +19,10 @@ draft: false
 collection: series
 seriesId: network-security
 seriesOrder: 20
+aliases:
+- /series/network-security/02-network-scanning-attacks/
+- /posts/networksecurity02/
+- /study/network-security/02-network-scanning-attacks/
 ---
 스캔을 통해 서비스를 제공하는 서버의 작동 여부와 제공하고 있는 서비스를 확인할 수 있다. 스캐닝에 사용하는 프로토콜은 ICMP(3계층), TCP(4계층), UDP(4계층)로 나눌 수 있다.
 

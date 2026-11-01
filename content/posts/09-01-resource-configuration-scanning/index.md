@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 910
+aliases:
+- /series/aws-security/09-01-resource-configuration-scanning/
+- /posts/aws36/
+- /study/aws-security/09-01-resource-configuration-scanning/
 ---
 ## 1. 개요
 클라우드 환경에는 수백, 수천 개의 리소스가 존재하며 개발 속도에 따라 매일 새로운 리소스가 생성되거나 변경된다.

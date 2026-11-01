@@ -14,6 +14,10 @@ draft: false
 collection: series
 seriesId: linux-fundamentals
 seriesOrder: 50
+aliases:
+- /series/linux-fundamentals/05-package-archive-and-text-tools/
+- /posts/linux05/
+- /study/linux-fundamentals/05-package-archive-and-text-tools/
 ---
 ![image](Linux05_01.png)
 

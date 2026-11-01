@@ -10,6 +10,10 @@ draft: false
 collection: series
 seriesId: network-fundamentals
 seriesOrder: 120
+aliases:
+- /series/network-fundamentals/12-access-control-lists/
+- /posts/network12/
+- /study/network-fundamentals/12-access-control-lists/
 ---
 ### OSI 7 Layer
 

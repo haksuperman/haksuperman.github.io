@@ -12,6 +12,10 @@ draft: false
 collection: series
 seriesId: linux-fundamentals
 seriesOrder: 10
+aliases:
+- /series/linux-fundamentals/01-basic-commands-files-and-paths/
+- /posts/linux01/
+- /study/linux-fundamentals/01-basic-commands-files-and-paths/
 ---
 ![image](Linux01_01.png)
 

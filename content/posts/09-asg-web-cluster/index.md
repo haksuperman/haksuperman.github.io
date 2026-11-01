@@ -17,6 +17,10 @@ draft: false
 collection: series
 seriesId: terraform-infrastructure
 seriesOrder: 90
+aliases:
+- /series/terraform-infrastructure/09-asg-web-cluster/
+- /posts/terraform09/
+- /study/terraform-infrastructure/09-asg-web-cluster/
 ---
 실제 운영 환경에서 서버가 하나뿐이라면 매우 불안할 것이다. 단일 장애점(Single Point of Failure, SPOF)으로 충돌하거나 트래픽 과부하가 발생하면 사용자는 사이트에 액세스할 수 없다. 이를 해결하기 위해 단일 서버가 아닌 서버 클러스터를 구성해서 트래픽을 분산시키고, 트래픽의 양에 따라 클러스터의 크기를 늘리거나 줄여야 한다.
 

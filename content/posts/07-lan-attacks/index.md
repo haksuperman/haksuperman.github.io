@@ -19,6 +19,10 @@ draft: false
 collection: series
 seriesId: network-security
 seriesOrder: 70
+aliases:
+- /series/network-security/07-lan-attacks/
+- /posts/networksecurity07/
+- /study/network-security/07-lan-attacks/
 ---
 ## 1. 근거리 네트워크 공격
 

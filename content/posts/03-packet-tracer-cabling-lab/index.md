@@ -12,6 +12,10 @@ draft: false
 collection: series
 seriesId: network-fundamentals
 seriesOrder: 30
+aliases:
+- /series/network-fundamentals/03-packet-tracer-cabling-lab/
+- /posts/network03/
+- /study/network-fundamentals/03-packet-tracer-cabling-lab/
 ---
 PacketTracer-7.3.0-win64-setup.exe 이용
 

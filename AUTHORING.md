@@ -135,6 +135,7 @@ tags: ["Kubernetes"]
 | `seriesId` | Series에서만 사용. 등록된 시리즈 ID |
 | `seriesOrder` | Series에서만 사용. 같은 시리즈 안에서 중복되지 않는 양의 정수 |
 | `tags` | 선택 항목. 기술 키워드 목록 |
+| `aliases` | 선택 항목. 이미 공개된 이전 주소를 현재 글로 연결. 새 글에는 입력하지 않아도 됨 |
 | `lastmod` | 선택 항목. 기본 수정일은 Git 기록으로 자동 반영. 특정 날짜로 고정할 때만 사용 |
 
 `categories`, `weight`는 이 블로그의 게시물 분류·순서에 사용하지 않습니다. Docs에 시리즈 정보를 함께 넣거나 Series에 `docCategory`를 넣으면 검사에서 안내합니다.
@@ -229,3 +230,17 @@ content/posts/oke-cluster/
 - **삭제:** 글 폴더를 삭제하고, 그 글을 참조하는 내부 링크도 고친 뒤 확인·PR 절차를 수행합니다. 글과 이미지의 이전 버전은 Git 기록에 남습니다.
 
 `public/`은 자동 생성 결과이므로 직접 수정하거나 커밋하지 않습니다. 게시 작업에는 이관 계획표나 과거 이미지 개수 기록을 수정할 필요가 없습니다.
+
+
+## 11. 이전 주소 연결
+
+글은 현재 `/posts/<영문-이름>/`에서 공개됩니다. 과거에 공개했던 `/study/.../`, `/series/.../`, `/docs/.../` 등의 주소는 해당 글의 `aliases`로 연결합니다. 분류를 바꾸어도 이 정보는 유지되며, 새 글에 과거 주소를 만들 필요는 없습니다.
+
+```yaml
+aliases:
+  - "/study/aws-security/01-01-shared-responsibility-model/"
+  - "/series/aws-security/01-01-shared-responsibility-model/"
+  - "/posts/aws04/"
+```
+
+이전 링크에서 자동으로 현재 글로 이동합니다. 이전 주소 연결은 글 상단의 분류와 별개이며, `./blog classify`로 분류를 바꿔도 유지됩니다. 이전 주소가 중복되거나 현재 글 주소와 충돌하면 `./blog check`가 알려줍니다. 초안·비공개 글의 연결 페이지도 공개 빌드에서는 제외됩니다.

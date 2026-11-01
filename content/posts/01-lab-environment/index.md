@@ -13,6 +13,10 @@ draft: false
 collection: series
 seriesId: network-security
 seriesOrder: 10
+aliases:
+- /series/network-security/01-lab-environment/
+- /posts/networksecurity01/
+- /study/network-security/01-lab-environment/
 ---
 ## 1. 압축 파일 해제
 해당 파일들이 192.168.0.x  대역으로 설정되어 있기 때문에 VMware도 192.168.0.x 대역으로 맞춰줘야 한다.

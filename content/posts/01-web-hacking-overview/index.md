@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: web-security
 seriesOrder: 10
+aliases:
+- /series/web-security/01-web-hacking-overview/
+- /posts/websecurity01/
+- /study/web-security/01-web-hacking-overview/
 ---
 웹 해킹은 웹 서비스를 대상으로 발생하는 해킹을 말한다. 주로 웹 사이트 취약점을 이용하여 권한이 없는 시스템에 접근하거나 데이터 유출 또는 파괴와 같은 행위를 말한다.
 

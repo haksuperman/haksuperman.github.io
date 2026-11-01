@@ -104,6 +104,7 @@ GitHub **Actions → Deploy Hugo site to Pages**에서 확인합니다.
 - 모든 현재 게시물의 공개 여부와 생성 결과
 - 분류별 글 목록·시리즈 목차·현재 위치·이전/다음 연결
 - 생성된 HTML의 내부 링크와 이미지·첨부 파일 참조
+- 등록된 이전 주소가 현재 글로 연결되는지와 주소 중복·충돌
 - 등록·분류 변경 기능의 자동 테스트
 
 CLI로 확인하려면:
@@ -124,6 +125,7 @@ gh run view RUN_ID --repo haksuperman/haksuperman.github.io --log-failed
 | 분류가 없거나 두 종류가 섞임 | `./blog classify <영문-이름>`으로 다시 선택 |
 | 시리즈 순서 중복 | 해당 글의 `seriesOrder`를 빈 번호로 변경 |
 | 이미지가 없음 | 파일 이름·대소문자·본문 경로 확인 |
+| 이전 공유 주소가 404 | 대상 글의 aliases와 공개 상태를 확인하고 ./blog check 실행 |
 | 공개할 글이 안 보임 | `draft: false` 여부와 미래 날짜 여부 확인 |
 | 목록 이름이 바뀌지 않음 | `data/navigation.json`의 title 수정 여부와 Hugo 재빌드 확인 |
 | 공개 빌드에서 초안 링크 오류 | 공개 글에서 초안으로 연결한 링크를 제거하거나 대상 글도 공개 준비 |

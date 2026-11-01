@@ -15,6 +15,10 @@ draft: false
 collection: series
 seriesId: terraform-infrastructure
 seriesOrder: 20
+aliases:
+- /series/terraform-infrastructure/02-tool-installation-vscode/
+- /posts/terraform02/
+- /study/terraform-infrastructure/02-tool-installation-vscode/
 ---
 ## 1. awscli 설치
 1. python-pip 설치

@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 120
+aliases:
+- /series/aws-security/01-02-cloud-native-security-tools/
+- /posts/aws05/
+- /study/aws-security/01-02-cloud-native-security-tools/
 ---
 ## 1. 개요
 1. IAM (Identity and Access Management)

@@ -13,6 +13,10 @@ draft: false
 collection: series
 seriesId: network-fundamentals
 seriesOrder: 40
+aliases:
+- /series/network-fundamentals/04-three-tier-switching-architecture/
+- /posts/network04/
+- /study/network-fundamentals/04-three-tier-switching-architecture/
 ---
 ★ 네트워크 토폴로지 스위치 계층을 세 계층으로 디자인 할 수 있음, 아니 할 수 있어야 함
 

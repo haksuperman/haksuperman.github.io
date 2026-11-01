@@ -15,6 +15,10 @@ draft: false
 collection: series
 seriesId: oci-foundations
 seriesOrder: 40
+aliases:
+- /series/oci-foundations/04-compute-instance-ssh-key/
+- /posts/oci07/
+- /study/oci-foundations/04-compute-instance-ssh-key/
 ---
 ## 1. 가상 머신과 관련한 기본 용어 및 개념
 

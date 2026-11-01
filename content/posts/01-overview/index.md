@@ -13,6 +13,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/aws-oci-bgp-vpn/01-overview/
+- /posts/multicloud01/
 ---
 ## 1.1. 목표
 

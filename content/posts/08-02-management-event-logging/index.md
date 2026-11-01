@@ -11,6 +11,10 @@ draft: false
 collection: series
 seriesId: aws-security
 seriesOrder: 820
+aliases:
+- /series/aws-security/08-02-management-event-logging/
+- /posts/aws33/
+- /study/aws-security/08-02-management-event-logging/
 ---
 ## 1. 관리 이벤트
 보안 문제가 발생했을 때 가장 먼저 찾아봐야 할 정보 소스는 리소스 관리 이벤트(Management Event)이다.<br>

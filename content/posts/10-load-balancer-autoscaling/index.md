@@ -15,6 +15,10 @@ draft: false
 collection: series
 seriesId: oci-foundations
 seriesOrder: 100
+aliases:
+- /series/oci-foundations/10-load-balancer-autoscaling/
+- /posts/oci13/
+- /study/oci-foundations/10-load-balancer-autoscaling/
 ---
 [[OCI] 애플리케이션 배포(with. Flask, PyMySQL, Faker)]({{< relref "/posts/08-flask-application-deployment/" >}})
 

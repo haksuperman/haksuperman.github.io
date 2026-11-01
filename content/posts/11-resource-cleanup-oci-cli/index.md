@@ -14,6 +14,10 @@ draft: false
 collection: series
 seriesId: oci-foundations
 seriesOrder: 110
+aliases:
+- /series/oci-foundations/11-resource-cleanup-oci-cli/
+- /posts/oci14/
+- /study/oci-foundations/11-resource-cleanup-oci-cli/
 ---
 초기에 생성했던 VCN을 제외한 나머지 모든 자원을 삭제할 것이다.
 

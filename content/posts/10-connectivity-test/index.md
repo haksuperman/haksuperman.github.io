@@ -13,6 +13,9 @@ tags:
 draft: false
 collection: docs
 docCategory: guide-lab
+aliases:
+- /docs/guide-lab/aws-oci-bgp-vpn/10-connectivity-test/
+- /posts/multicloud10/
 ---
 {{< callout type="info" >}}
 통신은 양 측 라우팅 테이블, 방화벽 설정이 완료된 것을 전제로 진행
