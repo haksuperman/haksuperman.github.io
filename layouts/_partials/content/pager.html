@@ -1,0 +1,16 @@
+{{- if and .IsPage (eq .Params.collection "series") -}}
+  {{- $current := . -}}
+  {{- $pages := partial "content/posts.html" (dict "collection" "series" "seriesId" .Params.seriesid) -}}
+  {{- $previous := false -}}
+  {{- $next := false -}}
+  {{- range $index, $page := $pages -}}
+    {{- if eq $page.RelPermalink $current.RelPermalink -}}
+      {{- if gt $index 0 -}}{{- $previous = index $pages (sub $index 1) -}}{{- end -}}
+      {{- if lt (add $index 1) (len $pages) -}}{{- $next = index $pages (add $index 1) -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+  <nav class="content-series-pager" aria-label="시리즈 이전 다음 글" data-series-pager>
+    {{- with $previous }}<a href="{{ .RelPermalink }}" rel="prev"><small>이전 글</small><span>{{ .LinkTitle }}</span></a>{{ end -}}
+    {{- with $next }}<a href="{{ .RelPermalink }}" rel="next"><small>다음 글</small><span>{{ .LinkTitle }}</span></a>{{ end -}}
+  </nav>
+{{- end -}}

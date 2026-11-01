@@ -1,22 +1,3 @@
-{{- $pages := .Page.Pages.ByLinkTitle -}}
-{{- if eq (.Get "order") "weight" -}}
-  {{- $pages = .Page.Pages.ByWeight -}}
-{{- end -}}
-{{- if $pages -}}
-<nav class="section-document-list" aria-label="{{ .Page.LinkTitle }} 문서 목록">
-  <ul>
-    {{- range $pages }}
-    <li>
-      <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
-      {{- if .IsSection }}
-      <span>{{ len .RegularPagesRecursive }}편</span>
-      {{- else }}
-      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time>
-      {{- end }}
-    </li>
-    {{- end }}
-  </ul>
-</nav>
-{{- else -}}
-<p class="section-document-empty">아직 이 분류에 등록된 문서가 없습니다.</p>
-{{- end -}}
+{{- $params := dict "collection" .Page.Params.collection "docCategory" .Page.Params.doccategory "seriesId" .Page.Params.seriesid -}}
+{{- $pages := partial "content/posts.html" $params -}}
+{{- partial "content/list.html" (dict "pages" $pages "title" .Page.Title) -}}

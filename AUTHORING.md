@@ -1,262 +1,231 @@
-# 게시물 작성 가이드
+# Hugo 게시물 등록·수정 가이드
 
-이 문서는 AI 도구 없이 Hugo와 Git만 사용해 게시물을 작성하고 검수한 뒤 배포하는 절차를 설명합니다.
+이 블로그는 글을 `content/posts/<영문-이름>/index.md`에 저장하고, 글 상단의 정보로 **Docs / Series와 세부 분류**를 결정합니다. 분류를 바꿀 때 파일이나 이미지를 옮기지 않습니다.
 
-## 1. 문서 위치 선택
+## 1. 처음 한 번 환경 준비
 
-새 글을 만들기 전에 글의 목적에 맞는 위치를 선택합니다.
+저장소 폴더에서 실행합니다.
 
-| 문서 종류 | 저장 위치 | 용도 |
+```bash
+cd /Users/haksu/Projects/haksuperman.github.io/site
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+```
+
+사이트 생성에는 **Hugo Extended 0.156.0과 Go**, 또는 **Docker Desktop**이 필요합니다. Docker Desktop이 설치되어 있다면 먼저 실행하세요. 운영 도우미가 설치된 Hugo를 우선 사용하고, 없으면 Docker의 동일한 Hugo 버전을 사용합니다. 첫 실행에는 테마 다운로드가 필요할 수 있습니다.
+
+## 2. 기억할 운영 흐름
+
+**작업 브랜치 준비 → 새 글 또는 기존 글 수정 → 미리보기 → 게시 전 확인 → PR → 병합·배포 확인** 순서입니다.
+
+터미널에서 `./blog`를 실행하거나 Finder에서 **블로그 관리.command**를 열면 번호로 선택하는 메뉴가 나옵니다.
+
+```bash
+./blog
+```
+
+| 메뉴 | 하는 일 |
+| --- | --- |
+| 새 글 만들기 | 제목·영문 이름을 입력하고 Docs/Series 및 세부 분류를 선택 |
+| 기존 글 찾기 | 제목이나 영문 이름으로 파일을 찾음 |
+| 게시물 분류 / 시리즈 순서 변경 | 파일을 옮기지 않고 소속·분류·순서를 변경 |
+| 새 시리즈 만들기 | 시리즈를 등록하고 목록·메뉴 자동 생성 |
+| 미리보기 | 초안까지 포함한 사이트 실행 |
+| 게시 전 확인 | 모든 글의 분류, 공개 결과, 이미지·링크와 시리즈 이동 검사 |
+
+운영 도우미는 글을 만들거나 검사합니다. 실제 공개는 GitHub의 PR을 병합한 뒤 수행됩니다. 기존 글 찾기는 파일 위치를 알려주며, 본문은 평소 사용하는 Markdown 편집기로 수정합니다.
+
+## 3. Docs와 Series 선택 기준
+
+**독립적으로 찾아 읽는 글이면 Docs**, **정해진 순서대로 읽는 글 묶음이면 Series**를 선택합니다.
+
+Docs에서는 다음 네 가지 중 하나를 반드시 선택합니다.
+
+| Docs 분류 | 글의 목적 | 저장되는 값 |
 | --- | --- | --- |
-| Theory & Reference | `content/docs/theory-reference/` | 기술 정의, 원리, 아키텍처와 참고 문서 |
-| Command & Tool | `content/docs/command-tool/` | 명령어와 도구 사용법 |
-| Guide & Lab | `content/docs/guide-lab/` | 설치, 구축, 테스트와 재현 가능한 실습 |
-| Issue & Troubleshooting | `content/docs/issue-troubleshooting/` | 문제 현상, 원인, 해결과 재발 방지 |
-| Series | `content/series/<series-name>/` | 강의, 책 또는 연속 학습의 목차형 기록 |
+| Theory & Reference | 기술 정의·원리·아키텍처·참고 자료 | `theory-reference` |
+| Command & Tool | 명령어·도구 사용법 | `command-tool` |
+| Guide & Lab | 설치·구축·실습·테스트 절차 | `guide-lab` |
+| Issue & Troubleshooting | 문제 현상·원인·해결·재발 방지 | `issue-troubleshooting` |
 
-화면의 메뉴, 공개 URL과 실제 콘텐츠 폴더 모두 `Series`/`series`로 통일합니다. 이전 `/study/.../` 주소는 호환용 alias로만 유지합니다.
+Series에서는 등록된 시리즈를 선택합니다. 목록에 없다면 **새 시리즈 만들기**로 이름과 소개를 등록하세요. 글의 순서는 기본적으로 마지막 번호에 10을 더해 지정합니다. 예를 들어 10, 20, 30 순서이며, 중간에 추가할 때는 15를 사용할 수 있습니다. 초안도 순서를 예약하므로 같은 시리즈에서 중복 번호를 사용할 수 없습니다.
 
-## 2. 새 Docs 문서 만들기
+AWS, OCI, Kubernetes 같은 기술 키워드는 `tags`로 입력합니다. Docs의 네 가지 문서 분류와는 별개입니다.
 
-저장소 루트에서 다음 명령을 실행합니다. `<slug>`는 영문 소문자와 하이픈으로 작성합니다.
+## 4. 새 글 등록
 
-```bash
-SLUG=oke-version-upgrade
-hugo new content --kind docs "docs/guide-lab/${SLUG}/index.md"
-```
+먼저 [운영 가이드](OPERATIONS.md)의 절차로 최신 main에서 작업 브랜치를 준비합니다. `./blog`의 **새 글 만들기**를 선택하면 다음 순서로 묻습니다.
 
-예시:
+1. 게시물 제목
+2. 저장할 영문 이름 — 예: `oke-cluster`
+3. Docs 또는 Series
+4. Docs라면 네 가지 문서 분류, Series라면 시리즈와 순서
 
-```bash
-hugo new content --kind docs docs/guide-lab/oke-version-upgrade/index.md
-```
-
-생성 결과:
+다음 파일이 만들어집니다.
 
 ```text
-content/docs/guide-lab/oke-version-upgrade/
+content/posts/oke-cluster/
 └── index.md
 ```
 
-분류에 따라 `guide-lab` 부분을 `theory-reference`, `command-tool`, `issue-troubleshooting`으로 변경합니다.
+영문 이름은 소문자·숫자·단어 사이의 하이픈을 사용하며, 공개 주소는 `/posts/oke-cluster/`가 됩니다. 제목이나 분류를 수정해도 영문 이름을 유지하면 주소는 유지됩니다. 새 글은 항상 `draft: true`인 초안으로 생성됩니다.
 
-## 3. 새 Series 문서 만들기
-
-먼저 글을 추가할 Series 폴더를 확인한 다음 다음 명령을 실행합니다.
+선택 없이 한 번에 생성하는 명령도 지원합니다.
 
 ```bash
-SERIES_NAME=aws-security
-SEQUENCE_SLUG=11-01-new-security-topic
-hugo new content --kind series "series/${SERIES_NAME}/${SEQUENCE_SLUG}/index.md"
+./blog new --title "OKE 클러스터 구축" --slug oke-cluster \
+  --collection docs --category guide-lab --tags OCI OKE Kubernetes
 ```
 
-예시:
+Series 예시:
 
 ```bash
-hugo new content --kind series series/aws-security/11-01-new-security-topic/index.md
+./blog new --title "클러스터 초기화" --slug kubernetes-bootstrap \
+  --collection series --series kubernetes-cluster --tags Kubernetes
 ```
 
-생성 결과:
+필요하면 `--order 40`으로 순서를 직접 지정합니다. 기존 파일과 폴더를 덮어쓰지 않습니다.
 
-```text
-content/series/aws-security/11-01-new-security-topic/
-└── index.md
-```
-
-Series 문서의 `weight`는 왼쪽 목차 순서를 결정합니다. 같은 Series의 앞뒤 문서를 확인해 중복되지 않는 값을 입력합니다.
-
-## 4. 기존 문서 수정하기
-
-기존 문서는 새로 생성하지 않고 해당 문서의 `index.md`를 직접 수정합니다. 수정 전에 최신 `main`에서 작업 브랜치를 만듭니다.
-
-먼저 저장소에 등록된 원격 저장소 이름을 확인합니다.
+Hugo 명령을 직접 사용해도 됩니다. 두 종류 모두 동일한 `content/posts/` 아래에 생성합니다.
 
 ```bash
-git remote -v
+hugo new content --kind docs posts/oke-cluster/index.md
+hugo new content --kind series posts/kubernetes-bootstrap/index.md
 ```
 
-새로 복제한 저장소는 보통 `origin`이지만, 현재 로컬 공식 저장소는 `blog`를 사용합니다. 아래 예시는 현재 공식 저장소 기준이며, `git remote -v`에 `origin`만 표시되면 첫 줄을 `REMOTE_NAME=origin`으로 바꿉니다.
+생성 후 Docs는 `docCategory`를 확인하고, Series는 빈 `seriesId`와 `seriesOrder`를 지정하세요. 분류를 선택해서 자동으로 입력하려면 `./blog new`를 사용합니다.
 
-```bash
-REMOTE_NAME=blog
-git status
-git switch main
-git pull --ff-only "$REMOTE_NAME" main
-git switch -c docs/update-oke-guide
-```
+## 5. 글 상단 정보 이해하기
 
-수정할 `index.md`와 같은 폴더의 이미지만 변경하고, 기존 `date`, `aliases`, `weight`는 목적 없이 바꾸지 않습니다. 특히 공개된 문서의 폴더명이나 URL을 변경할 때는 기존 경로를 `aliases`에 남겨야 합니다.
-
-수정 후에는 7절의 로컬 미리보기와 8절의 공개 전 검증을 수행합니다.
-
-## 5. Front Matter 작성
-
-`index.md` 위쪽의 `---` 사이 영역은 문서의 메타데이터입니다.
+Docs 예시:
 
 ```yaml
 ---
-title: "OKE 버전 업그레이드"
-linkTitle: "OKE 버전 업그레이드"
-date: "2026-10-30T10:00:00+09:00"
+title: "OKE 클러스터 구축"
+date: "2026-11-01T15:00:00+09:00"
 draft: true
-tags:
-  - "oci"
-  - "oke"
-  - "kubernetes"
+collection: docs
+docCategory: guide-lab
+tags: ["OCI", "OKE", "Kubernetes"]
 ---
 ```
 
-- `title`: 본문 상단에 표시되는 전체 제목
-- `linkTitle`: 왼쪽 메뉴와 경로에 표시되는 짧은 제목
-- `date`: 작성 시각. 한국 표준시는 `+09:00`을 사용합니다.
-- `draft`: 작성 중에는 `true`, 공개할 때는 `false`
-- `tags`: 기술 스택과 검색에 사용할 키워드
-- `weight`: Series 문서의 목차 순서에만 사용
-- `aliases`: 기존 주소를 변경하거나 대체할 때만 사용
+Series 예시:
 
-새 문서는 기존 문서를 복사하지 말고 Hugo 명령으로 생성합니다. 기존 문서의 `aliases`, 날짜와 이관용 메타데이터가 실수로 복제되는 것을 방지할 수 있습니다.
-
-## 6. 본문과 이미지 작성
-
-본문은 Markdown으로 작성합니다.
-
-```markdown
-## 1. 개요
-
-문서의 목적과 전제 조건을 설명합니다.
-
-### 1.1. 구성
-
-세부 내용을 작성합니다.
+```yaml
+---
+title: "Kubernetes 클러스터 초기화"
+date: "2026-11-01T15:00:00+09:00"
+draft: true
+collection: series
+seriesId: kubernetes-cluster
+seriesOrder: 40
+tags: ["Kubernetes"]
+---
 ```
 
-이미지는 `index.md`와 같은 폴더에 넣습니다.
+| 항목 | 수정 규칙 |
+| --- | --- |
+| `title` | 글 제목. 언제든 수정 가능 |
+| `linkTitle` | 선택 항목. 메뉴에 더 짧은 제목이 필요할 때만 입력 |
+| `date` | 최초 작성일. 기존 글을 고칠 때 유지 |
+| `draft` | 초안은 `true`, 공개 준비가 끝나면 `false`. 따옴표 없이 작성 |
+| `collection` | `docs` 또는 `series` 중 하나 |
+| `docCategory` | Docs에서만 사용. 네 가지 분류 중 하나 |
+| `seriesId` | Series에서만 사용. 등록된 시리즈 ID |
+| `seriesOrder` | Series에서만 사용. 같은 시리즈 안에서 중복되지 않는 양의 정수 |
+| `tags` | 선택 항목. 기술 키워드 목록 |
+| `lastmod` | 선택 항목. 기본 수정일은 Git 기록으로 자동 반영. 특정 날짜로 고정할 때만 사용 |
+
+`categories`, `weight`는 이 블로그의 게시물 분류·순서에 사용하지 않습니다. Docs에 시리즈 정보를 함께 넣거나 Series에 `docCategory`를 넣으면 검사에서 안내합니다.
+
+## 6. 본문·이미지 수정
+
+본문은 Markdown으로 작성합니다. 이미지는 글과 같은 폴더에 넣고 파일 이름으로 연결합니다.
 
 ```text
-oke-version-upgrade/
+content/posts/oke-cluster/
 ├── index.md
 ├── architecture.png
 └── result.png
 ```
 
-본문에서는 파일 이름으로 참조합니다.
-
 ```markdown
 ![OKE 구성도](architecture.png)
 ```
 
-파일 이름에는 영문 소문자, 숫자와 하이픈 사용을 권장합니다. 비밀번호, 인증 키, 개인 IP, 이메일과 계정 정보가 이미지에 포함되지 않았는지 반드시 확인합니다.
+이미지를 자유롭게 추가·삭제할 수 있습니다. 삭제한 이미지가 본문에서 참조되고 있으면 게시 전 확인에서 알려줍니다. 이미지와 본문에 계정 비밀번호·인증 키 같은 민감정보가 없는지도 확인하세요.
 
-## 7. 로컬 미리보기
+다른 게시물로 연결할 때는 Hugo의 `relref`를 사용합니다. 삭제되거나 없는 게시물을 가리키면 빌드에서 확인할 수 있습니다.
 
-Hugo Extended와 Go가 설치된 환경에서 저장소 루트로 이동한 뒤 실행합니다.
+```markdown
+[클러스터 초기화]({{< relref "/posts/kubernetes-bootstrap/" >}})
+```
+
+## 7. 기존 글 찾기·분류 변경
 
 ```bash
-hugo server --buildDrafts --navigateToChanged
+./blog list --search OKE
 ```
 
-터미널에 출력된 로컬 주소를 브라우저에서 엽니다. 저장할 때마다 페이지가 자동으로 다시 빌드됩니다.
+검색 결과의 `content/posts/<영문-이름>/index.md`를 편집기로 엽니다. 제목·본문·태그 수정은 이 파일에서 수행합니다.
 
-확인 항목:
-
-- 제목과 경로가 올바른가
-- Docs 또는 Series의 올바른 위치에 표시되는가
-- Series의 목차 순서가 올바른가
-- 이미지, 표, 코드 블록과 내부 링크가 정상인가
-- 모바일 폭에서도 내용을 읽을 수 있는가
-- 민감정보가 포함되지 않았는가
-
-## 8. 공개 전 검증
-
-검수가 끝나면 `draft`를 `false`로 변경합니다.
-
-```yaml
-draft: false
-```
-
-전체 사이트를 다시 빌드하고 이관 검증을 실행합니다.
+분류는 관리 메뉴 또는 다음 명령으로 바꿀 수 있습니다.
 
 ```bash
-hugo --gc --minify --cleanDestinationDir
-python3 scripts/validate_build.py
+./blog classify oke-cluster
 ```
 
-`public/`은 Hugo가 자동으로 만드는 결과물이므로 직접 수정하거나 Git에 추가하지 않습니다.
-
-## 9. Git으로 게시하기
-
-기본 게시 방식은 `main` 직접 push가 아니라 작업 브랜치와 Pull Request입니다. 이렇게 하면 게시 전에 GitHub Actions 빌드와 이관 검증을 확인할 수 있습니다.
-
-새 문서를 만들 때는 최신 `main`에서 작업 브랜치를 생성합니다. 기존 문서를 수정하면서 4절의 절차로 브랜치를 이미 만들었다면 이 단계는 생략합니다.
+새로운 Docs/Series 소속과 세부 분류를 선택하면 불필요해진 이전 분류 정보는 자동으로 제거됩니다. 파일 위치·본문·이미지는 유지됩니다.
 
 ```bash
-REMOTE_NAME=blog
-git status
-git switch main
-git pull --ff-only "$REMOTE_NAME" main
-git switch -c docs/add-oke-version-upgrade
+# Docs의 다른 분류로 변경
+./blog classify oke-cluster --collection docs --category theory-reference
+
+# Series로 변경하거나 다른 시리즈로 이동
+./blog classify oke-cluster --collection series --series oci-foundations --order 120
 ```
 
-변경 파일만 추가하고 실제 커밋 내용을 확인합니다.
+직접 글 상단을 수정해도 됩니다. **Docs에는 `docCategory`만, Series에는 `seriesId`와 `seriesOrder`만** 남기세요. 저장 후 미리보기를 확인하면 분류 목록·왼쪽 메뉴·현재 위치·시리즈 이전/다음 글이 새 정보에 맞게 반영됩니다.
+
+## 8. 시리즈 등록·이름 변경
 
 ```bash
-git status
-git add content/docs/guide-lab/oke-version-upgrade
-git diff --cached
-git commit -m "Add OKE version upgrade guide"
-git push -u "$REMOTE_NAME" HEAD
+./blog series-add --id oke-operations --title "OKE 운영" --description "OKE 운영 절차를 순서대로 정리합니다."
 ```
 
-Series 문서라면 실제 Series 경로를 `git add`에 사용합니다. 브랜치를 올린 뒤 GitHub에서 `main` 대상 Pull Request를 만듭니다. GitHub CLI를 사용한다면 다음 명령으로 만들 수 있습니다.
+이 명령은 **분류 정의 파일 `data/navigation.json` 한곳만 수정**합니다. Hugo가 목록 페이지와 메뉴를 자동으로 만드므로 별도 폴더나 메뉴를 추가하지 않습니다.
+
+이 파일에서 Docs·Series의 `title`과 `description`을 수정할 수 있습니다. 시리즈의 배열 순서는 메뉴와 홈의 표시 순서입니다. **이름만 바꿀 때는 `id`를 유지**하세요. ID를 바꾸거나 시리즈를 삭제할 경우에는 소속된 글의 `seriesId`도 함께 변경해야 합니다. Docs 네 분류의 ID는 고정입니다.
+
+## 9. 미리보기·공개 준비
 
 ```bash
-gh pr create --base main --fill
-gh pr checks --watch
+./blog preview
 ```
 
-Pull Request의 `build`가 성공한 뒤 내용을 검토하고 병합합니다. Pull Request 단계에서는 배포하지 않으며, 병합으로 `main`이 변경되면 GitHub Actions가 Hugo 사이트를 다시 빌드해 GitHub Pages에 배포합니다.
+브라우저에서 `http://localhost:1313/`을 엽니다. 초안도 보이며, 초안 글 상단에는 안내가 표시됩니다. 종료하려면 터미널에서 `Ctrl+C`를 누릅니다. 메뉴에서 실행했다면 메뉴로 돌아갑니다.
 
-원격 저장소 이름을 `origin`으로 가정하지 않습니다. `git remote -v`로 확인한 실제 이름을 `REMOTE_NAME`에 설정합니다.
+확인할 내용:
 
-공식 전환 전에는 `migration/hextra-blog` 브랜치에서만 검수하고, 최종 승인 없이 `main`에 병합하지 않습니다. 공식 전환 후에도 게시물 크기와 관계없이 작업 브랜치와 Pull Request를 기본 방식으로 사용합니다.
+- Docs/Series와 세부 분류가 올바른가
+- 메뉴·현재 위치·시리즈 순서와 이전/다음 이동이 올바른가
+- 본문·이미지·표·코드와 모바일 화면이 정상인가
 
-## 10. GitHub Actions와 배포 확인
-
-GitHub 저장소의 **Actions → Deploy Hugo site to Pages**에서 실행 결과를 확인합니다.
-
-- Pull Request: `build` 성공, `deploy` 건너뜀
-- `main` 반영: `build`와 `deploy` 모두 성공
-- `build` 실패: 병합하지 않고 로그를 확인해 브랜치에서 수정
-- `deploy` 실패: 공개 사이트 상태를 확인하고 재실행 또는 롤백
-
-명령줄에서는 다음처럼 확인할 수 있습니다.
+검수가 끝난 글만 `draft: false`로 바꾸고 실행합니다.
 
 ```bash
-gh pr checks
-gh run list --workflow pages.yaml --limit 5
-RUN_ID=1234567890
-gh run view "$RUN_ID" --log-failed
+./blog check
 ```
 
-자세한 실패 대응, 복구와 배포 후 로컬 저장소 동기화 절차는 [운영 및 복구 가이드](OPERATIONS.md)를 따릅니다.
+이 명령은 초안의 작성 정보도 검사하지만, 공개 결과에는 공개할 글만 포함됐는지 확인합니다. 미래의 작성일·게시 예정일을 지정한 글은 해당 시각 전까지 공개되지 않습니다. 수정일 자동 반영은 커밋 후 빌드에서 적용됩니다.
 
-## 11. 게시 후 확인
+## 10. 게시·수정 반영·비공개·삭제
 
-GitHub Actions가 성공한 뒤 다음을 확인합니다.
+공개 준비가 끝나면 [운영 가이드](OPERATIONS.md)에 따라 변경 파일을 커밋하고 PR을 올립니다. PR 검사 성공 후 `main`에 병합하면 GitHub Pages에 배포됩니다.
 
-- 새 문서의 실제 URL이 열리는가
-- 왼쪽 메뉴와 상단 경로가 올바른가
-- 이미지와 내부 링크가 정상인가
-- 검색에서 새 문서를 찾을 수 있는가
-- 이전 글과 다음 글 이동이 올바른가
+- **기존 글 수정 반영:** 수정하고 미리보기·확인 후 같은 PR 절차로 반영합니다.
+- **비공개 전환:** `draft: true`로 바꾼 뒤 PR로 반영합니다. 공개 사이트에서 빠져도 저장소에 파일은 남습니다. 공개 저장소에 있는 초안은 비밀 문서가 아닙니다.
+- **삭제:** 글 폴더를 삭제하고, 그 글을 참조하는 내부 링크도 고친 뒤 확인·PR 절차를 수행합니다. 글과 이미지의 이전 버전은 Git 기록에 남습니다.
 
-게시 후 URL을 변경해야 한다면 기존 URL을 `aliases`에 추가한 뒤 이동합니다. 이미 공개된 경로를 별도 조치 없이 삭제하거나 변경하지 않습니다.
-
-## 12. 공식 참고 문서
-
-- [Hugo Archetypes](https://gohugo.io/content-management/archetypes/)
-- [Hugo Content Organization](https://gohugo.io/content-management/organization/)
-- [Hugo Page Bundles](https://gohugo.io/content-management/page-bundles/)
-- [Hugo Front Matter](https://gohugo.io/content-management/front-matter/)
-- [Hextra Organize Files](https://imfing.github.io/hextra/docs/guide/organize-files/)
-
+`public/`은 자동 생성 결과이므로 직접 수정하거나 커밋하지 않습니다. 게시 작업에는 이관 계획표나 과거 이미지 개수 기록을 수정할 필요가 없습니다.

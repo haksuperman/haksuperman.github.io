@@ -1,0 +1,10 @@
+{{- $pages := where site.RegularPages "Section" "posts" -}}
+{{- with .collection -}}{{- $pages = where $pages "Params.collection" . -}}{{- end -}}
+{{- with .docCategory -}}{{- $pages = where $pages "Params.doccategory" . -}}{{- end -}}
+{{- with .seriesId -}}{{- $pages = where $pages "Params.seriesid" . -}}{{- end -}}
+{{- if .seriesId -}}
+  {{- $pages = $pages.ByParam "seriesOrder" -}}
+{{- else -}}
+  {{- $pages = $pages.ByLinkTitle -}}
+{{- end -}}
+{{- return $pages -}}

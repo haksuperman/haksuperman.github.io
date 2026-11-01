@@ -1,76 +1,34 @@
 # 뭉게뭉게 학수의 클라우드 세상
 
-`haksuperman.github.io`의 Hugo/Hextra 기반 기술 블로그 저장소입니다.
+Hugo/Hextra 기반 기술 블로그입니다.
 
-## 원칙
+- 공개 사이트: https://haksuperman.github.io/
+- 모든 게시물: `content/posts/<영문-이름>/index.md`
+- Docs: Theory & Reference / Command & Tool / Guide & Lab / Issue & Troubleshooting
+- Series: 등록된 시리즈별로 순서대로 읽는 게시물
+- 글의 소속과 순서는 글 상단 정보로 관리하며, 분류 변경에 파일 이동은 필요하지 않습니다.
+- 이미지와 첨부 파일은 해당 글과 같은 폴더에 저장합니다.
 
-- 기존 공식 사이트는 최종 승인 전까지 변경하지 않습니다.
-- 문서는 `Docs`에서 제목순으로 탐색합니다.
-- 강의와 책을 따라 학습한 글은 `Series`에서 목차 순서로 탐색합니다.
-- 독립적인 구축 및 테스트 절차는 `Docs / Guide & Lab`에 둡니다.
-- 기존 `/posts/.../` 주소는 Hugo alias로 보존합니다.
-- 기술 스택은 상위 카테고리 대신 태그로 유지합니다.
+## 시작하기
 
-## 로컬 확인
-
-Hugo Extended와 Go를 설치한 뒤 다음 명령을 실행합니다.
+Python 3와 Hugo Extended 0.156.0·Go 또는 Docker Desktop을 준비합니다.
 
 ```bash
-hugo server --buildDrafts --navigateToChanged
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+./blog
 ```
 
-새 게시물 생성, 이미지 배치와 초안 검수는 [게시물 작성 가이드](AUTHORING.md)를 따릅니다. Pull Request 검증, GitHub Pages 배포, 실패 대응과 롤백은 [운영 및 복구 가이드](OPERATIONS.md)를 따릅니다.
-
-Docs 문서는 다음처럼 생성합니다.
+Mac에서는 `블로그 관리.command`를 열어 같은 메뉴를 사용할 수 있습니다.
 
 ```bash
-SLUG=oke-version-upgrade
-hugo new content --kind docs "docs/guide-lab/${SLUG}/index.md"
+./blog new       # 새 글과 분류 선택
+./blog list      # 기존 글 찾기
+./blog preview   # 초안 포함 미리보기
+./blog check     # 공개 전 확인
 ```
 
-Series 문서는 다음처럼 생성합니다.
+- [게시물 등록·수정 가이드](AUTHORING.md): 분류 선택, 본문·이미지 작성, 시리즈와 초안 관리
+- [운영·배포 가이드](OPERATIONS.md): 작업 브랜치, PR, 자동 검사, 배포 확인과 복구
 
-```bash
-SERIES_NAME=aws-security
-SEQUENCE_SLUG=11-01-new-security-topic
-hugo new content --kind series "series/${SERIES_NAME}/${SEQUENCE_SLUG}/index.md"
-```
-
-## 마이그레이션
-
-전체 132개 게시물의 분류·원문 해시·기존 URL 계획표를 다시 생성합니다.
-
-```bash
-python3 scripts/build_migration_plan.py \
-  --source /path/to/haksuperman.github.io/site
-```
-
-1차 Docs 이관 명세를 만든 뒤 게시물을 재생성합니다. 원본 해시가 계획 시점과 다르면 이관을 중단합니다.
-
-```bash
-python3 scripts/build_ready_docs_manifest.py
-
-python3 scripts/migrate_posts.py \
-  --source /path/to/haksuperman.github.io/site \
-  --target . \
-  --manifest migration/ready-docs.json
-```
-
-변환 과정에서는 기존 `/posts/.../` 주소를 alias로 보존하고, 이미지를 각 Hugo page bundle로 복사하며, 공개되어 있던 VPN Pre-Shared Key 값은 자리표시자로 치환합니다.
-
-확정된 Series 묶음은 별도의 명세로 재생성합니다. 정확한 강의·책 출처가 확인되지 않은 문서는 front matter의 `sourceStatus: needs-review`로 추적합니다.
-
-```bash
-python3 scripts/build_series_manifest.py
-
-python3 scripts/migrate_posts.py \
-  --source /path/to/haksuperman.github.io/site \
-  --target . \
-  --manifest migration/series-posts.json
-```
-
-이관 후에는 Hugo 전체 빌드를 실행한 다음 다음 검증을 통과해야 합니다.
-
-```bash
-python3 scripts/validate_build.py
-```
+`main` 대상 PR에서 검사하고, 병합 후 GitHub Pages에 배포합니다. `public/`은 자동 생성 결과이므로 직접 편집하거나 커밋하지 않습니다.

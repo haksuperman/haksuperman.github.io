@@ -13,3 +13,6 @@ __pycache__/
 # Local workspace files
 .DS_Store
 AGENTS.md
+
+# Local authoring environment
+.venv/

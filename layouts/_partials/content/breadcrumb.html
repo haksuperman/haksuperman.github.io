@@ -1,0 +1,14 @@
+{{- $collection := .Params.collection -}}
+<nav class="content-breadcrumb" aria-label="현재 위치">
+  <a href="{{ "/" | relURL }}">홈</a>
+  {{- if $collection }}
+    <span aria-hidden="true">›</span><a href="{{ printf "%s/" $collection | relURL }}">{{ if eq $collection "docs" }}Docs{{ else }}Series{{ end }}</a>
+    {{- $id := .Params.doccategory | default .Params.seriesid -}}
+    {{- if $id -}}
+      {{- range index site.Data.navigation $collection -}}
+        {{- if eq .id $id }}<span aria-hidden="true">›</span><a href="{{ printf "%s/%s/" $collection .id | relURL }}">{{ .title }}</a>{{ end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- else }}<span aria-hidden="true">›</span><a href="{{ "posts/" | relURL }}">전체 게시물</a>{{ end -}}
+  {{- if .IsPage }}<span aria-hidden="true">›</span><span aria-current="page">{{ .LinkTitle }}</span>{{ end -}}
+</nav>

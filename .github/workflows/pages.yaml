@@ -36,6 +36,12 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: '1.26'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install authoring dependencies
+        run: python -m pip install -r requirements.txt
       - name: Setup Pages
         if: github.event_name != 'pull_request'
         id: pages
@@ -44,13 +50,19 @@ jobs:
         run: |
           wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
           && sudo dpkg -i ${{ runner.temp }}/hugo.deb
+      - name: Check post metadata and authoring workflows
+        env:
+          BLOG_HUGO_INTEGRATION: '1'
+        run: |
+          python -m unittest discover -s tests -v
+          python scripts/validate_build.py --sources-only
       - name: Build with Hugo
         env:
           HUGO_ENVIRONMENT: production
           HUGO_ENV: production
         run: |
           hugo \
-            --gc --minify --cleanDestinationDir \
+            --gc --minify --cleanDestinationDir --printPathWarnings \
             --baseURL "https://haksuperman.github.io/"
       - name: Validate generated site
         run: python3 scripts/validate_build.py

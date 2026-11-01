@@ -1,0 +1,14 @@
+{{- if .pages -}}
+<nav class="section-document-list" aria-label="{{ .title }} 문서 목록" data-content-list>
+  <ul>
+    {{- range .pages }}
+    <li>
+      <a href="{{ .RelPermalink }}"{{ with .Params.seriesorder }} data-series-order="{{ . }}"{{ end }}>{{ .LinkTitle }}</a>
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time>
+    </li>
+    {{- end }}
+  </ul>
+</nav>
+{{- else -}}
+<p class="section-document-empty">아직 이 분류에 등록된 문서가 없습니다.</p>
+{{- end -}}

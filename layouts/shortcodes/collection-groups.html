@@ -1,0 +1,11 @@
+{{- $collection := .Page.Params.collection -}}
+{{- range index site.Data.navigation $collection -}}
+  {{- $params := dict "collection" $collection -}}
+  {{- if eq $collection "docs" -}}{{- $params = merge $params (dict "docCategory" .id) -}}
+  {{- else -}}{{- $params = merge $params (dict "seriesId" .id) -}}{{- end -}}
+  {{- $pages := partial "content/posts.html" $params -}}
+  <section class="collection-group" data-collection-group="{{ .id }}">
+    <h2><a href="{{ printf "%s/%s/" $collection .id | relURL }}">{{ .title }}</a> <small>{{ len $pages }}편</small></h2>
+    <p>{{ .description }}</p>
+  </section>
+{{- end -}}
