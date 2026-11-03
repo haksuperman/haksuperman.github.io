@@ -86,7 +86,7 @@ class RenderedWorkflowTests(unittest.TestCase):
                 add_series(root, "new-series", "신규 시리즈", "자동 생성 확인")
                 first_path = reclassify(root, "first", collection="docs", category="command-tool")
             hugo(root)
-            self.assertEqual(validate(root)["시리즈"], 10)
+            self.assertEqual(validate(root)["시리즈"], len(navigation["series"]) + 1)
             moved = PageLinks((root / "public/posts/last/index.html").read_text())
             self.assertEqual(moved.sidebar_open["/series/oci-foundations/"], [True, True])
             self.assertEqual(moved.sidebar_open["/series/kubernetes-cluster/"], [False, False])
