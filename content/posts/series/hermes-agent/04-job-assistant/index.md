@@ -53,7 +53,7 @@ Mac mini / Docker Desktop
 Scout: 전용 채널에서 공고 평가·지원서 작성·면접 준비·지원 이력 관리
 ```
 
-위 그림은 이 글을 따라 구축할 <strong>목표 연결 구조</strong>다. Scout Profile 생성, 모델 인증, Bot 토큰 연결, 실제 Discord 응답을 순서대로 검증한다. 공통 Gateway가 Scout의 전용 Bot 토큰으로 연결을 관리하며, 하나의 Bot을 채널별로 나누는 공유 Bot 라우팅은 사용하지 않는다. [공식 Profiles](https://hermes-agent.nousresearch.com/docs/user-guide/profiles), [다중 Profile Gateway](https://hermes-agent.nousresearch.com/docs/user-guide/multi-profile-gateways)
+위 그림은 이 글을 따라 구축할 **목표 연결 구조**다. Scout Profile 생성, 모델 인증, Bot 토큰 연결, 실제 Discord 응답을 순서대로 검증한다. 공통 Gateway가 Scout의 전용 Bot 토큰으로 연결을 관리하며, 하나의 Bot을 채널별로 나누는 공유 Bot 라우팅은 사용하지 않는다. [공식 Profiles](https://hermes-agent.nousresearch.com/docs/user-guide/profiles), [다중 Profile Gateway](https://hermes-agent.nousresearch.com/docs/user-guide/multi-profile-gateways)
 
 ## 2. 참고 GitHub 레포의 기능과 Hermes 이식 범위
 
@@ -70,9 +70,9 @@ Scout: 전용 채널에서 공고 평가·지원서 작성·면접 준비·지�
 | 지원 결과 관리 | 지원·면접·합격·탈락 기록, 후속 연락 초안 | 7.5\~7.6에서 사용자가 알려준 지원 상태를 JSON으로 기록 |
 | 부가 기능 | 역량 보완 계획, 연봉 비교, HTML 대시보드, Gmail·Notion 연동 | 기본 흐름 안정화 후 선택 도입 |
 
-원본은 <strong>Claude Code 중심의 워크플로</strong>다. `.claude/commands`를 복사한다고 Hermes에서 동일한 명령이 자동 등록되지는 않는다. Hermes의 SOUL·Skill·허용 도구·상태 저장 방식으로 옮기는 작업이 필요하다. 원본 검색기는 덴마크 포털 4종과 LinkedIn·Freehire를 포함하며, 국내 채용 사이트 검색을 바로 보장하지 않는다. [README](https://github.com/ai-job-search-dev/ai-job-search/blob/83c788d779b74522bb346145ef675b984bf2d3f7/README.md)
+원본은 **Claude Code 중심의 워크플로**다. `.claude/commands`를 복사한다고 Hermes에서 동일한 명령이 자동 등록되지는 않는다. Hermes의 SOUL·Skill·허용 도구·상태 저장 방식으로 옮기는 작업이 필요하다. 원본 검색기는 덴마크 포털 4종과 LinkedIn·Freehire를 포함하며, 국내 채용 사이트 검색을 바로 보장하지 않는다. [README](https://github.com/ai-job-search-dev/ai-job-search/blob/83c788d779b74522bb346145ef675b984bf2d3f7/README.md)
 
-원본의 주요 의존성은 Python 3.10+, Bun, PDF 생성용 LuaLaTeX·XeLaTeX다. 일부 포털 CLI는 `@bunli/core`, `@bunli/utils`, `node-html-parser`, `zod`를 사용하고, LinkedIn·Freehire CLI에는 런타임 패키지 의존성이 없다. PDF 검사에는 pypdf·Poppler, 급여 Excel 변환에는 openpyxl이 선택적으로 사용된다. <strong>Scout 기본 Bot 연결 단계에서는 이 패키지들을 일괄 설치하지 않는다.</strong>
+원본의 주요 의존성은 Python 3.10+, Bun, PDF 생성용 LuaLaTeX·XeLaTeX다. 일부 포털 CLI는 `@bunli/core`, `@bunli/utils`, `node-html-parser`, `zod`를 사용하고, LinkedIn·Freehire CLI에는 런타임 패키지 의존성이 없다. PDF 검사에는 pypdf·Poppler, 급여 Excel 변환에는 openpyxl이 선택적으로 사용된다. **Scout 기본 Bot 연결 단계에서는 이 패키지들을 일괄 설치하지 않는다.**
 
 ## 3. 사전 조건과 실습 순서
 
@@ -92,17 +92,17 @@ Scout: 전용 채널에서 공고 평가·지원서 작성·면접 준비·지�
 4. Scout 역할 정의와 실제 응답 확인
 5. 공고 평가·지원서·면접·이력 관리 기능을 단계별로 구성
 
-같은 이름의 Profile이나 작업 폴더가 발견되면 <strong>삭제·초기화하거나 덮어쓰지 않고 멈춘다.</strong> 이전 실습 결과인지 확인한 후 이어서 진행할 위치를 판단한다. 이 글은 특정 환경에서 이미 수행된 작업이나 테스트 결과를 완료 상태로 가정하지 않는다.
+같은 이름의 Profile이나 작업 폴더가 발견되면 **삭제·초기화하거나 덮어쓰지 않고 멈춘다.** 이전 실습 결과인지 확인한 후 이어서 진행할 위치를 판단한다. 이 글은 특정 환경에서 이미 수행된 작업이나 테스트 결과를 완료 상태로 가정하지 않는다.
 
 ## 4. Discord 전용 채널·Bot 준비
 
 ### 4.1 채널 생성
 
-기존 <strong>Hermes-Agent</strong> 서버에서 텍스트 채널 `03_job-assistant`를 만든다. 이력서와 지원서가 오갈 수 있으므로 본인과 필요한 Bot만 볼 수 있도록 접근 범위를 정한다. 실제 Channel ID는 채널을 만든 후 복사한다.
+기존 **Hermes-Agent** 서버에서 텍스트 채널 `03_job-assistant`를 만든다. 이력서와 지원서가 오갈 수 있으므로 본인과 필요한 Bot만 볼 수 있도록 접근 범위를 정한다. 실제 Channel ID는 채널을 만든 후 복사한다.
 
 ### 4.2 애플리케이션과 Bot 확인
 
-[Discord Developer Portal](https://discord.com/developers/applications)에서 <strong>New Application</strong>을 선택하고 애플리케이션 이름을 `Scout (job-assistant)`로 지정한다. 이어서 <strong>Bot</strong> 메뉴에서 표시 이름도 `Scout (job-assistant)`로 설정하고 Scout 전용 Bot 토큰을 준비한다.
+[Discord Developer Portal](https://discord.com/developers/applications)에서 **New Application**을 선택하고 애플리케이션 이름을 `Scout (job-assistant)`로 지정한다. 이어서 **Bot** 메뉴에서 표시 이름도 `Scout (job-assistant)`로 설정하고 Scout 전용 Bot 토큰을 준비한다.
 
 ### 4.3 Gateway Intent 설정
 
@@ -120,7 +120,7 @@ Bot → Privileged Gateway Intents에서 다음과 같이 설정하고 저장한
 
 ### 4.4 초대 Scope와 Bot 권한
 
-OAuth2 → URL Generator에서 <strong>`bot`</strong>, `applications.commands`를 선택한다. Bot Permissions는 다음 8개를 권장한다.
+OAuth2 → URL Generator에서 **`bot`**, `applications.commands`를 선택한다. Bot Permissions는 다음 8개를 권장한다.
 
 | 권한 | 용도 |
 | --- | --- |
@@ -139,7 +139,7 @@ OAuth2 → URL Generator에서 <strong>`bot`</strong>, `applications.commands`�
 
 ### 4.5 서버 초대와 채널 접근 범위
 
-초대 URL에서 서버 <strong>Hermes-Agent</strong>를 선택하고 권한을 확인해 Scout를 추가한다. Hermes에서 봇 토큰 연결 전에는 오프라인이어도 정상이다.
+초대 URL에서 서버 **Hermes-Agent**를 선택하고 권한을 확인해 Scout를 추가한다. Hermes에서 봇 토큰 연결 전에는 오프라인이어도 정상이다.
 
 | 채널 범위 | Scout Bot 설정 |
 | --- | --- |
@@ -148,14 +148,14 @@ OAuth2 → URL Generator에서 <strong>`bot`</strong>, `applications.commands`�
 
 ![Scout 구축 실습 화면 04](step-04.png)
 
-Scout 멤버에 대한 채널별 권한을 추가해 접근 범위를 제한한다. 상속된 권한 때문에 단순히 체크를 해제하는 것만으로 접근이 막히지 않을 수 있으므로, 사용하지 않는 채널의 <strong>Scout 멤버 → View Channel을 명시적으로 거부</strong>한다.  
+Scout 멤버에 대한 채널별 권한을 추가해 접근 범위를 제한한다. 상속된 권한 때문에 단순히 체크를 해제하는 것만으로 접근이 막히지 않을 수 있으므로, 사용하지 않는 채널의 **Scout 멤버 → View Channel을 명시적으로 거부**한다.  
 (02\_it-news-briefing 채널에 대한 권한 거부)
 
 ![Scout 구축 실습 화면 05](step-05.png)
 
 ### 4.6 Channel ID 확인
 
-Discord 사용자 설정 → 고급 → 개발자 모드를 켠다. `03_job-assistant`를 우클릭해 <strong>채널 ID 복사</strong>를 선택한다. Application ID·Bot Token·Channel ID는 서로 다른 값이다.
+Discord 사용자 설정 → 고급 → 개발자 모드를 켠다. `03_job-assistant`를 우클릭해 **채널 ID 복사**를 선택한다. Application ID·Bot Token·Channel ID는 서로 다른 값이다.
 
 ## 5. Scout Profile과 작업 폴더 생성
 
@@ -176,7 +176,7 @@ docker compose exec -T --user 10000:10000 hermes hermes profile list
 
 ### 5.1.1 Scout 작업 폴더의 파일 쓰기 허용
 
-<strong>Mac 터미널에서 실행한다.</strong> Docker 이미지의 기본 `HERMES_WRITE_SAFE_ROOT`는 `/opt/data`다. Mac 폴더가 `/workspace`에 마운트돼 있어도, Hermes의 `write_file`·`patch` 도구가 해당 위치에 쓸 수 있다는 뜻은 아니다. 이 설정을 먼저 추가해야 7.5에서 평가 문서를 저장할 수 있다.
+**Mac 터미널에서 실행한다.** Docker 이미지의 기본 `HERMES_WRITE_SAFE_ROOT`는 `/opt/data`다. Mac 폴더가 `/workspace`에 마운트돼 있어도, Hermes의 `write_file`·`patch` 도구가 해당 위치에 쓸 수 있다는 뜻은 아니다. 이 설정을 먼저 추가해야 7.5에서 평가 문서를 저장할 수 있다.
 
 `compose.yaml`의 `environment`에 다음처럼 선언한다. 아래 실행 블록이 해당 줄을 추가하고 원본을 백업하므로, 직접 파일을 편집하지 않아도 된다.
 
@@ -187,7 +187,7 @@ environment:
   HERMES_WRITE_SAFE_ROOT: "/opt/data:/workspace/03_job-assistant"
 ```
 
-이 목록은 컨테이너의 파일 도구에 공통 적용된다. 기존 `/opt/data`를 유지하고 <strong>Scout 작업 폴더 하나만 추가</strong>한다. `/workspace` 전체나 `/`를 허용하지 않는다. 변수 자체를 지우거나 터미널 쓰기로 제한을 우회하지 않는다.
+이 목록은 컨테이너의 파일 도구에 공통 적용된다. 기존 `/opt/data`를 유지하고 **Scout 작업 폴더 하나만 추가**한다. `/workspace` 전체나 `/`를 허용하지 않는다. 변수 자체를 지우거나 터미널 쓰기로 제한을 우회하지 않는다.
 
 ```bash
 cd "$HOME/Projects/hermes-agent"
@@ -232,7 +232,7 @@ print('Scout 폴더 쓰기 허용 확인. 다른 작업 폴더와 /tmp의 쓰기
 PY
 ```
 
-<strong>기대 결과:</strong> 허용 경로가 `/opt/data:/workspace/03_job-assistant`로 표시되고 Scout 경로 검사에 통과한다. 이 검사는 실제 결과 파일을 만들지 않는다. 다음 5.2에서 Profile과 작업 폴더를 생성한다.
+**기대 결과:** 허용 경로가 `/opt/data:/workspace/03_job-assistant`로 표시되고 Scout 경로 검사에 통과한다. 이 검사는 실제 결과 파일을 만들지 않는다. 다음 5.2에서 Profile과 작업 폴더를 생성한다.
 
 `docker compose up`은 같은 로컬 이미지를 사용해 컨테이너 환경 설정을 반영한다. 변경이 있으면 Bot 연결이 잠시 끊기지만, named volume과 모델·Bot 인증은 유지된다. `down -v`는 실행하지 않는다. 이미 설정이 같으면 불필요한 초기화를 하지 않는다.
 
@@ -322,7 +322,7 @@ Profile 목록에 `job-assistant`가 표시되는지 확인한다. Gateway가 ru
 
 이 단계에서는 `job_assistant.py` 같은 별도 연결 스크립트가 설치돼 있다고 가정하지 않는다. 후속 기능을 스크립트로 구현한다면 파일을 준비하는 절차와 실행 방법을 함께 추가한다.
 
-Profile별 폴더 분리는 상태와 대화를 나누기 위한 것이다. 같은 컨테이너·같은 실행 사용자에서 동작하므로 <strong>운영체제 수준의 완전한 파일 접근 격리와 같지는 않다.</strong>
+Profile별 폴더 분리는 상태와 대화를 나누기 위한 것이다. 같은 컨테이너·같은 실행 사용자에서 동작하므로 **운영체제 수준의 완전한 파일 접근 격리와 같지는 않다.**
 
 ## 6. Scout 모델 인증과 Discord Bot 연결
 
@@ -348,20 +348,20 @@ docker compose exec -it --user 10000:10000 hermes \
   hermes -p job-assistant gateway setup
 ```
 
-Discord를 선택하고 <strong>Scout Bot의 전용 토큰</strong>을 입력한다. 허용 사용자는 본인 계정으로 제한한다. Scout Profile의 Bot 토큰·허용 사용자 설정을 직접 확인한다.
+Discord를 선택하고 **Scout Bot의 전용 토큰**을 입력한다. 허용 사용자는 본인 계정으로 제한한다. Scout Profile의 Bot 토큰·허용 사용자 설정을 직접 확인한다.
 
 ![Scout 구축 실습 화면 10](step-10.png)
 
 ### 6.3 기본 응답을 확인하고 다음 단계로 넘어가기
 
-<strong>Mac 터미널에서 실행</strong>
+**Mac 터미널에서 실행**
 
 ```bash
 cd "$HOME/Projects/hermes-agent"
 docker compose exec -T --user 10000:10000 hermes hermes -p job-assistant gateway status
 ```
 
-<strong>Discord의 03\_job-assistant 채널에서 입력</strong>
+**Discord의 03\_job-assistant 채널에서 입력**
 
 아직 멘션 없는 응답 설정을 하지 않았으므로 첫 시험은 Bot을 직접 멘션한다.
 
@@ -373,11 +373,11 @@ docker compose exec -T --user 10000:10000 hermes hermes -p job-assistant gateway
 
 ## 7. Scout 역할·업무 파일을 설치하고 직접 시험하기
 
-이 절은 <strong>7.1\~7.3은 Mac 터미널</strong>, <strong>7.4\~7.6은 Discord</strong>에서 진행한다. 명령 블록은 사용자가 직접 실행하며, 실행 결과를 캡처한다. 앞 절에서 설정한 모델·OAuth·Bot 토큰을 다시 만들 필요는 없다.
+이 절은 **7.1\~7.3은 Mac 터미널**, **7.4\~7.6은 Discord**에서 진행한다. 명령 블록은 사용자가 직접 실행하며, 실행 결과를 캡처한다. 앞 절에서 설정한 모델·OAuth·Bot 토큰을 다시 만들 필요는 없다.
 
 ### 7.1 SOUL·Skill·경력 파일·가상 자료 생성
 
-<strong>Mac 터미널에서 아래 블록 전체를 한 번 실행한다.</strong> 별도로 파일 내용을 만들어 붙여 넣을 필요는 없다. 블록은 다음을 수행한다.
+**Mac 터미널에서 아래 블록 전체를 한 번 실행한다.** 별도로 파일 내용을 만들어 붙여 넣을 필요는 없다. 블록은 다음을 수행한다.
 
 - 기존 Scout의 SOUL·설정을 전용 backups 폴더에 보관
 - Scout의 이름·역할·작업 범위를 SOUL에 저장
@@ -386,7 +386,7 @@ docker compose exec -T --user 10000:10000 hermes hermes -p job-assistant gateway
 - 가상 경력과 가상 공고는 demo 폴더에 분리
 - 새 대화에서 Skill을 자동으로 읽도록 설정
 
-같은 경력·Skill 파일이 이미 있으면 <strong>덮어쓰지 않고 중단</strong>한다. 이 경우 반복 실행하지 말고 기존 내용을 확인한다. 모델·Bot 인증 값은 변경하지 않는다.
+같은 경력·Skill 파일이 이미 있으면 **덮어쓰지 않고 중단**한다. 이 경우 반복 실행하지 말고 기존 내용을 확인한다. 모델·Bot 인증 값은 변경하지 않는다.
 
 ```bash
 cd "$HOME/Projects/hermes-agent"
@@ -581,7 +581,7 @@ PY
 
 ### 7.2 전용 채널에서 멘션 없이 대화하도록 설정
 
-<strong>Mac 터미널에서 실행한다.</strong> 아래 첫 줄의 대괄호 부분을 <strong>03\_job-assistant의 실제 숫자 Channel ID</strong>로 바꾼다. 여기에 Bot 토큰을 넣지 않는다.
+**Mac 터미널에서 실행한다.** 아래 첫 줄의 대괄호 부분을 **03\_job-assistant의 실제 숫자 Channel ID**로 바꾼다. 여기에 Bot 토큰을 넣지 않는다.
 
 이 블록은 기존 Scout `.env`를 백업하고 채널·응답 조건만 바꾼다. Bot 토큰과 허용 사용자 값은 유지한다.
 
@@ -654,11 +654,11 @@ unset SCOUT_CHANNEL_ID
 
 ![Scout 구축 실습 화면 13](step-13.png)
 
-<strong>사용자 멘션·노란 강조 방지:</strong> Bot을 호출하는 입력 멘션과 Bot이 사용자에게 보내는 출력 멘션은 별개다. 위 설정은 사용자의 개별 멘션, 답장 작성자 핑, 승인 알림 멘션을 끄고 일반 메시지로 답하도록 한다. 5절의 기본 설정에도 같은 원칙을 적용한다. 이 정책을 이미 적용한 환경에서는 설치 블록 전체를 다시 실행할 필요가 없다. 기존 메시지가 아닌 이후 새 답변에서 확인한다. [공식 Mention Control](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/discord#mention-control)
+**사용자 멘션·노란 강조 방지:** Bot을 호출하는 입력 멘션과 Bot이 사용자에게 보내는 출력 멘션은 별개다. 위 설정은 사용자의 개별 멘션, 답장 작성자 핑, 승인 알림 멘션을 끄고 일반 메시지로 답하도록 한다. 5절의 기본 설정에도 같은 원칙을 적용한다. 이 정책을 이미 적용한 환경에서는 설치 블록 전체를 다시 실행할 필요가 없다. 기존 메시지가 아닌 이후 새 답변에서 확인한다. [공식 Mention Control](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/discord#mention-control)
 
 ### 7.3 설정 반영과 Skill 인식 확인
 
-<strong>Mac 터미널에서 실행한다.</strong> 다음 재시작은 공통 Hermes 컨테이너에 적용돼 연결된 Bot들이 잠시 끊긴다. 진행 중인 작업이 없는 때 한 번 수행한다. 데이터 볼륨을 지우거나 이미지를 다시 만들지 않는다.
+**Mac 터미널에서 실행한다.** 다음 재시작은 공통 Hermes 컨테이너에 적용돼 연결된 Bot들이 잠시 끊긴다. 진행 중인 작업이 없는 때 한 번 수행한다. 데이터 볼륨을 지우거나 이미지를 다시 만들지 않는다.
 
 ```bash
 docker compose restart hermes
@@ -671,9 +671,9 @@ docker compose exec -T --user 10000:10000 hermes hermes -p job-assistant skills 
 
 ### 7.4 Discord에서 새 대화를 열고 역할 확인
 
-<strong>03\_job-assistant 채널에서</strong> `/new`를 실행한다. 새 대화에서 Skill을 읽도록 하기 위한 단계다.
+**03\_job-assistant 채널에서** `/new`를 실행한다. 새 대화에서 Skill을 읽도록 하기 위한 단계다.
 
-<strong>Confirm /new 확인창이 나오면:</strong> <strong>Approve Once</strong>를 눌러 이번 한 번만 승인한다. 버튼이 보이지 않으면 같은 채널에 `/approve`를 입력한다. 승인 요청이 사라지고 새 세션으로 전환됐다는 응답을 확인한 뒤, 아래 상태 확인 문장을 보낸다. `/new`는 대화 세션을 새로 시작하는 명령이며, 앞에서 만든 SOUL·Skill·경력 파일을 삭제하는 단계가 아니다.
+**Confirm /new 확인창이 나오면:** **Approve Once**를 눌러 이번 한 번만 승인한다. 버튼이 보이지 않으면 같은 채널에 `/approve`를 입력한다. 승인 요청이 사라지고 새 세션으로 전환됐다는 응답을 확인한 뒤, 아래 상태 확인 문장을 보낸다. `/new`는 대화 세션을 새로 시작하는 명령이며, 앞에서 만든 SOUL·Skill·경력 파일을 삭제하는 단계가 아니다.
 
 ![Scout 구축 실습 화면 15](step-15.png)
 
@@ -692,11 +692,11 @@ scout-job-assistant Skill을 기준으로 상태를 확인해줘.
 
 ### 7.5 가상 공고로 평가·지원서·면접·이력 관리 시험
 
-<strong>아래 요청을 Discord에 하나씩 보내고, 앞 요청의 파일 저장 결과를 확인한 뒤 다음 요청을 보낸다.</strong> 각 요청에 `DEMO=true`를 유지한다. 실습 데이터를 실제 경력으로 입력하지 않는다.
+**아래 요청을 Discord에 하나씩 보내고, 앞 요청의 파일 저장 결과를 확인한 뒤 다음 요청을 보낸다.** 각 요청에 `DEMO=true`를 유지한다. 실습 데이터를 실제 경력으로 입력하지 않는다.
 
-<strong>저장 오류가 나면:</strong> `outside HERMES_WRITE_SAFE_ROOT (/opt/data)`는 평가 실패가 아니라 파일 쓰기 허용 경로 설정 누락이다. 5.1.1에서 Scout 폴더만 허용하고 컨테이너 환경 설정을 반영한 뒤, 실패했던 요청을 다시 보낸다. 저장이 확인되기 전에는 다음 실습으로 넘어가지 않는다. 이 문제를 해결하려고 보안 변수를 제거하거나 터미널로 대신 쓰게 하지 않는다.
+**저장 오류가 나면:** `outside HERMES_WRITE_SAFE_ROOT (/opt/data)`는 평가 실패가 아니라 파일 쓰기 허용 경로 설정 누락이다. 5.1.1에서 Scout 폴더만 허용하고 컨테이너 환경 설정을 반영한 뒤, 실패했던 요청을 다시 보낸다. 저장이 확인되기 전에는 다음 실습으로 넘어가지 않는다. 이 문제를 해결하려고 보안 변수를 제거하거나 터미널로 대신 쓰게 하지 않는다.
 
-<strong>① 공고 평가</strong>
+**① 공고 평가**
 
 ```txt
 DEMO=true, id=demo-001.
@@ -705,11 +705,11 @@ demo/profile.json과 demo/posting.md를 실제로 읽고 공고 적합도를 평
 demo/results/demo-001/evaluation.md에 저장하고 경로를 알려줘.
 ```
 
-확인: Linux 운영 경험은 근거로 사용하고, Kubernetes는 <strong>개인 실습과 상용 운영 경험을 구분</strong>해야 한다. 연봉·마감일은 미확인으로 남긴다.
+확인: Linux 운영 경험은 근거로 사용하고, Kubernetes는 **개인 실습과 상용 운영 경험을 구분**해야 한다. 연봉·마감일은 미확인으로 남긴다.
 
 ![Scout 구축 실습 화면 17](step-17.png)
 
-<strong>② 지원서 초안</strong>
+**② 지원서 초안**
 
 ```txt
 DEMO=true, id=demo-001.
@@ -723,7 +723,7 @@ Kubernetes 상용 운영 경험이 있는 것처럼 쓰지 마.
 
 ![Scout 구축 실습 화면 18](step-18.png)
 
-<strong>③ 면접 준비</strong>
+**③ 면접 준비**
 
 ```txt
 DEMO=true, id=demo-001.
@@ -734,7 +734,7 @@ demo/results/demo-001/interview.md에 저장해줘.
 
 ![Scout 구축 실습 화면 19](step-19.png)
 
-<strong>④ 지원 상태 기록</strong>
+**④ 지원 상태 기록**
 
 ```txt
 DEMO=true, id=demo-001.
@@ -745,7 +745,7 @@ demo/tracker.json만 갱신해줘.
 
 ![Scout 구축 실습 화면 20](step-20.png)
 
-<strong>⑤ 저장 결과 확인 — Mac 터미널에서 실행</strong>
+**⑤ 저장 결과 확인 — Mac 터미널에서 실행**
 
 ```bash
 docker compose exec -T --user 10000:10000 hermes python3 - <<'PY'
@@ -766,13 +766,13 @@ print('실제 경력 파일과 실제 지원 기록은 빈 상태 유지')
 PY
 ```
 
-정상 완료되면 <strong>실습 결과 파일 3개·applied 상태·실제 프로필과 지원 기록은 빈 상태</strong>가 확인된다. 오류가 나면 해당 파일의 저장 여부를 먼저 확인하고 실습 자료를 실제 파일로 옮겨 맞추지 않는다.
+정상 완료되면 **실습 결과 파일 3개·applied 상태·실제 프로필과 지원 기록은 빈 상태**가 확인된다. 오류가 나면 해당 파일의 저장 여부를 먼저 확인하고 실습 자료를 실제 파일로 옮겨 맞추지 않는다.
 
 ![Scout 구축 실습 화면 21](step-21.png)
 
 ### 7.6 실제 경력과 실제 공고로 사용 시작
 
-가상 실습을 마쳤으면 새 대화를 열고 실제 경력을 등록한다. 다음 대괄호 부분을 본인의 값으로 바꾼 뒤 Discord에 보낸다. <strong>DEMO=true는 넣지 않는다.</strong>
+가상 실습을 마쳤으면 새 대화를 열고 실제 경력을 등록한다. 다음 대괄호 부분을 본인의 값으로 바꾼 뒤 Discord에 보낸다. **DEMO=true는 넣지 않는다.**
 
 ```txt
 아래는 내 실제 경력이야. profile/candidate.json을 먼저 읽고 중복 없이 등록해줘.
@@ -804,23 +804,23 @@ URL을 방문했다고 가정하지 말고, 아래 본문만 근거로 사용해
 [공고의 실제 내용을 붙여 넣기]
 ```
 
-이후에는 <strong>“job-001 지원서 문항 ○○를 ○자 이내로 작성해줘”</strong>, <strong>“job-001 면접 질문을 준비해줘”</strong>, 실제 제출 뒤 <strong>“job-001 지원을 완료했어. applied로 기록해줘”</strong>처럼 사용한다. 결과는 해당 지원 건의 파일과 실제 지원 이력에 저장한다.
+이후에는 **“job-001 지원서 문항 ○○를 ○자 이내로 작성해줘”**, **“job-001 면접 질문을 준비해줘”**, 실제 제출 뒤 **“job-001 지원을 완료했어. applied로 기록해줘”처럼** 사용한다. 결과는 해당 지원 건의 파일과 실제 지원 이력에 저장한다.
 
 ### 7.7 이번 실습의 완료 범위
 
-여기까지 완료하면 <strong>수동으로 제공한 경력·공고를 사용한 평가, 지원서 Markdown 초안, 면접 준비, 지원 상태 기록</strong>을 사용할 수 있다. 국내 공고 요청형 검색은 7.8의 도구 설치·검증 후 사용한다. 매일 세 번의 예약 검색·Discord 자동 전달은 7.9까지 추가한다. 원본의 별도 reviewer·PDF·ATS 검사는 이 과정에서 설치하지 않는다.
+여기까지 완료하면 **수동으로 제공한 경력·공고를 사용한 평가, 지원서 Markdown 초안, 면접 준비, 지원 상태 기록**을 사용할 수 있다. 국내 공고 요청형 검색은 7.8의 도구 설치·검증 후 사용한다. 매일 세 번의 예약 검색·Discord 자동 전달은 7.9까지 추가한다. 원본의 별도 reviewer·PDF·ATS 검사는 이 과정에서 설치하지 않는다.
 
 ### 7.8 국내 공고 검색 추가 — 요청형
 
-7.1\~7.5를 마친 뒤 적용하는 확장이다. <strong>사람인·잡코리아·원티드에서 공개 공고를 검색하고 결과 저장·중복 구분까지 수행한다.</strong> 검색 요약을 공고 본문이나 채용 중 확인으로 취급하지 않는다.
+7.1\~7.5를 마친 뒤 적용하는 확장이다. **사람인·잡코리아·원티드에서 공개 공고를 검색하고 결과 저장·중복 구분까지 수행한다.** 검색 요약을 공고 본문이나 채용 중 확인으로 취급하지 않는다.
 
-기본 조건은 <strong>DevOps 또는 클라우드 또는 인프라 또는 플랫폼 / 서울 또는 경기</strong>다. 사이트별 최대 5건, 한 번에 최대 15건을 요청한다. 직무·지역은 검색어이며 실제 조건 일치는 원문에서 확인한다. 전체 공고를 빠짐없이 수집하는 기능은 아니다.
+기본 조건은 **DevOps 또는 클라우드 또는 인프라 또는 플랫폼 / 서울 또는 경기**다. 사이트별 최대 5건, 한 번에 최대 15건을 요청한다. 직무·지역은 검색어이며 실제 조건 일치는 원문에서 확인한다. 전체 공고를 빠짐없이 수집하는 기능은 아니다.
 
 Hermes에 포함된 Keenable 공개 무료 검색과 같은 경로를 사용한다. 별도 API 키·로그인·패키지 설치가 필요 없다. 제한되면 실패로 보고하며 유료 경로로 전환하지 않는다. 외부에는 직무·지역 검색어만 보내고 경력 원문·연락처·인증정보는 보내지 않는다. Discord 대화에는 모델의 기존 사용량이 발생한다. [Hermes 공식 검색 안내](https://hermes-agent.nousresearch.com/docs/user-guide/features/web-search)
 
 #### 7.8.1 설치 — Mac 터미널
 
-아래 블록 <strong>전체를 한 번에 복사해 실행</strong>한다. 기본 구축 스크립트(7.1)를 다시 실행하지 않는다. 기존 경력·지원 이력·demo·Bot 토큰을 초기화하지 않는다.
+아래 블록 **전체를 한 번에 복사해 실행**한다. 기본 구축 스크립트(7.1)를 다시 실행하지 않는다. 기존 경력·지원 이력·demo·Bot 토큰을 초기화하지 않는다.
 
 검색 도구와 `scout-job-search` Skill을 만들고 자동 로딩 목록에 추가한다. 변경 전 파일은 Scout의 `backups/scout-search-날짜시각/`에 보관한다. 재실행해도 이미 저장한 기본 검색 조건은 유지한다.
 
@@ -1251,7 +1251,7 @@ if __name__ == '__main__':
 PY
 ```
 
-<strong>Scout 국내 공고 검색 설치 완료</strong>, 기본 설정 경로와 백업 경로가 나오는지 확인한다. 오류가 나면 다음 단계로 넘어가지 말고 해당 파일·설정을 확인한다.
+**Scout 국내 공고 검색 설치 완료**, 기본 설정 경로와 백업 경로가 나오는지 확인한다. 오류가 나면 다음 단계로 넘어가지 말고 해당 파일·설정을 확인한다.
 
 ```txt
 /opt/data/profiles/job-assistant/skills/scout-job-search/SKILL.md
@@ -1288,7 +1288,7 @@ PY
 docker compose exec -T --user 10000:10000 hermes hermes -p job-assistant config get skills.auto_load
 ```
 
-자동 로딩 목록에 <strong>scout-job-assistant</strong>, <strong>scout-job-search</strong>가 함께 있어야 한다. 기존 다른 비서의 도구·설정은 변경하지 않는다.
+자동 로딩 목록에 **scout-job-assistant**, **scout-job-search**가 함께 있어야 한다. 기존 다른 비서의 도구·설정은 변경하지 않는다.
 
 #### 7.8.3 실제 검색·저장 검증 — Mac 터미널
 
@@ -1318,11 +1318,11 @@ if r['status']=='empty': print('허용한 공고 URL 발견 없음. 공고 자�
 PY
 ```
 
-`complete`는 검색 완료, `partial`은 일부 사이트 실패, `empty`는 허용한 공고 URL 0건, `error`는 전체 검색 실패다. <strong>결과 0건과 검색 실패를 구분</strong>한다. 같은 검색을 반복하면 이전 공고는 신규 개수에서 빠지고 전체 결과에는 남는다. 결과 개수는 검색 시점마다 달라진다.
+`complete`는 검색 완료, `partial`은 일부 사이트 실패, `empty`는 허용한 공고 URL 0건, `error`는 전체 검색 실패다. **결과 0건과 검색 실패를 구분**한다. 같은 검색을 반복하면 이전 공고는 신규 개수에서 빠지고 전체 결과에는 남는다. 결과 개수는 검색 시점마다 달라진다.
 
 #### 7.8.4 Discord에서 사용 — 03\_job-assistant
 
-`/new`를 보내고 7.4처럼 <strong>Approve Once</strong> 또는 `/approve`로 새 대화 전환을 완료한 뒤 아래 문장을 보낸다.
+`/new`를 보내고 7.4처럼 **Approve Once** 또는 `/approve`로 새 대화 전환을 완료한 뒤 아래 문장을 보낸다.
 
 ```txt
 기본 조건으로 국내 공고를 검색해줘.
@@ -1347,18 +1347,18 @@ PY
 새 검색은 실행하지 마.
 ```
 
-고른 공고를 평가하려면 <strong>원문을 열어 본문을 제공한 뒤 7.6으로 진행</strong>한다. 검색 제목·요약만으로 자격 충족·수치 점수·지원서를 만들지 않는다. `is_new`는 이 기록에서 처음 발견했다는 뜻이며 신규 게시·채용 중이라는 뜻이 아니다. 검색 ID는 출처를 구별하는 값이며 실제 지원 상태를 자동 변경하지 않는다.
+고른 공고를 평가하려면 **원문을 열어 본문을 제공한 뒤 7.6으로 진행**한다. 검색 제목·요약만으로 자격 충족·수치 점수·지원서를 만들지 않는다. `is_new`는 이 기록에서 처음 발견했다는 뜻이며 신규 게시·채용 중이라는 뜻이 아니다. 검색 ID는 출처를 구별하는 값이며 실제 지원 상태를 자동 변경하지 않는다.
 
 ### 7.9 하루 세 번 자동 검색하고 Discord로 전달
 
-7.8의 요청형 검색에 <strong>예약 실행·새 공고 전달</strong>을 추가한다. Discord에서 매번 요청하지 않아도 Hermes가 실행한다.
+7.8의 요청형 검색에 **예약 실행·새 공고 전달**을 추가한다. Discord에서 매번 요청하지 않아도 Hermes가 실행한다.
 
-- <strong>일정:</strong> 매일 12:00·15:00·18:00, 한국 시간(Asia/Seoul), 주말 포함
-- <strong>조건:</strong> search/config.json의 기본 직무·지역·사이트 사용
-- <strong>전달:</strong> Scout Bot → 03\_job-assistant 전용 채널
-- <strong>메시지 형식:</strong> 공고별 두 자리 번호·굵은 제목 한 줄, 다음 줄에 미리보기 없는 링크만 표시한다. 헤더·시간·건수·요약·출처 ID·안내 문구는 붙이지 않는다.
-- <strong>알림:</strong> 처음 전달하는 공고가 있을 때만 게시. 같은 공고만 재발견하면 조용히 완료
-- <strong>오류:</strong> 검색 실패는 알려주고, 전달 실패 공고는 다음 예약에 재시도할 수 있게 보관
+- **일정:** 매일 12:00·15:00·18:00, 한국 시간(Asia/Seoul), 주말 포함
+- **조건:** search/config.json의 기본 직무·지역·사이트 사용
+- **전달:** Scout Bot → 03\_job-assistant 전용 채널
+- **메시지 형식:** 공고별 두 자리 번호·굵은 제목 한 줄, 다음 줄에 미리보기 없는 링크만 표시한다. 헤더·시간·건수·요약·출처 ID·안내 문구는 붙이지 않는다.
+- **알림:** 처음 전달하는 공고가 있을 때만 게시. 같은 공고만 재발견하면 조용히 완료
+- **오류:** 검색 실패는 알려주고, 전달 실패 공고는 다음 예약에 재시도할 수 있게 보관
 
 세 번 검색은 업무 시간 중 변화를 확인하는 주기다. 검색 서비스의 색인 반영 지연과 사이트별 최대 5건 제한이 있으므로 모든 공고를 당일에 빠짐없이 찾는다는 의미는 아니다. 검색 시각과 게시 시각은 다르다. 마감·본문·직무/지역 일치는 원문에서 확인한다.
 
@@ -1583,7 +1583,7 @@ if __name__ == '__main__':
 PY
 ```
 
-출력에서 <strong>예약 활성화, 세 시간대, 전용 채널 ID, 다음 실행 시각, 백업 경로</strong>를 확인한다. 다음 실행은 설치 시점 이후의 가장 가까운 12시·15시·18시다.
+출력에서 **예약 활성화, 세 시간대, 전용 채널 ID, 다음 실행 시각, 백업 경로**를 확인한다. 다음 실행은 설치 시점 이후의 가장 가까운 12시·15시·18시다.
 
 추가되는 파일:
 
@@ -1603,11 +1603,11 @@ docker compose exec -T --user 10000:10000 hermes hermes -p job-assistant cron li
 docker compose exec -T --user 10000:10000 hermes hermes -p job-assistant cron status
 ```
 
-확인할 항목은 <strong>scout-domestic-job-alerts 1개, active, 세 시간대의 반복 일정, Discord 전용 채널, no-agent 모드, 다음 실행의 +09:00 시간대, Gateway·예약 실행기의 정상 상태</strong>다. 매일 세 번을 뜻하는 일정은 하나의 반복 예약에 담는다.
+확인할 항목은 **scout-domestic-job-alerts 1개, active, 세 시간대의 반복 일정, Discord 전용 채널, no-agent 모드, 다음 실행의 +09:00 시간대, Gateway·예약 실행기의 정상 상태**다. 매일 세 번을 뜻하는 일정은 하나의 반복 예약에 담는다.
 
 #### 7.9.3 지금 한 번 실행해 실제 전달 확인 — Mac 터미널
 
-다음 명령은 <strong>실제 검색과 Discord 전달</strong>을 수행한다. 처음 발견한 공고가 있으면 채널에 메시지가 올라온다.
+다음 명령은 **실제 검색과 Discord 전달**을 수행한다. 처음 발견한 공고가 있으면 채널에 메시지가 올라온다.
 
 ```bash
 docker compose exec -T --user 10000:10000 hermes hermes -p job-assistant cron run scout-domestic-job-alerts
@@ -1630,7 +1630,7 @@ for run in list_executions(job_id=job['id'],limit=3):
 PY
 ```
 
-<strong>completed + delivered</strong>는 실제 전달 완료, <strong>completed + suppressed</strong>는 새 알림이 없어 메시지를 보내지 않고 정상 완료한 상태다. failed·delivery\_failed·queued는 전달 완료와 구분해서 확인한다. 실행이 아직 진행 중이면 잠시 뒤 다시 확인한다.
+**completed + delivered**는 실제 전달 완료, **completed + suppressed**는 새 알림이 없어 메시지를 보내지 않고 정상 완료한 상태다. failed·delivery\_failed·queued는 전달 완료와 구분해서 확인한다. 실행이 아직 진행 중이면 잠시 뒤 다시 확인한다.
 
 같은 조건으로 한 번 더 실행하면 이미 전달한 공고가 다시 게시되지 않아야 한다. 전달 완료 공고 ID는 다음 실행 시작 때 Hermes 전달 영수증을 확인한 뒤 기록한다. 실패·확인 불가 상태는 완료로 표시하지 않는다. 전송 도중 일부 메시지만 도착한 뒤 실패한 경우 재시도에서 일부가 중복될 수 있다.
 
@@ -1652,14 +1652,14 @@ docker compose exec -T --user 10000:10000 hermes hermes -p job-assistant cron re
 
 ## 8. 데이터 보존·보안·비용
 
-- <strong>기존 데이터 보존:</strong> `docker compose down -v`, Profile 삭제·초기화, 기존 데이터 폴더 덮어쓰기를 하지 않는다. 기존 예약 작업은 유지한다.
-- <strong>인증 분리:</strong> Bot Token은 Scout의 `.env`, OAuth는 Scout의 인증 저장소에서 관리한다. Notion·지원서·로그·캡처에 기록하지 않는다.
-- <strong>개인 자료:</strong> 경력·연봉·연락처·지원 이력은 공개 GitHub에 올리지 않는다. 원본 레포의 공개 fork에 개인 프로필을 채우지 않는다.
-- <strong>외부 전송:</strong> 공고와 경력 정보를 모델에 전달하면 로컬 PC 밖의 모델 제공자로 데이터가 전송된다. ‘파일이 로컬에 있다’는 설명과 구분한다.
-- <strong>의존성:</strong> 검토한 원본 커밋을 기록하고 검색 도구·PDF 도구를 필요한 단계에서만 설치한다. 이번 검토는 모든 의존성의 취약점이 없다는 보증이나 전체 레포 실행 시험이 아니다.
-- <strong>모델 사용량:</strong> Scout도 같은 계정의 사용량·제한에 영향을 준다. Profile을 나눈다고 구독 사용 한도가 따로 생기지 않는다. 별도 API·유료 서비스를 도입하면 해당 서비스 비용을 따로 확인한다.
-- <strong>실행 제한:</strong> 5절의 `max_turns: 30` 외에 하루 호출 횟수 제한이나 캐시는 이 가이드에서 구현하지 않는다. 필요하면 별도 제어를 구성하고, 실제 적용된 범위와 테스트 결과를 확인한다.
-- <strong>백업:</strong> Hermes 상태는 named volume의 `/opt/data`, 경력·공고·지원 자료는 Mac과 연결된 `/workspace/03_job-assistant`에 저장하므로 양쪽을 함께 관리한다. 실행 중인 SQLite 파일을 단순 복사한 결과를 정상 백업이라고 단정하지 않는다. 운영·백업은 후속 글 「LLM Wiki 및 운영·백업」(준비 중)에서 이어간다.
+- **기존 데이터 보존:** `docker compose down -v`, Profile 삭제·초기화, 기존 데이터 폴더 덮어쓰기를 하지 않는다. 기존 예약 작업은 유지한다.
+- **인증 분리:** Bot Token은 Scout의 `.env`, OAuth는 Scout의 인증 저장소에서 관리한다. Notion·지원서·로그·캡처에 기록하지 않는다.
+- **개인 자료:** 경력·연봉·연락처·지원 이력은 공개 GitHub에 올리지 않는다. 원본 레포의 공개 fork에 개인 프로필을 채우지 않는다.
+- **외부 전송:** 공고와 경력 정보를 모델에 전달하면 로컬 PC 밖의 모델 제공자로 데이터가 전송된다. ‘파일이 로컬에 있다’는 설명과 구분한다.
+- **의존성:** 검토한 원본 커밋을 기록하고 검색 도구·PDF 도구를 필요한 단계에서만 설치한다. 이번 검토는 모든 의존성의 취약점이 없다는 보증이나 전체 레포 실행 시험이 아니다.
+- **모델 사용량:** Scout도 같은 계정의 사용량·제한에 영향을 준다. Profile을 나눈다고 구독 사용 한도가 따로 생기지 않는다. 별도 API·유료 서비스를 도입하면 해당 서비스 비용을 따로 확인한다.
+- **실행 제한:** 5절의 `max_turns: 30` 외에 하루 호출 횟수 제한이나 캐시는 이 가이드에서 구현하지 않는다. 필요하면 별도 제어를 구성하고, 실제 적용된 범위와 테스트 결과를 확인한다.
+- **백업:** Hermes 상태는 named volume의 `/opt/data`, 경력·공고·지원 자료는 Mac과 연결된 `/workspace/03_job-assistant`에 저장하므로 양쪽을 함께 관리한다. 실행 중인 SQLite 파일을 단순 복사한 결과를 정상 백업이라고 단정하지 않는다. 운영·백업은 후속 글 「LLM Wiki 및 운영·백업」(준비 중)에서 이어간다.
 
 ## 9. 참고 자료
 
