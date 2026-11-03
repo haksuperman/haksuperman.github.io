@@ -14,15 +14,11 @@ tags:
 linkTitle: 03. IT 뉴스클리핑 비서 구축하기
 ---
 
-> <strong>구현 가이드 초안 · Bot 전용 발송으로 개정.</strong> Part 1·2의 Atlas 구성을 마친 뒤 새 it-news Profile과 전용 IT News Bot을 연결한다. 뉴스는 <strong>it-news → 공통 Gateway → IT News Bot → #02\_it-news-briefing</strong> 경로로 전송한다. Discord Webhook은 생성·저장·사용하지 않는다. 기본 Bot 메시지 형식으로 제목·원문 링크·KST 시각을 게시한다. 문서 편집만으로 실제 프로필 생성이나 발송·예약 활성화가 수행되지는 않는다.
-
-선행 문서: [Part 1 — Mac mini Docker로 Hermes Agent 설치하기](/posts/01-docker-setup/) · [Part 2 — 메인 비서 Atlas 구축하기](/posts/02-atlas/)
-
 ## 1. 이번에 만들 뉴스 비서
 
-<strong>기존 구축했던 Orca, Claude Code의 실행 부분을 Hermes로 옮긴다.</strong> Python 코드를 처음부터 다시 만들지 않는다.
+**기존 구축했던 Orca, Claude Code의 실행 부분을 Hermes로 옮긴다.** Python 코드를 처음부터 다시 만들지 않는다.
 
-목표는 <strong>매일 정해진 시각에 #02\_it-news-briefing으로 새 글을 자동 수신</strong>하는 것이다. 최초 시험 발송과 예약 활성화 때 범위를 확인하고, 활성화한 뒤에는 매일 같은 작업의 승인을 다시 요구하지 않는다.
+목표는 **매일 정해진 시각에 #02\_it-news-briefing으로 새 글을 자동 수신**하는 것이다. 최초 시험 발송과 예약 활성화 때 범위를 확인하고, 활성화한 뒤에는 매일 같은 작업의 승인을 다시 요구하지 않는다.
 
 | KST | 수집원 | 식별자 | 처리 |
 | --- | --- | --- | --- |
@@ -31,9 +27,9 @@ linkTitle: 03. IT 뉴스클리핑 비서 구축하기
 | 08:45 | 보안뉴스 | boannews | 새 글 전부 · 원래 제목과 기사 링크 |
 | 09:00 | 토스 테크 | toss | 새 글 전부 · 원래 제목과 글 링크 |
 
-출력은 <strong>사이트별 일반 Bot 메시지, 번호·제목·원문 링크, KST 수집 시각</strong>이다. 기존 색상 Embed 카드는 사용하지 않는다. 요약·중요도 선정·관심 주제 필터는 추가하지 않는다. 기사 링크는 Python의 수집 결과만 사용하고 모델이 생성하거나 바꾸지 않는다.
+출력은 **사이트별 일반 Bot 메시지, 번호·제목·원문 링크, KST 수집 시각**이다. 기존 색상 Embed 카드는 사용하지 않는다. 요약·중요도 선정·관심 주제 필터는 추가하지 않는다. 기사 링크는 Python의 수집 결과만 사용하고 모델이 생성하거나 바꾸지 않는다.
 
-새 글이 없으면 그 사이트는 발송하지 않는다. 첫 실행은 기본적으로 최근 24시간 글이며, 발행일이 없는 항목은 기존 코드의 규칙에 따라 포함될 수 있다. 이후에는 처리 이력에 없는 URL을 전부 보낸다. ‘전부’는 <strong>피드가 제공하는 범위 안의 새 글</strong>이라는 뜻이다. [기준 요구사항](https://github.com/haksuperman/ai-agent-it-news/blob/main/docs/PRD.md), [최종 결정 ADR-014·015](https://github.com/haksuperman/ai-agent-it-news/blob/main/docs/ADR.md)
+새 글이 없으면 그 사이트는 발송하지 않는다. 첫 실행은 기본적으로 최근 24시간 글이며, 발행일이 없는 항목은 기존 코드의 규칙에 따라 포함될 수 있다. 이후에는 처리 이력에 없는 URL을 전부 보낸다. ‘전부’는 **피드가 제공하는 범위 안의 새 글**이라는 뜻이다. [기준 요구사항](https://github.com/haksuperman/ai-agent-it-news/blob/main/docs/PRD.md), [최종 결정 ADR-014·015](https://github.com/haksuperman/ai-agent-it-news/blob/main/docs/ADR.md)
 
 ## 2. 구성과 재사용 범위
 
@@ -82,37 +78,37 @@ docker compose exec -T --user 10000:10000 hermes hermes -p atlas gateway status
 
 ![IT 뉴스클리핑 비서 구축 실습 화면 01](step-01.png)
 
-실제 경로 `/Users/haksu/Projects/hermes-agent`, 실행 중인 `hermes-agent`, 공통 Gateway에서 실행되는 `atlas`를 확인한다. 모든 Hermes 명령은 <strong>실행 중인 컨테이너의 exec</strong>로 실행한다.
+실제 경로 `/Users/haksu/Projects/hermes-agent`, 실행 중인 `hermes-agent`, 공통 Gateway에서 실행되는 `atlas`를 확인한다. 모든 Hermes 명령은 **실행 중인 컨테이너의 exec**로 실행한다.
 
 ## 3. 전용 Bot과 뉴스 채널 준비
 
 ### 3.1 뉴스 채널 준비
 
-Discord의 기존 <strong>Hermes-Agent</strong> 서버에 `#02_it-news-briefing` 텍스트 채널을 생성한다. `#01_atlas`와 Atlas Bot은 유지한다.
+Discord의 기존 **Hermes-Agent** 서버에 `#02_it-news-briefing` 텍스트 채널을 생성한다. `#01_atlas`와 Atlas Bot은 유지한다.
 
 ![IT 뉴스클리핑 비서 구축 실습 화면 02](step-02.png)
 
 ### 3.2 IT News 애플리케이션 생성
 
-1. [Discord Developer Portal](https://discord.com/developers/applications)을 열고 <strong>New Application</strong>을 선택한다. 애플리케이션 이름은 `IT News`로 지정한다. Atlas와 별도 애플리케이션으로 만든다.
+1. [Discord Developer Portal](https://discord.com/developers/applications)을 열고 **New Application**을 선택한다. 애플리케이션 이름은 `IT News`로 지정한다. Atlas와 별도 애플리케이션으로 만든다.
 
 ### 3.3 Bot 이름과 토큰 준비
 
-- 애플리케이션의 <strong>Bot</strong> 메뉴를 연다. Discord에 표시할 Bot 이름을 확인한다. 이 문서에서는 `IT-News-Briefing`으로 표기한다.
+- 애플리케이션의 **Bot** 메뉴를 연다. Discord에 표시할 Bot 이름을 확인한다. 이 문서에서는 `IT-News-Briefing`으로 표기한다.
   ![IT 뉴스클리핑 비서 구축 실습 화면 03](step-03.png)
-- <strong>Reset Token</strong>으로 이 Bot의 토큰을 발급한다. Atlas 토큰을 재사용하지 않는다.
+- **Reset Token**으로 이 Bot의 토큰을 발급한다. Atlas 토큰을 재사용하지 않는다.
 
 ### 3.4 Intent 활성화
 
-- 같은 <strong>Bot</strong> 화면의 <strong>Privileged Gateway Intents</strong>에서 다음 두 항목을 켜고 변경 사항을 저장한다.
-  - <strong>Server Members Intent</strong>
+- 같은 **Bot** 화면의 **Privileged Gateway Intents**에서 다음 두 항목을 켜고 변경 사항을 저장한다.
+  - **Server Members Intent**
     ![IT 뉴스클리핑 비서 구축 실습 화면 04](step-04.png)
-  - <strong>Message Content Intent</strong>
+  - **Message Content Intent**
     ![IT 뉴스클리핑 비서 구축 실습 화면 05](step-05.png)
 
 ### 3.5 초대 Scope와 기본 권한 선택
 
-- <strong>OAuth2 → URL Generator</strong>에서 Scope를 선택한다.
+- **OAuth2 → URL Generator**에서 Scope를 선택한다.
   - `bot`
   - `applications.commands`
     ![IT 뉴스클리핑 비서 구축 실습 화면 06](step-06.png)
@@ -125,14 +121,14 @@ Discord의 기존 <strong>Hermes-Agent</strong> 서버에 `#02_it-news-briefing`
     ![IT 뉴스클리핑 비서 구축 실습 화면 07](step-07.png)
 
     
-    <strong>Administrator는 선택하지 않는다.</strong> 이 뉴스 채널은 직접 응답하는 방식이므로 스레드 생성 권한도 추가하지 않는다.
+    **Administrator는 선택하지 않는다.** 이 뉴스 채널은 직접 응답하는 방식이므로 스레드 생성 권한도 추가하지 않는다.
     
 
 
 
 ### 3.6 서버에 IT News Bot 초대
 
-생성된 초대 URL을 브라우저에서 연다. 대상 서버로 <strong>Hermes-Agent</strong>를 선택하고 권한을 확인해 승인한다.
+생성된 초대 URL을 브라우저에서 연다. 대상 서버로 **Hermes-Agent**를 선택하고 권한을 확인해 승인한다.
 
 ![IT 뉴스클리핑 비서 구축 실습 화면 08](step-08.png)
 
@@ -148,7 +144,7 @@ Discord의 기존 <strong>Hermes-Agent</strong> 서버에 `#02_it-news-briefing`
 
 ### 3.7 Bot별 채널 접근 범위 설정
 
-각 채널의 <strong>채널 편집 → 권한</strong>에서 Bot 멤버를 추가해 아래처럼 설정한다. <strong>Atlas는 메인 비서이므로 뉴스 채널을 포함한 필요한 업무 채널의 보기·메시지 기록 보기 권한을 허용</strong>한다. 뉴스 Bot은 뉴스 채널을 담당하도록 범위를 제한한다. 필요한 메시지 전송 권한은 허용한 채널에서 사용할 수 있어야 한다.
+각 채널의 **채널 편집 → 권한**에서 Bot 멤버를 추가해 아래처럼 설정한다. **Atlas는 메인 비서이므로 뉴스 채널을 포함한 필요한 업무 채널의 보기·메시지 기록 보기 권한을 허용**한다. 뉴스 Bot은 뉴스 채널을 담당하도록 범위를 제한한다. 필요한 메시지 전송 권한은 허용한 채널에서 사용할 수 있어야 한다.
 
 ![IT 뉴스클리핑 비서 구축 실습 화면 12](step-12.png)
 
@@ -159,15 +155,15 @@ Discord의 기존 <strong>Hermes-Agent</strong> 서버에 `#02_it-news-briefing`
 | #01\_atlas | 채널 보기 허용 | 채널 보기 거부 |
 | #02\_it-news-briefing | 채널 보기 허용 | 채널 보기 허용 |
 
-다른 역할이나 `@everyone`의 권한이 상속될 수 있으므로, 체크를 해제하는 것만으로 제한됐다고 판단하지 않는다. 접근을 막을 채널에서는 <strong>Bot 멤버의 채널 보기 권한을 명시적으로 거부</strong>한다. 관리자 권한은 부여하지 않는다.
+다른 역할이나 `@everyone`의 권한이 상속될 수 있으므로, 체크를 해제하는 것만으로 제한됐다고 판단하지 않는다. 접근을 막을 채널에서는 **Bot 멤버의 채널 보기 권한을 명시적으로 거부**한다. 관리자 권한은 부여하지 않는다.
 
 
 
 ### 3.8 뉴스 Channel ID 복사
 
-Discord의 <strong>사용자 설정 → 고급 → 개발자 모드</strong>를 켠다.
+Discord의 **사용자 설정 → 고급 → 개발자 모드**를 켠다.
 
-`#02_it-news-briefing` 채널을 우클릭하고 <strong>채널 ID 복사</strong>를 선택한다. Channel ID는 Bot 토큰과 다른 값이다.
+`#02_it-news-briefing` 채널을 우클릭하고 **채널 ID 복사**를 선택한다. Channel ID는 Bot 토큰과 다른 값이다.
 
 
 
@@ -438,7 +434,7 @@ docker compose exec -T --user 10000:10000 hermes \
 
 ![IT 뉴스클리핑 비서 구축 실습 화면 14](step-14.png)
 
-<strong>정상 결과:</strong> `collect`, `preview`, `publish`, `reconcile`, `translations-path`가 보인다. `send`는 이 연결 파일에서 지원하지 않는다.
+**정상 결과:** `collect`, `preview`, `publish`, `reconcile`, `translations-path`가 보인다. `send`는 이 연결 파일에서 지원하지 않는다.
 
 ## 5. 뉴스 Profile 만들고 전용 Bot 연결
 
@@ -488,7 +484,7 @@ PY
 
 
 
-Atlas의 SOUL·기억·Bot Token·OAuth 파일은 복제하지 않고 <strong>모델 선택만</strong> 가져온다. Part 1에서 인증한 대상은 atlas이므로, 아래 `it-news model` 화면에서도 Codex OAuth 연결을 직접 확인하고 필요한 로그인을 완료한다. `auth.json`을 수동 복사하지 않는다. 모델 선택 복사는 로그인 완료를 뜻하지 않는다.
+Atlas의 SOUL·기억·Bot Token·OAuth 파일은 복제하지 않고 **모델 선택만** 가져온다. Part 1에서 인증한 대상은 atlas이므로, 아래 `it-news model` 화면에서도 Codex OAuth 연결을 직접 확인하고 필요한 로그인을 완료한다. `auth.json`을 수동 복사하지 않는다. 모델 선택 복사는 로그인 완료를 뜻하지 않는다.
 
 새 Profile을 만든 뒤 공통 Gateway를 재시작하고 뉴스 Profile의 서비스 상태를 먼저 확인한다. 준비 중이면 잠시 후 status만 다시 실행한다.
 
@@ -513,7 +509,7 @@ docker compose exec -it --user 10000:10000 hermes hermes -p it-news model
 
 
 
-모델 화면을 마친 뒤 새 인증·모델 설정을 반영하고, <strong>Discord 연결 전에</strong> 뉴스 비서 자체의 응답을 확인한다. 재시작 중에는 Atlas도 잠시 연결이 끊긴다.
+모델 화면을 마친 뒤 새 인증·모델 설정을 반영하고, **Discord 연결 전에** 뉴스 비서 자체의 응답을 확인한다. 재시작 중에는 Atlas도 잠시 연결이 끊긴다.
 
 ```bash
 docker compose restart hermes
@@ -535,16 +531,16 @@ docker compose exec -it --user 10000:10000 hermes hermes -p it-news gateway setu
 ```
 
 
-이 화면에서 Discord를 선택해 <strong>IT News Bot의 별도 토큰</strong>을 입력하고, 본인 Discord 계정을 허용 사용자로 지정한다. Atlas의 허용 사용자 설정이 자동으로 적용된다고 가정하지 않는다. 마법사의 설정을 마치면 Done으로 나온다. 
+이 화면에서 Discord를 선택해 **IT News Bot의 별도 토큰**을 입력하고, 본인 Discord 계정을 허용 사용자로 지정한다. Atlas의 허용 사용자 설정이 자동으로 적용된다고 가정하지 않는다. 마법사의 설정을 마치면 Done으로 나온다. 
 
 
-공통 Gateway 하나가 `atlas`의 Atlas Bot과 `it-news`의 IT News Bot을 각자 연결한다. <strong>어느 Bot에 보낸 메시지인지에 따라 해당 Profile이 처리</strong>하므로 공유 Bot용 채널 라우팅을 추가하지 않는다. 뉴스 발송도 해당 Profile의 공통 Gateway·전용 Bot 경로로 통일한다. [공식 Profiles](https://hermes-agent.nousresearch.com/docs/user-guide/profiles), [공식 다중 Profile Gateway](https://hermes-agent.nousresearch.com/docs/user-guide/multi-profile-gateways)
+공통 Gateway 하나가 `atlas`의 Atlas Bot과 `it-news`의 IT News Bot을 각자 연결한다. **어느 Bot에 보낸 메시지인지에 따라 해당 Profile이 처리**하므로 공유 Bot용 채널 라우팅을 추가하지 않는다. 뉴스 발송도 해당 Profile의 공통 Gateway·전용 Bot 경로로 통일한다. [공식 Profiles](https://hermes-agent.nousresearch.com/docs/user-guide/profiles), [공식 다중 Profile Gateway](https://hermes-agent.nousresearch.com/docs/user-guide/multi-profile-gateways)
 
 ![IT 뉴스클리핑 비서 구축 실습 화면 19](step-19.png)
 
 ### 5.3 뉴스 Channel ID 저장
 
-아래 <strong>한 곳의 값만 실제 뉴스 Channel ID로 바꾸고</strong> 실행한다. 이는 공개 식별자이며 Bot 토큰을 입력하는 곳이 아니다. 이후 테스트와 정기 예약은 이 파일을 공통으로 사용한다.
+아래 **한 곳의 값만 실제 뉴스 Channel ID로 바꾸고** 실행한다. 이는 공개 식별자이며 Bot 토큰을 입력하는 곳이 아니다. 이후 테스트와 정기 예약은 이 파일을 공통으로 사용한다.
 
 ```bash
 export IT_NEWS_CHANNEL_ID='<여기에_뉴스_Channel_ID>'
@@ -568,7 +564,7 @@ PY
 
 ## 6. Bot 전달용 Skill 등록
 
-기존 Claude 명령의 수집·번역 절차를 Hermes Skill로 옮긴다. <strong>MODE는 기존 dry-run/send에서 preview/publish로 변경</strong>했다. 아래 SOURCE·MODE 문자는 지금 바꾸지 않고, 실행 프롬프트에서 실제 값을 전달한다.
+기존 Claude 명령의 수집·번역 절차를 Hermes Skill로 옮긴다. **MODE는 기존 dry-run/send에서 preview/publish로 변경**했다. 아래 SOURCE·MODE 문자는 지금 바꾸지 않고, 실행 프롬프트에서 실제 값을 전달한다.
 
 ```bash
 docker compose exec -T --user 10000:10000 hermes sh -c \
@@ -674,7 +670,7 @@ docker compose exec -it --user 10000:10000 hermes \
 
 ### 7.2 Gateway·전용 Bot 경로로 한 번 게시
 
-일반 CLI 채팅의 답변은 터미널로 돌아오므로, <strong>실제 발송은 Hermes의 일회성 테스트 예약으로 검증</strong>한다. 다음은 GeekNews 테스트를 정지 상태로 만들기만 한다.
+일반 CLI 채팅의 답변은 터미널로 돌아오므로, **실제 발송은 Hermes의 일회성 테스트 예약으로 검증**한다. 다음은 GeekNews 테스트를 정지 상태로 만들기만 한다.
 
 ```bash
 export IT_NEWS_TEST_SOURCE=geeknews
@@ -705,7 +701,7 @@ print('일회성 테스트 생성 완료 — 아직 정지 상태:', name)
 PY
 ```
 
-미리보기와 저장한 Channel ID를 확인했다면 아래 재개 명령을 <strong>한 번만</strong> 실행한다. <strong>실제 뉴스 게시를 승인하고 정지된 일회성 테스트를 현재 시각으로 재개하는 단계</strong>다. 이 버전은 정지된 작업에 `cron run`을 호출하면 실행하지 않는다. `resume --run-now`로 재개하면 공통 Gateway의 다음 스케줄러 주기에 실행된다. `--repeat 1`은 유지되므로 매일 반복되지 않는다.
+미리보기와 저장한 Channel ID를 확인했다면 아래 재개 명령을 **한 번만** 실행한다. **실제 뉴스 게시를 승인하고 정지된 일회성 테스트를 현재 시각으로 재개하는 단계**다. 이 버전은 정지된 작업에 `cron run`을 호출하면 실행하지 않는다. `resume --run-now`로 재개하면 공통 Gateway의 다음 스케줄러 주기에 실행된다. `--repeat 1`은 유지되므로 매일 반복되지 않는다.
 
 ```bash
 docker compose exec -T --user 10000:10000 hermes \
@@ -714,9 +710,9 @@ docker compose exec -T --user 10000:10000 hermes \
   hermes -p it-news cron runs "it-news-test-$IT_NEWS_TEST_SOURCE"
 ```
 
-재개 직후 `cron runs`에 아직 실행 이력이 없을 수 있다. 잠시 후 <strong>조회 명령인 </strong><strong>`cron runs`</strong><strong>만 다시 실행</strong>한다. `resume --run-now`를 반복하거나 `cron run`을 추가하지 않는다. 실행 중인 모델·도구 처리와 Gateway 전달이 끝난 뒤 결과를 확인한다.
+재개 직후 `cron runs`에 아직 실행 이력이 없을 수 있다. 잠시 후 **조회 명령인 `cron runs`만 다시 실행**한다. `resume --run-now`를 반복하거나 `cron run`을 추가하지 않는다. 실행 중인 모델·도구 처리와 Gateway 전달이 끝난 뒤 결과를 확인한다.
 
-`#02_it-news-briefing`에서 <strong>IT News Bot 계정</strong>이 게시했는지 확인한다. 제목·원문 링크·KST 시각이 있어야 하며, 일반 메시지 형식으로 채널에 직접 도착해야 한다. 새 글이 없으면 `[SILENT]`로 게시되지 않는다. 그 경우 예약 실행은 확인했어도 실제 뉴스 수신 시험은 아직 완료한 것이 아니다.
+`#02_it-news-briefing`에서 **IT News Bot 계정**이 게시했는지 확인한다. 제목·원문 링크·KST 시각이 있어야 하며, 일반 메시지 형식으로 채널에 직접 도착해야 한다. 새 글이 없으면 `[SILENT]`로 게시되지 않는다. 그 경우 예약 실행은 확인했어도 실제 뉴스 수신 시험은 아직 완료한 것이 아니다.
 
 ![IT 뉴스클리핑 비서 구축 실습 화면 25](step-25.png)
 
@@ -731,7 +727,7 @@ docker compose exec -T --user 10000:10000 hermes \
 
 ![IT 뉴스클리핑 비서 구축 실습 화면 26](step-26.png)
 
-<strong>Bot 전달 확인·이력 반영 완료</strong>가 나오면, 준비했던 정확한 본문이 해당 실행에서 전달됐다는 Hermes 기록을 확인한 것이다. 그 뒤에만 URL 이력과 `sent.json`을 갱신한다. 새 글 없음으로 정상 생략했다면 대기 중인 회차가 없다는 결과가 정상이다.
+**Bot 전달 확인·이력 반영 완료**가 나오면, 준비했던 정확한 본문이 해당 실행에서 전달됐다는 Hermes 기록을 확인한 것이다. 그 뒤에만 URL 이력과 `sent.json`을 갱신한다. 새 글 없음으로 정상 생략했다면 대기 중인 회차가 없다는 결과가 정상이다.
 
 TechNode·보안뉴스·토스 테크도 7.1 미리보기와 7.2\~7.3을 각각 실행한다. 테스트 블록 첫 줄의 SOURCE만 `technode`, `boannews`, `toss`로 바꾼다. TechNode는 모든 새 글의 한국어 제목을 확인해야 한다.
 
@@ -741,7 +737,7 @@ TechNode·보안뉴스·토스 테크도 7.1 미리보기와 7.2\~7.3을 각각 
 
 ### 8.1 정기 작업 4개를 일시정지 상태로 생성
 
-시간대는 컨테이너와 뉴스 Profile 모두 `Asia/Seoul`이다. 아래는 정기 예약을 <strong>등록만 하고 아직 발송하지 않는다.</strong> 일회성 테스트와 이름이 달라 구분할 수 있다.
+시간대는 컨테이너와 뉴스 Profile 모두 `Asia/Seoul`이다. 아래는 정기 예약을 **등록만 하고 아직 발송하지 않는다.** 일회성 테스트와 이름이 달라 구분할 수 있다.
 
 ```bash
 docker compose exec -T --user 10000:10000 hermes python - <<'PY'
@@ -781,7 +777,7 @@ docker compose exec -T --user 10000:10000 hermes hermes -p it-news cron list --a
 
 ### 8.2 수신 검증을 마친 사이트만 활성화
 
-다음은 표의 시각에 매일 게시하도록 <strong>승인하고 활성화하는 단계</strong>다. 네 사이트를 모두 시험했을 때 전체 블록을 실행한다. 일부만 준비됐다면 해당 사이트의 한 줄만 실행한다.
+다음은 표의 시각에 매일 게시하도록 **승인하고 활성화하는 단계**다. 네 사이트를 모두 시험했을 때 전체 블록을 실행한다. 일부만 준비됐다면 해당 사이트의 한 줄만 실행한다.
 
 ```bash
 docker compose exec -T --user 10000:10000 hermes hermes -p it-news cron resume it-news-technode
@@ -805,7 +801,7 @@ docker compose exec -T --user 10000:10000 hermes hermes -p it-news cron runs it-
 docker compose exec -T --user 10000:10000 hermes python /workspace/02_it-news-briefing/news.py reconcile --source technode
 ```
 
-사이트별 다음 `collect`는 이전 전달을 먼저 확인해 자동으로 이력을 반영한다. 즉, `sent.json`이 생기는 시점은 본문 준비 직후가 아니라 <strong>전달 확인 후 또는 다음 회차의 시작</strong>이다. 지금 확인하려면 위 `reconcile`을 사용한다. `sent.json`은 Gateway의 실행 ID·확인 시각·항목 수를 기록하며, 예전 Webhook의 message\_ids 형식과 다르다.
+사이트별 다음 `collect`는 이전 전달을 먼저 확인해 자동으로 이력을 반영한다. 즉, `sent.json`이 생기는 시점은 본문 준비 직후가 아니라 **전달 확인 후 또는 다음 회차의 시작**이다. 지금 확인하려면 위 `reconcile`을 사용한다. `sent.json`은 Gateway의 실행 ID·확인 시각·항목 수를 기록하며, 예전 Webhook의 message\_ids 형식과 다르다.
 
 모델의 완료 답변만으로 발송 성공이라 쓰지 않는다. 실제 Bot 게시, `cron runs`의 전달 결과, 연결 파일의 확인 결과를 대조한다. 수집 실패 알림이 전달된 경우는 뉴스 수집 성공과 구분한다.
 
@@ -821,16 +817,16 @@ TechNode 번역 파일은 `translations-path`가 출력한 `/opt/data/profiles/i
 
 ## 10. 제한·검증 상태와 블로그 캡처
 
-- <strong>표시 형식:</strong> 사이트명 머리말 아래에 KST 수집 시각·기사 수를 표시한다. 각 기사는 일반 문자로 표시한 번호와 굵은 제목, 바로 다음 줄의 원문 링크로 구성하고 기사 사이에만 빈 줄 하나를 둔다. 번호 뒤 마침표는 이스케이프해 Discord의 번호 목록으로 해석되지 않도록 한다. 제목에 링크를 숨기지 않는다. `cron.wrap_response: false`로 정상 브리핑 앞의 예약명·ID와 끝의 관리 안내를 생략한다. 기본 Bot 메시지를 사용하며, 긴 본문은 Hermes가 분할하고 `(1/2)`처럼 순서를 붙인다. 현재 분할은 줄바꿈 기준이므로 제목과 링크가 다른 메시지로 나뉠 수 있다.
-- <strong>수집 범위:</strong> TechNode 50·GeekNews 50·보안뉴스 50·토스 테크 20개 피드 항목 안에서 새 글을 판별한다. 최초 실행은 최근 24시간, 발행일 없는 항목은 기존 코드 규칙을 따른다. 피드에서 밀려난 글은 누락될 수 있다.
-- <strong>중복 기준:</strong> 사이트별 URL 이력이다. 다른 URL의 같은 사건까지 합치지는 않는다. 성공 전달 전에는 상태를 갱신하지 않고, 새 글 없는 정상 생략은 바로 이력을 갱신한다.
-- <strong>확인 대기:</strong> 준비와 전송 사이에 장애가 발생하면 불명확한 회차를 보류한다. 완전한 1회 전달을 보장한다고 쓰지 않는다. 다음 수집이 멈추는 것은 중복 발송을 피하기 위한 동작이다.
-- <strong>버전:</strong> 연결 파일의 전달 확인은 현재 검토한 Hermes v0.22.5의 `executions.db`·`deliveries.db` 읽기 구조를 사용한다. Hermes 업데이트 후에는 미리보기·일회성 수신·전달 확인을 다시 검증한다. 기록 구조가 달라지면 이력을 갱신하지 않고 중단한다.
-- <strong>원본 보존:</strong> 공개 레포는 새 폴더에 클론하고 원본 소스·기존 프로젝트 상태는 수정하거나 가져오지 않는다. 새 `/opt/data`와 `workspace/02_it-news-briefing`을 함께 백업한다.
+- **표시 형식:** 사이트명 머리말 아래에 KST 수집 시각·기사 수를 표시한다. 각 기사는 일반 문자로 표시한 번호와 굵은 제목, 바로 다음 줄의 원문 링크로 구성하고 기사 사이에만 빈 줄 하나를 둔다. 번호 뒤 마침표는 이스케이프해 Discord의 번호 목록으로 해석되지 않도록 한다. 제목에 링크를 숨기지 않는다. `cron.wrap_response: false`로 정상 브리핑 앞의 예약명·ID와 끝의 관리 안내를 생략한다. 기본 Bot 메시지를 사용하며, 긴 본문은 Hermes가 분할하고 `(1/2)`처럼 순서를 붙인다. 현재 분할은 줄바꿈 기준이므로 제목과 링크가 다른 메시지로 나뉠 수 있다.
+- **수집 범위:** TechNode 50·GeekNews 50·보안뉴스 50·토스 테크 20개 피드 항목 안에서 새 글을 판별한다. 최초 실행은 최근 24시간, 발행일 없는 항목은 기존 코드 규칙을 따른다. 피드에서 밀려난 글은 누락될 수 있다.
+- **중복 기준:** 사이트별 URL 이력이다. 다른 URL의 같은 사건까지 합치지는 않는다. 성공 전달 전에는 상태를 갱신하지 않고, 새 글 없는 정상 생략은 바로 이력을 갱신한다.
+- **확인 대기:** 준비와 전송 사이에 장애가 발생하면 불명확한 회차를 보류한다. 완전한 1회 전달을 보장한다고 쓰지 않는다. 다음 수집이 멈추는 것은 중복 발송을 피하기 위한 동작이다.
+- **버전:** 연결 파일의 전달 확인은 현재 검토한 Hermes v0.22.5의 `executions.db`·`deliveries.db` 읽기 구조를 사용한다. Hermes 업데이트 후에는 미리보기·일회성 수신·전달 확인을 다시 검증한다. 기록 구조가 달라지면 이력을 갱신하지 않고 중단한다.
+- **원본 보존:** 공개 레포는 새 폴더에 클론하고 원본 소스·기존 프로젝트 상태는 수정하거나 가져오지 않는다. 새 `/opt/data`와 `workspace/02_it-news-briefing`을 함께 백업한다.
 
-<strong>코드 검증:</strong> 공개 레포의 핵심 파일과 Hermes v0.22.5의 CLI·전달 기록 구조를 대조했다. 연결 파일은 전달 확인 성공·실패·본문 불일치·잘못된 대상·미리보기·번역 누락·새 글 없음·허용 경로 번역·완료 후 비워진 전달 기록·저장 응답 불일치의 10가지 경우를 임시 데이터로 시험했다. 네 SOURCE의 제목과 링크 줄이 분리되고 URL 순서·건수가 유지되는 것도 확인했다. 외부 제목의 멘션·미디어 지시는 그대로 실행되지 않도록 표시를 정리했다.
+**코드 검증:** 공개 레포의 핵심 파일과 Hermes v0.22.5의 CLI·전달 기록 구조를 대조했다. 연결 파일은 전달 확인 성공·실패·본문 불일치·잘못된 대상·미리보기·번역 누락·새 글 없음·허용 경로 번역·완료 후 비워진 전달 기록·저장 응답 불일치의 10가지 경우를 임시 데이터로 시험했다. 네 SOURCE의 제목과 링크 줄이 분리되고 URL 순서·건수가 유지되는 것도 확인했다. 외부 제목의 멘션·미디어 지시는 그대로 실행되지 않도록 표시를 정리했다.
 
-<strong>실제 구성에서 확인:</strong> it-news Profile과 IT-News-Briefing Bot의 연결, GeekNews 일회성 시험 50건과 보안뉴스 정기 브리핑 23건의 수신을 확인했다. 해당 실행의 전달 완료 기록과 저장된 본문을 대조한 뒤 URL 이력을 반영했다. TechNode는 번역 저장 경로 오류를 수정한 뒤 실제 7건의 한국어 제목 번역 저장과 미리보기 생성을 확인했다. 기존 파일의 전체 내용을 읽기 전에 덮어쓰지 않도록 보호 절차를 보완했으며, 정기 예약의 Gateway·Bot 전달 확인은 남아 있다. 새 표시 형식은 실제 수집 데이터를 사용한 본문 생성까지 확인했고, Discord에서의 최종 표시는 다음 수신 때 확인한다. 이 확인 결과만으로 네 사이트의 모든 실습이 완료됐다고 판단하지 않는다.
+**실제 구성에서 확인:** it-news Profile과 IT-News-Briefing Bot의 연결, GeekNews 일회성 시험 50건과 보안뉴스 정기 브리핑 23건의 수신을 확인했다. 해당 실행의 전달 완료 기록과 저장된 본문을 대조한 뒤 URL 이력을 반영했다. TechNode는 번역 저장 경로 오류를 수정한 뒤 실제 7건의 한국어 제목 번역 저장과 미리보기 생성을 확인했다. 기존 파일의 전체 내용을 읽기 전에 덮어쓰지 않도록 보호 절차를 보완했으며, 정기 예약의 Gateway·Bot 전달 확인은 남아 있다. 새 표시 형식은 실제 수집 데이터를 사용한 본문 생성까지 확인했고, Discord에서의 최종 표시는 다음 수신 때 확인한다. 이 확인 결과만으로 네 사이트의 모든 실습이 완료됐다고 판단하지 않는다.
 
 - [ ] 전용 IT News Bot이 it-news Profile에 연결됨
 - [ ] SOURCE 네 종류의 미리보기와 TechNode 전체 제목 번역 확인

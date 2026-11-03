@@ -15,11 +15,9 @@ aliases:
   - /posts/hermes-agent-02-atlas/
 ---
 
-> <strong>문서 상태: Part 2 독립 실습 초안 · 완전 초기 설치판 Part 1의 후속 절차.</strong> Part 1에서 새로 만든 atlas Profile·공통 Gateway·Codex OAuth·Atlas Bot의 실제 응답 검증을 마친 뒤 진행한다.
-
 ## 1. Part 2의 목표와 범위
 
-Part 1에서 Docker 설치, ChatGPT Plus Codex OAuth 연결과 Discord 기본 응답까지 확인했다. 이번에는 이미 연결된 비서를 <strong>Atlas 메인 비서</strong>로 정의한다.
+Part 1에서 Docker 설치, ChatGPT Plus Codex OAuth 연결과 Discord 기본 응답까지 확인했다. 이번에는 이미 연결된 비서를 **Atlas 메인 비서**로 정의한다.
 
 - Part 1에서 연결한 Discord `#01_atlas`와 Atlas Bot을 유지한다.
 - Part 1에서 처음부터 생성한 `atlas` Profile과 `/opt/data/profiles/atlas/SOUL.md`를 사용한다.
@@ -39,7 +37,7 @@ Atlas: 요청 접수 → 목표·범위 확인 → 계획과 실행
 향후 확장: 업무별 Profile·도구·작업 흐름을 필요에 따라 추가
 ```
 
-<strong>이번 단계의 완료 기준:</strong> Atlas가 자신의 역할과 권한을 일관되게 설명하고, 간단한 요청은 직접 처리하며, 수행하지 않은 도구 작업이나 미구축 전문 비서의 실행을 꾸며내지 않는다. SOUL 작성만으로 자동 위임·예약·외부 서비스 연동이 구성되는 것은 아니다.
+**이번 단계의 완료 기준:** Atlas가 자신의 역할과 권한을 일관되게 설명하고, 간단한 요청은 직접 처리하며, 수행하지 않은 도구 작업이나 미구축 전문 비서의 실행을 꾸며내지 않는다. SOUL 작성만으로 자동 위임·예약·외부 서비스 연동이 구성되는 것은 아니다.
 
 메인 채널은 Part 1에서 준비한 `#01_atlas`이고, Atlas Bot은 `atlas` Profile에만 연결한다.
 
@@ -68,13 +66,13 @@ docker compose exec -T --user 10000:10000 hermes \
 
 ## 3. Atlas의 역할과 설정 파일 구분
 
-<strong>메인 비서의 역할:</strong> 사용자의 요청을 이해하고, 필요한 경우에만 짧은 계획을 세우며, 실행 가능한 작업을 처리한 뒤 결과와 남은 일을 알려 준다. 답을 바로 낼 수 있는 질문까지 전문 비서에게 넘기지 않는다.
+**메인 비서의 역할:** 사용자의 요청을 이해하고, 필요한 경우에만 짧은 계획을 세우며, 실행 가능한 작업을 처리한 뒤 결과와 남은 일을 알려 준다. 답을 바로 낼 수 있는 질문까지 전문 비서에게 넘기지 않는다.
 
-<strong>구성 원칙:</strong> 현재 확정된 비서는 메인 비서 Atlas 하나다. 서브 전문 비서의 분야·이름·역할·개수·구성은 아직 정하지 않는다. Atlas는 요청을 직접 처리하고, 추후 실제로 구성된 전문 비서가 있을 때만 필요에 따라 활용한다.
+**구성 원칙:** 현재 확정된 비서는 메인 비서 Atlas 하나다. 서브 전문 비서의 분야·이름·역할·개수·구성은 아직 정하지 않는다. Atlas는 요청을 직접 처리하고, 추후 실제로 구성된 전문 비서가 있을 때만 필요에 따라 활용한다.
 
-<strong>판단 기준:</strong> 요청이 명확하고 되돌릴 수 있는 일상 작업은 승인된 범위에서 진행한다. 필수 정보가 없거나 되돌리기 어려운 변경·외부 게시·새 권한이 필요하면 구체적인 결과물 또는 변경안을 먼저 준비하고 필요한 부분만 확인한다.
+**판단 기준:** 요청이 명확하고 되돌릴 수 있는 일상 작업은 승인된 범위에서 진행한다. 필수 정보가 없거나 되돌리기 어려운 변경·외부 게시·새 권한이 필요하면 구체적인 결과물 또는 변경안을 먼저 준비하고 필요한 부분만 확인한다.
 
-<strong>결과에 대한 책임:</strong> 이외 전문 비서를 사용하더라도 Atlas가 결과를 확인하고 사용자에게 보고한다. 설정되어 있지 않은 Profile이나 사용할 수 없는 도구를 호출한 것처럼 말하지 않는다.
+**결과에 대한 책임:** 이외 전문 비서를 사용하더라도 Atlas가 결과를 확인하고 사용자에게 보고한다. 설정되어 있지 않은 Profile이나 사용할 수 없는 도구를 호출한 것처럼 말하지 않는다.
 
 - `SOUL.md`: Atlas의 정체성, 말투, 지속적인 판단·소통 원칙.
 - `config.yaml`: 모델, 작업 시작 폴더, 도구와 승인 동작 등 실제 설정.
@@ -85,7 +83,7 @@ Atlas를 `-p atlas`로 선택하면 `/opt/data/profiles/atlas/SOUL.md`를 읽는
 
 ## 4. Atlas `SOUL.md` 권장 초안
 
-기존 초안의 한국어 우선, 근거·불확실성 보고, 공식 기술 문서 우선, 원본 보존 원칙을 유지한다. `credentials use`를 포괄적으로 승인 대상으로 두던 문구는 <strong>기존 연결의 허용된 사용</strong>과 <strong>새 인증·권한 확대</strong>로 구체화한다. 간단한 요청 직접 처리와 위임 후 검증 책임도 추가한다.
+기존 초안의 한국어 우선, 근거·불확실성 보고, 공식 기술 문서 우선, 원본 보존 원칙을 유지한다. `credentials use`를 포괄적으로 승인 대상으로 두던 문구는 **기존 연결의 허용된 사용**과 **새 인증·권한 확대**로 구체화한다. 간단한 요청 직접 처리와 위임 후 검증 책임도 추가한다.
 
 아래는 검토 후 적용할 권장안이다. 특정 전문 비서의 명단이나 개별 프로젝트 절차를 고정하지 않는다. 실제 계정명·토큰·서버 ID·작업별 스케줄도 넣지 않는다.
 
@@ -128,7 +126,7 @@ If a tool or service is unavailable, explain the limit and offer a practical nex
 
 ## 5. SOUL 백업·적용
 
-<strong>아래 블록 전체를 한 번에 복사해 Mac 터미널에서 실행</strong>한다. 기존 SOUL과 설정을 자동으로 백업한 다음 새 SOUL을 적용하고, 저장된 내용까지 확인한다. 별도 파일 저장이나 수동 비교는 필요 없다.
+**아래 블록 전체를 한 번에 복사해 Mac 터미널에서 실행**한다. 기존 SOUL과 설정을 자동으로 백업한 다음 새 SOUL을 적용하고, 저장된 내용까지 확인한다. 별도 파일 저장이나 수동 비교는 필요 없다.
 
 ```bash
 cd "$HOME/Projects/hermes-agent"
@@ -184,7 +182,7 @@ If a tool or service is unavailable, explain the limit and offer a practical nex
 EOF
 ```
 
-<strong>정상 결과:</strong> `Atlas SOUL 적용 완료`와 `백업 위치: /opt/data/profiles/atlas/backups/atlas-...`가 출력된다. 출력된 백업 위치만 확인한다.
+**정상 결과:** `Atlas SOUL 적용 완료`와 `백업 위치: /opt/data/profiles/atlas/backups/atlas-...`가 출력된다. 출력된 백업 위치만 확인한다.
 
 ![Atlas 구축 실습 화면 02](step-02.png)
 
@@ -194,7 +192,7 @@ EOF
 
 ## 6. Hermes 시간을 한국 시간으로 설정
 
-Atlas가 날짜와 시간을 <strong>한국 시간(KST)</strong> 기준으로 다루도록 설정한다. 아래 블록을 그대로 실행하면 된다.
+Atlas가 날짜와 시간을 **한국 시간(KST)** 기준으로 다루도록 설정한다. 아래 블록을 그대로 실행하면 된다.
 
 ```bash
 cd "$HOME/Projects/hermes-agent"
@@ -228,7 +226,7 @@ docker compose exec -T --user 10000:10000 hermes \
 
 
 
-SOUL 변경은 <strong>새 세션</strong>에서 확인한다. 재시작만으로 모든 기존 대화 문맥이 새로 만들어진다고 가정하지 않는다. Discord의 새 대화 기능을 사용할 때는 보존할 기존 대화와 확인 안내를 먼저 살핀다. CLI의 새 단발성 대화로 역할을 먼저 시험할 수 있다.
+SOUL 변경은 **새 세션**에서 확인한다. 재시작만으로 모든 기존 대화 문맥이 새로 만들어진다고 가정하지 않는다. Discord의 새 대화 기능을 사용할 때는 보존할 기존 대화와 확인 안내를 먼저 살핀다. CLI의 새 단발성 대화로 역할을 먼저 시험할 수 있다.
 
 ```bash
 docker compose exec -T --user 10000:10000 hermes \
@@ -240,7 +238,7 @@ docker compose exec -T --user 10000:10000 hermes \
 
 
 
-Discord <strong>#01\_atlas</strong>에서 `@Atlas 네 역할과 업무 처리 원칙을 알려줘`를 입력한다. 기존에 멘션 없는 응답이 되었다면 그 설정을 유지한다. [공식 Discord](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/discord)
+Discord **#01\_atlas**에서 `@Atlas 네 역할과 업무 처리 원칙을 알려줘`를 입력한다. 기존에 멘션 없는 응답이 되었다면 그 설정을 유지한다. [공식 Discord](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/discord)
 
 ![Atlas 구축 실습 화면 06](step-06.png)
 
@@ -249,7 +247,7 @@ Discord <strong>#01\_atlas</strong>에서 `@Atlas 네 역할과 업무 처리 �
 ## 8. 시리즈 진행 순서와 확장 원칙
 
 1. [Part 1 — Mac mini Docker로 Hermes Agent 설치하기](/posts/01-docker-setup/): Docker 설치, 모델 인증과 Discord 기본 응답을 확인한다.
-2. <strong>Part 2 — 메인 비서 Atlas 구축하기</strong>: 현재 글. 정체성·승인·업무 처리와 검증 원칙을 확립한다.
+2. **Part 2 — 메인 비서 Atlas 구축하기**: 현재 글. 정체성·승인·업무 처리와 검증 원칙을 확립한다.
 3. [Part 3 — IT 뉴스클리핑 비서 구축하기](/posts/03-it-news-briefing/): 별도 Profile과 Bot으로 뉴스 수집·정기 발송을 구성한다.
 4. [Part 4 — 채용·구직 비서 Scout 구축하기](/posts/04-job-assistant/): 채용·구직 업무를 위한 전용 비서를 구성한다.
 
