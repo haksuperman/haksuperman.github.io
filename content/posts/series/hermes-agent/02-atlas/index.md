@@ -241,14 +241,3 @@ docker compose exec -T --user 10000:10000 hermes \
 Discord **#01\_atlas**에서 `@Atlas 네 역할과 업무 처리 원칙을 알려줘`를 입력한다. 기존에 멘션 없는 응답이 되었다면 그 설정을 유지한다. [공식 Discord](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/discord)
 
 ![Atlas 구축 실습 화면 06](step-06.png)
-
-
-
-## 8. 시리즈 진행 순서와 확장 원칙
-
-1. [Part 1 — Mac mini Docker로 Hermes Agent 설치하기](/posts/01-docker-setup/): Docker 설치, 모델 인증과 Discord 기본 응답을 확인한다.
-2. **Part 2 — 메인 비서 Atlas 구축하기**: 현재 글. 정체성·승인·업무 처리와 검증 원칙을 확립한다.
-3. [Part 3 — IT 뉴스클리핑 비서 구축하기](/posts/03-it-news-briefing/): 별도 Profile과 Bot으로 뉴스 수집·정기 발송을 구성한다.
-4. [Part 4 — 채용·구직 비서 Scout 구축하기](/posts/04-job-assistant/): 채용·구직 업무를 위한 전용 비서를 구성한다.
-
-이 단계에서 정의하는 비서는 Atlas뿐이다. 전문 비서는 별도로 구성하고 검증한 뒤에 활용한다. SOUL에 역할을 적는 것만으로 전문 비서나 자동 위임 기능이 만들어지지는 않는다.
