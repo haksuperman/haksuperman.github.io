@@ -2,6 +2,7 @@
 title: OCI 개발용 가상 머신과 Docker 구성
 linkTitle: 12. OCI VM과 Docker
 date: '2024-12-03T19:46:00+09:00'
+lastmod: '2024-12-03T19:46:00+09:00'
 tags:
 - oci
 - cloud
