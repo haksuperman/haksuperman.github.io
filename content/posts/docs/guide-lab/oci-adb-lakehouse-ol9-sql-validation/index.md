@@ -6,11 +6,6 @@ collection: docs
 docCategory: guide-lab
 tags: ["OCI","Autonomous Database","Lakehouse","Oracle Linux","SQL*Plus"]
 ---
-
-> [Notion 원문](https://app.notion.com/p/4159263dda2e80c59234e63ea7d33143)
-
-> ☝🏼
-> 
 > **목표:** 
 > Oracle Linux 9 Compute VM에서 OCI Autonomous Database(Lakehouse)에 Wallet 기반 mTLS로 접속하고 SQL 실행을 검증한다.
 
@@ -57,10 +52,7 @@ Oracle Linux 9 Compute VM
 ADB의 Access Type은 엔드포인트 종류와 OL9 VM의 접속 경로를 결정한다. 세 선택지 모두 인증서 기반 SSL/TLS를 사용하지만, Public/Private Endpoint와 접근 제어 방식이 다르다.
 
 
-> 💡
-> 
-> **이 문서의 선택:**
-> 
+> [!NOTE] **이 문서의 선택:**
 > 이 가이드에서는 ADB Private Endpoint를 DB 서비스의 접속 지점으로 구성하므로 **DB용 Private Subnet을 선택한다.** 선택한 DB용 Subnet의 CIDR에서 Private Endpoint IP가 할당되며, OL9 VM은 OL9용 Subnet에서 VCN Local Routing을 통해 해당 Endpoint에 접속한다.
 
 
@@ -73,8 +65,7 @@ ADB의 Access Type은 엔드포인트 종류와 OL9 VM의 접속 경로를 결�
 | **Private endpoint access only** | 선택한 VCN/Subnet의 Private IP/hostname | 지정 VCN·Peered VCN·연결된 On-premises 경로와 NSG/Security List로 제어 | VCN Local Routing, LPG/DRG/Peering → Private Endpoint |
 
 
-> 💡
-> 
+> [!NOTE]
 > ADB는 선택한 **Access Type에 따라 생성되는 엔드포인트, 허용되는 접속 출발지, OL9 VM에서 ADB까지의 접근 경로가 달라진다.** 
 > 따라서 먼저 현재 Access Type을 확인한 후 해당 방식에 맞는 접속 경로를 구성해야 한다. 
 > 아래 3.2~3.4에서는 각 Access Type별 접근 방식과 확인 항목을 구분하여 설명한다.
@@ -171,8 +162,7 @@ Private Endpoint는 선택한 DB용 Subnet의 VNIC에 연결되므로 Endpoint �
 | OL9 NSG 또는 Subnet Security List | Egress | ADB Endpoint NSG, Private IP 또는 DB Subnet CIDR | TCP 1522 |
 
 
-> ⚠️
-> 
+> [!WARNING]
 > Stateful 규칙을 권장한다. TLS-only 구성은 실제 접속 문자열에 따라 1521 또는 1522를 사용하므로 Wallet의 `tnsnames.ora`에 기재된 포트를 기준으로 설정한다.
 
 
@@ -189,8 +179,7 @@ Private Endpoint는 선택한 DB용 Subnet의 VNIC에 연결되므로 Endpoint �
 [Oracle 공식 문서 — Configure Private Endpoints](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/private-endpoints-autonomous.html)
 
 
-> ⚠️
-> 
+> [!WARNING]
 > Wallet에 포함되는 접속 정보는 ADB의 Endpoint 구성에 따라 달라진다. 
 > 따라서 Access Type을 변경하여 Public Endpoint와 Private Endpoint 사이를 전환했다면, 변경 완료 후 **접속에 사용할 Wallet을 다시 다운로드하여 OL9 VM에 배포해야 한다.**
 > 
@@ -263,8 +252,7 @@ SSL_SERVER_DN_MATCH=yes
 ![ADB 접속 및 SQL 실행 검증 화면 4](screenshot-04.png)
 
 
-> ⚠️
-> 
+> [!INFO]
 > 사용하는 Oracle Client 버전과 Wallet 유형에 따라 경로 설정 방식이 다를 수 있으므로 다운로드된 `sqlnet.ora`의 기존 내용을 먼저 확인한다.
 
 
@@ -286,8 +274,7 @@ echo 'export TNS_ADMIN=/home/opc/adb_wallet/<ADB_NAME>' >> ~/.bashrc
 ![ADB 접속 및 SQL 실행 검증 화면 6](screenshot-06.png)
 
 
-> ⚠️
-> 
+> [!INFO]
 > `~/.bashrc` 설정은 opc 사용자의 Bash 셸에 적용된다. 
 > 별도의 systemd 서비스나 다른 계정으로 실행하는 프로그램은 해당 실행 환경에 별도로 설정해야 한다.
 
@@ -348,8 +335,7 @@ grep -Ei 'host|port|service_name'   "$TNS_ADMIN/tnsnames.ora"
 ![ADB 접속 및 SQL 실행 검증 화면 13](screenshot-13.png)
 
 
-> 📖
-> 
+> [!INFO]
 > **ADB 접속 서비스별 차이**
 > 
 > | 서비스 | 실행 특성 | 동시성 | 주요 용도 |
@@ -412,8 +398,7 @@ echo "$TNS_ADMIN"
 Access Type이나 Wallet을 변경했거나 DNS·네트워크 문제를 진단하는 경우에만 6번의 hostname, 포트, DNS 및 TCP 점검을 다시 수행한다.
 
 
-> ⚠️
-> 
+> [!WARNING]
 > **ORA-12506:** ADB 리스너까지 도달했지만 실제 출발지가 Service ACL과 일치하지 않는 상태다. **Secure access from allowed IPs and VCNs only**에서 주로 확인하며, Wallet이나 DB 암호보다 Access Type·Route Table·ACL 값을 먼저 점검한다.
 > 
 > [Oracle 공식 문서 — ORA-12506](https://docs.oracle.com/en/error-help/db/ora-12506/)
@@ -505,8 +490,7 @@ DROP TABLE OL9_CONNECTION_TEST PURGE;
 ![ADB 접속 및 SQL 실행 검증 화면 20](screenshot-20.png)
 
 
-> ⚠️
-> 
+> [!INFO]
 > Oracle DDL은 암시적 COMMIT을 발생시킨다. 
 > `ROLLBACK`은 INSERT 행을 취소하지만 CREATE TABLE은 취소하지 않으므로 `DROP TABLE ... PURGE`가 필요하다.
 
