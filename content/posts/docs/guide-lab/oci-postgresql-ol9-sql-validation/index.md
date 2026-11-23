@@ -6,11 +6,6 @@ collection: docs
 docCategory: guide-lab
 tags: ["OCI","PostgreSQL","Oracle Linux","TLS","psql"]
 ---
-
-> [Notion 원문](https://app.notion.com/p/40f9263dda2e81529adfc3ca411ee87c)
-
-> ☝🏼
-> 
 > **목표:** Oracle Linux 9 Compute VM에서 OCI Database with PostgreSQL로 TLS 접속하고 SQL 실행을 검증한다.
 
 
@@ -122,8 +117,7 @@ openssl x509   -in /home/opc/.postgresql/CaCertificate-psql17.pub   -noout -subj
 ![PostgreSQL 접속 및 SQL 실행 검증 화면 3](screenshot-03.png)
 
 
-> 🔐
-> 
+> [!INFO]
 > OCI Database with PostgreSQL은 SSL 연결만 허용한다. 운영 수준의 검증에는 서버 인증서 체인과 호스트 이름을 모두 확인하는 `sslmode=verify-full`을 사용한다.
 
 
@@ -345,8 +339,7 @@ openssl x509 -in /home/opc/.postgresql/oci-db-system-ca.pem -noout -subject -iss
 ```
 
 
-> ⚠️
-> 
+> [!IMPORTANT]
 > 문제 해결을 위해 `sslmode=disable`로 낮추지 않는다. OCI Database with PostgreSQL은 비SSL 연결을 지원하지 않는다. 일시적으로 `require`를 사용해 인증서 문제와 네트워크 문제를 분리 진단할 수는 있지만, 최종 성공 판정은 반드시 `verify-full`로 수행한다.
 
 
