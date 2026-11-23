@@ -7,7 +7,7 @@ docCategory: guide-lab
 tags: ["OCI","Autonomous Database","Lakehouse","Oracle Linux","SQL*Plus"]
 ---
 
-> 이 문서는 [Notion 원문](https://app.notion.com/p/4159263dda2e80c59234e63ea7d33143)의 기술 절차를 Markdown으로 옮긴 글입니다. 원문 스크린샷 23장은 현재 포함되어 있지 않으며, 화면 예시는 원문에서 확인할 수 있습니다.
+> [Notion 원문](https://app.notion.com/p/4159263dda2e80c59234e63ea7d33143)의 기술 절차를 옮겼습니다. 스크린샷 23장은 포함되지 않아 원문에서 확인할 수 있습니다.
 
 **☝🏼 참고 / 주의**
 
@@ -17,6 +17,124 @@ Oracle Linux 9 Compute VM에서 OCI Autonomous Database(Lakehouse)에 Wallet 기
 
 
 ---
+
+
+---
+
+
+# 1. 구성 개요
+
+```txt
+Oracle Linux 9 Compute VM
+  └─ Oracle Instant Client / SQL*Plus
+       └─ Private network / TCP 1522 / mTLS
+            └─ OCI Autonomous Database (Lakehouse)
+```
+
+이 문서는 Private Endpoint와 Wallet 기반 mTLS를 기준으로 한다. Public Endpoint 또는 TLS-only 환경에서는 ADB의 실제 Network 및 Database connection 설정을 우선한다.
+
+| 구분 | 플레이스홀더 |
+| --- | --- |
+| OCI 리전/Compartment | `<REGION> / <COMPARTMENT_NAME>` |
+| VM 이름/IP/NSG | `<OL9_VM_NAME> / <OL9_VM_PRIVATE_IP> / <OL9_VM_NSG>` |
+| ADB 표시 이름 | `<ADB_DISPLAY_NAME>` |
+| Database Name | `<ADB_DATABASE_NAME>` |
+| Workload Type | `Lakehouse` |
+| Access Type | `Private Endpoint / Public Endpoint` |
+| ADB 호스트/포트 | `<ADB_HOST> / 1522` |
+| ADB NSG | `<ADB_NSG>` |
+| 접속 사용자 | `<ADB_USER>` |
+| TNS Alias | `<TNS_ALIAS>` |
+| Wallet 경로 | `/home/opc/adb_wallet/<ADB_NAME>` |
+
+# 2. 사전 준비 및 주의사항
+
+- ADB가 `AVAILABLE` 상태여야 한다.
+- OL9 VM에 SSH 접속할 수 있어야 한다.
+- Private Endpoint 사용 시 VM과 ADB 사이의 사설 경로가 준비되어야 한다.
+- Database connection에서 **Mutual TLS authentication required** 여부를 확인한다.
+- DB 사용자 암호와 Wallet 암호를 구분한다.
+- Wallet 파일과 암호를 문서·Git·공용 저장소에 노출하지 않는다.
+- `high`, `medium`, `low` 등의 TNS Alias 중 관리자가 지정한 서비스를 사용한다.
+
+
+# 3. Access Type별 네트워크 및 보안 규칙
+
+ADB의 Access Type은 엔드포인트 종류와 OL9 VM의 접속 경로를 결정한다. 세 선택지 모두 인증서 기반 SSL/TLS를 사용하지만, Public/Private Endpoint와 접근 제어 방식이 다르다.
+
+
+**💡 참고 / 주의**
+
+
+**이 문서의 선택:**
+
+이 가이드에서는 ADB Private Endpoint를 DB 서비스의 접속 지점으로 구성하므로 **DB용 Private Subnet을 선택한다.** 선택한 DB용 Subnet의 CIDR에서 Private Endpoint IP가 할당되며, OL9 VM은 OL9용 Subnet에서 VCN Local Routing을 통해 해당 Endpoint에 접속한다.
+
+
+## 3.1 Access Type 비교
+
+| Access Type | ADB 엔드포인트 | 접근 제어 | OL9 VM의 대표 접속 경로 |
+| --- | --- | --- | --- |
+| **Secure access from everywhere** | Public IP/hostname | 모든 IP에서 접근 가능. 별도 ACL 없음 | Service Gateway, NAT Gateway 또는 Internet Gateway → Public Endpoint |
+| **Secure access from allowed IPs and VCNs only** | Public IP/hostname | 지정한 공인 IP/CIDR 또는 Service Gateway를 사용하는 VCN만 ACL로 허용 | 허용 VCN은 Service Gateway, 허용 공인 IP는 NAT/Internet Gateway → Public Endpoint |
+| **Private endpoint access only** | 선택한 VCN/Subnet의 Private IP/hostname | 지정 VCN·Peered VCN·연결된 On-premises 경로와 NSG/Security List로 제어 | VCN Local Routing, LPG/DRG/Peering → Private Endpoint |
+
+
+**💡 참고 / 주의**
+
+
+ADB는 선택한 **Access Type에 따라 생성되는 엔드포인트, 허용되는 접속 출발지, OL9 VM에서 ADB까지의 접근 경로가 달라진다.**   
+따라서 먼저 현재 Access Type을 확인한 후 해당 방식에 맞는 접속 경로를 구성해야 한다.   
+아래 3.2~3.4에서는 각 Access Type별 접근 방식과 확인 항목을 구분하여 설명한다.
+
+
+## 3.2 Secure access from everywhere
+
+ADB에 Public Endpoint가 생성되고 모든 출발 IP가 허용된다. ADB ACL 조건은 없지만 OL9 VM에서 Public Endpoint까지의 네트워크 경로는 필요하다.
+
+| OL9 VM 위치 | 필요한 경로 | ADB ACL |
+| --- | --- | --- |
+| Private Subnet | Service Gateway 또는 NAT Gateway | 없음 |
+| Public Subnet + VM Public IP | Internet Gateway | 없음 |
+
+### 필요한 네트워크 보안 설정
+
+Public Endpoint가 사용자 VCN 안에 생성되는 방식이 아니므로 ADB Endpoint용 Ingress NSG/Security List는 작성하지 않는다.
+
+| 적용 위치 | 방향 | 허용 대상 | 포트 |
+| --- | --- | --- | --- |
+| OL9 NSG 또는 Subnet Security List | Egress | 실제 경로의 Public Endpoint 또는 Oracle Services Network  
+(일반적으로 `0.0.0.0/0 -> All Protocols` Egress 허용) | TCP 1522 |
+| ADB ACL | 해당 없음 | 별도 ACL 없음 | 해당 없음 |
+
+Stateful Egress 규칙을 사용하는 경우 응답 트래픽을 위한 별도 Ingress 규칙은 일반적으로 필요하지 않다.
+
+보안상 접근 출발지를 제한해야 하는 운영 환경에서는 **Secure access from allowed IPs and VCNs only** 또는 **Private endpoint access only**를 검토한다.
+
+## 3.3 Secure access from allowed IPs and VCNs only
+
+ADB에 Public Endpoint가 생성되며 ACL에 등록된 출발지만 허용된다.
+
+| ACL 등록 방식 | OL9 VM의 필수 접속 경로 | ACL에 입력할 값 |
+| --- | --- | --- |
+| Virtual Cloud Network | Service Gateway → Oracle Services Network | OL9 VM이 속한 VCN OCID. 필요하면 Private IP/Subnet CIDR 추가 제한 |
+| IP address/CIDR | Private Subnet → NAT Gateway | OCI NAT Gateway의 Public IP/CIDR |
+| IP address/CIDR | Public Subnet → Internet Gateway | OL9 VM VNIC의 Public IP/CIDR |
+
+VCN OCID 허용은 트래픽이 Service Gateway를 통해 전달될 때 사용한다.
+
+```txt
+Destination: All Seoul Region Services in Oracle Services Network
+Target:      Service Gateway
+```
+
+Service Gateway가 없고 **0.0.0.0/0 → NAT Gateway**만 있다면 ADB에는 NAT Gateway의 공인 IP가 출발지로 보인다.   
+이 경우 같은 VCN의 VM이어도 VCN OCID가 아니라 NAT Gateway Public IP를 ACL에 허용해야 한다.
+
+### 필요한 네트워크 보안 설정
+
+Public Endpoint 방식이므로 ADB Endpoint용 Ingress NSG/Security List는 작성하지 않는다.   
+ADB ACL 값과 OL9의 실제 Egress 경로가 서로 일치해야 한다.
 
 
 | 실제 경로 | ADB ACL에 허용할 값 | OL9 NSG/Security List Egress |
