@@ -59,19 +59,9 @@ body:has(.documentation-layout) {
 }
 
 .compact-toc {
+  border-block: 1px solid rgba(148, 163, 184, 0.25);
   margin: 1.25rem 0 2rem;
-}
-
-.compact-toc .compact-toc__title {
-  color: #111827;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.5;
-  margin: 0 0 1rem;
-}
-
-.dark .compact-toc .compact-toc__title {
-  color: #f3f4f6;
+  padding-block: 0.75rem;
 }
 
 .compact-toc nav {

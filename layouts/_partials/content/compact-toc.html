@@ -1,8 +1,7 @@
 {{- if and .IsPage .Fragments.Headings (ne .Params.toc false) -}}
   {{- $toc := .TableOfContents -}}
   {{- if strings.Contains (string $toc) "<a " -}}
-    <section class="compact-toc" aria-labelledby="compact-toc-title">
-      <p class="compact-toc__title" id="compact-toc-title">{{ (T "onThisPage") | default "On this page" }}</p>
+    <section class="compact-toc" aria-label="{{ (T "tableOfContents") | default "Table of contents" }}">
       {{ $toc }}
     </section>
   {{- end -}}
