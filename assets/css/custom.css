@@ -64,12 +64,6 @@ body:has(.documentation-layout) {
   padding-block: 0.75rem;
 }
 
-.compact-toc nav {
-  max-height: min(50vh, 24rem);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-
 .compact-toc ul {
   list-style: none;
   margin: 0;
