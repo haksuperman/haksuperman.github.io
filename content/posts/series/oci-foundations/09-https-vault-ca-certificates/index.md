@@ -1,6 +1,6 @@
 ---
 title: OCI Vault와 CA 인증서를 이용한 HTTPS 구성
-linkTitle: 10. OCI Vault와 CA 인증서를 이용한 HTTPS 구성
+linkTitle: 11. OCI Vault와 CA 인증서를 이용한 HTTPS 구성
 date: '2024-06-21T20:02:00+09:00'
 tags:
 - oci
@@ -15,7 +15,7 @@ sourceStatus: needs-review
 draft: false
 collection: series
 seriesId: oci-foundations
-seriesOrder: 100
+seriesOrder: 110
 aliases:
 - /series/oci-foundations/09-https-vault-ca-certificates/
 - /posts/oci12/

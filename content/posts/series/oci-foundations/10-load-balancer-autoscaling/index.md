@@ -1,6 +1,6 @@
 ---
 title: Load Balancer와 Auto Scaling 구성
-linkTitle: 11. Load Balancer와 Auto Scaling 구성
+linkTitle: 12. Load Balancer와 Auto Scaling 구성
 date: '2024-06-28T23:27:00+09:00'
 tags:
 - oci
@@ -14,7 +14,7 @@ sourceStatus: needs-review
 draft: false
 collection: series
 seriesId: oci-foundations
-seriesOrder: 110
+seriesOrder: 120
 aliases:
 - /series/oci-foundations/10-load-balancer-autoscaling/
 - /posts/oci13/

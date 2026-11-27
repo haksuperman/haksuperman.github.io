@@ -1,6 +1,6 @@
 ---
 title: OCI에 접근하는 방법
-linkTitle: OCI 접근 방법
+linkTitle: 02. OCI 접근 방법
 date: '2024-06-11T20:11:00+09:00'
 tags:
 - oci
@@ -11,11 +11,12 @@ tags:
 - ocicli
 - managementconsole
 draft: false
-collection: docs
-docCategory: command-tool
 aliases:
 - /docs/command-tool/oci-access-methods/
 - /posts/oci02/
+collection: series
+seriesId: oci-foundations
+seriesOrder: 20
 ---
 ## 1. Oracle Cloud Console
 

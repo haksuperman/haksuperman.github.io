@@ -1,6 +1,6 @@
 ---
 title: Flask, PyMySQL과 Faker 애플리케이션 배포
-linkTitle: 09. Flask, PyMySQL과 Faker 애플리케이션 배포
+linkTitle: 10. Flask, PyMySQL과 Faker 애플리케이션 배포
 date: '2024-06-21T15:30:00+09:00'
 tags:
 - oci
@@ -15,7 +15,7 @@ sourceStatus: needs-review
 draft: false
 collection: series
 seriesId: oci-foundations
-seriesOrder: 90
+seriesOrder: 100
 aliases:
 - /series/oci-foundations/08-flask-application-deployment/
 - /posts/oci11/

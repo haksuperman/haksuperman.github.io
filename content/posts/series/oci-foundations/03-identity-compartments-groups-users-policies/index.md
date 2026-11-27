@@ -1,6 +1,6 @@
 ---
 title: Compartment, Group, User와 Policy 구성
-linkTitle: 04. Compartment, Group, User와 Policy 구성
+linkTitle: 05. Compartment, Group, User와 Policy 구성
 date: '2024-06-16T20:33:00+09:00'
 tags:
 - oci
@@ -15,7 +15,7 @@ sourceStatus: needs-review
 draft: false
 collection: series
 seriesId: oci-foundations
-seriesOrder: 40
+seriesOrder: 50
 aliases:
 - /series/oci-foundations/03-identity-compartments-groups-users-policies/
 - /posts/oci06/

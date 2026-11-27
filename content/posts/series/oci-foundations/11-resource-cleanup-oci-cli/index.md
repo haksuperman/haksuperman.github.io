@@ -1,6 +1,6 @@
 ---
 title: OCI CLI와 Cloud Shell로 리소스 정리
-linkTitle: 12. OCI CLI와 Cloud Shell로 리소스 정리
+linkTitle: 13. OCI CLI와 Cloud Shell로 리소스 정리
 date: '2024-06-29T00:23:00+09:00'
 tags:
 - oci
@@ -13,7 +13,7 @@ sourceStatus: needs-review
 draft: false
 collection: series
 seriesId: oci-foundations
-seriesOrder: 120
+seriesOrder: 130
 aliases:
 - /series/oci-foundations/11-resource-cleanup-oci-cli/
 - /posts/oci14/

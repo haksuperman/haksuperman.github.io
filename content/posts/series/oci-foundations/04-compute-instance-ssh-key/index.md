@@ -1,6 +1,6 @@
 ---
 title: 가상 머신과 SSH 키 생성
-linkTitle: 05. 가상 머신과 SSH 키 생성
+linkTitle: 06. 가상 머신과 SSH 키 생성
 date: '2024-06-18T00:53:00+09:00'
 tags:
 - oci
@@ -14,7 +14,7 @@ sourceStatus: needs-review
 draft: false
 collection: series
 seriesId: oci-foundations
-seriesOrder: 50
+seriesOrder: 60
 aliases:
 - /series/oci-foundations/04-compute-instance-ssh-key/
 - /posts/oci07/

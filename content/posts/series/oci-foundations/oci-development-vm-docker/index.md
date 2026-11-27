@@ -1,6 +1,6 @@
 ---
 title: OCI 개발용 가상 머신과 Docker 구성
-linkTitle: 13. OCI VM과 Docker
+linkTitle: 14. OCI VM과 Docker
 date: '2024-12-03T19:46:00+09:00'
 lastmod: '2024-12-03T19:46:00+09:00'
 tags:
@@ -13,7 +13,7 @@ tags:
 draft: false
 collection: series
 seriesId: oci-foundations
-seriesOrder: 130
+seriesOrder: 140
 aliases:
 - /docs/guide-lab/oci-development-vm-docker/
 - /posts/oci15/

@@ -1,6 +1,6 @@
 ---
 title: OCI Bastion 서비스
-linkTitle: 06. OCI Bastion 서비스
+linkTitle: 07. OCI Bastion 서비스
 date: '2024-06-19T19:29:00+09:00'
 tags:
 - oci
@@ -13,7 +13,7 @@ sourceStatus: needs-review
 draft: false
 collection: series
 seriesId: oci-foundations
-seriesOrder: 60
+seriesOrder: 70
 aliases:
 - /series/oci-foundations/05-bastion-service/
 - /posts/oci08/
