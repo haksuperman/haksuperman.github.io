@@ -37,7 +37,7 @@ ALLOW any-user to manage volume-attachments in TENANCY where request.principal.t
 
 ## 3. PVC(Persistent Volume Claim)
 
-## 3.1. PVC 정의 파일(YAML) 작성
+### 3.1. PVC 정의 파일(YAML) 작성
 1. 사용할 볼륨의 크기와 특성 정의
 2. 파일명 : \<적절한 이름 입력\>  
    (여기서는 csi-bv-pvc.yaml)
@@ -58,7 +58,7 @@ spec:
 
 ![image](OCI25_01.png)
 
-## 3.2. PVC 생성 및 상태 확인
+### 3.2. PVC 생성 및 상태 확인
 
 ```bash
 # PVC 생성
@@ -85,7 +85,7 @@ mynginxclaim   Pending                                      oci-bv         \<uns
 
 ## 4. Pod
 
-## 4.1. 정의 파일(YAML) 작성
+### 4.1. 정의 파일(YAML) 작성
 1. 생성한 PVC를 마운트하여 사용할 파드 생성
 2. 파일명 : \<적절한 이름 입력\>  
    (여기서는 nginx-pod.yaml)
@@ -113,7 +113,7 @@ spec:
 
 ![image](OCI25_04.png)
 
-## 4.2. 파드 생성 및 확인
+### 4.2. 파드 생성 및 확인
 
 ```bash
 # 파드 생성

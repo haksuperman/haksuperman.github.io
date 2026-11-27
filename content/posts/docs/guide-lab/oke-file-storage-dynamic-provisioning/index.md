@@ -17,7 +17,7 @@ aliases:
 - /posts/oci27/
 ---
 ## 1. 개요
-## 1.1. 프로비저닝 방식
+### 1.1. 프로비저닝 방식
 1. 동적 프로비저닝
    1. **새로운 스토리지 클래스(StorageClass)를 정의한 후, 생성한 스토리지 클래스 기반으로 새 PVC를 생성하는 방식**
    2. PVC를 생성할 때 CSI Volume Plugin이 **OCI 내에 새로운 File Storage와 이를 백엔드로 하는 PV를 동적으로 자동 생성**
@@ -35,7 +35,7 @@ aliases:
    1. **OCI Console에서 수동으로 File Storage와 Mount Target을 미리 생성해 두는 방식**
    2. 미리 생성한 File Storage를 백엔드로 하는 PV를 정의하고, 새로운 PVC를 정의하여 PVC와 기존 File Storage를 가리키는 PV를 바인딩
 
-## 1.2. 데이터 암호화
+### 1.2. 데이터 암호화
 
 - 저장 데이터 암호화 (Data At Rest)
   - 기본적으로 'Oracle 관리형 암호화 키'를 통해 암호화 수행
@@ -47,7 +47,7 @@ aliases:
   - Worker Node의 OS가 Oracle Linux 7 혹은 Oracle Linux 8이어야 함
 
 ## 2. IAM
-## 2.1. CSI Volume Plugin의 File Storage 리소스 권한 부여
+### 2.1. CSI Volume Plugin의 File Storage 리소스 권한 부여
 
 ```plaintext
 # File System, Mount Target, Export Path에 대해 생성 및 관리(manage)할 수 있도록 권한 부여
@@ -57,7 +57,7 @@ ALLOW any-user to manage file-family in compartment <compartment-name> where req
 ALLOW any-user to use virtual-network-family in compartment <compartment-name> where request.principal.type = 'cluster'
 ```
 
-## 2.2. (Compartment가 다른 경우) CSI Volume Plugin의 리소스 권한 부여
+### 2.2. (Compartment가 다른 경우) CSI Volume Plugin의 리소스 권한 부여
 
 ```plaintext
 ALLOW any-user to manage file-family in TENANCY where request.principal.type = 'cluster'
@@ -73,7 +73,7 @@ ALLOW any-user to use virtual-network-family in TENANCY where request.principal.
 - File System 동적 생성을 담당할 fss.csi.oraclecloud.com 프로비저너를 사용하는 StorageClass를 신규 정의
 
 
-## 4.1. YAML 매니페스트 파일 작성
+### 4.1. YAML 매니페스트 파일 작성
 
 ```yaml
 kind: StorageClass
@@ -102,7 +102,7 @@ parameters:
   ![image](OCI27_02.png)
 {{< /callout >}}
 
-## 4.2. StorageClass 생성 및 확인
+### 4.2. StorageClass 생성 및 확인
 
 ```bash
 # StorageClass 생성
@@ -129,7 +129,7 @@ Pod Subnet과 통신하는 것이 아닌, WorkerNode Subnet과 통신하는 것
   ![image](OCI27_05.png)
 
 ## 6. PVC
-## 6.1. YAML 매니페스트 파일 작성
+### 6.1. YAML 매니페스트 파일 작성
 
 ```yaml
 apiVersion: v1
@@ -147,7 +147,7 @@ spec:
 
 ![image](OCI27_06.png)
 
-## 6.2. PVC 생성 및 확인
+### 6.2. PVC 생성 및 확인
 
 ```bash
 # PVC 생성
@@ -159,7 +159,7 @@ kubectl get pvc
 
 ![image](OCI27_07.png)
 
-## 6.3. FSS 결과 확인
+### 6.3. FSS 결과 확인
 
 - PVC 생성 시, StorageClass에서 명시한 `provisioner: fss.csi.oraclecloud.com` 에 의해 CSI Volume Plugin은 PV 및 File System을 자동 생성
 - 기존 Mount Target을 지정하지 않은 경우, Mount Target도 함께 자동 생성
@@ -172,7 +172,7 @@ kubectl get pvc
 ![image](OCI27_09.png)
 
 ## 7. Pod
-## 7.1. YAML 매니페스트 파일 작성
+### 7.1. YAML 매니페스트 파일 작성
 
 ```yaml
 apiVersion: v1
@@ -197,7 +197,7 @@ spec:
 
 ![image](OCI27_10.png)
 
-## 7.2. Pod 생성 및 확인
+### 7.2. Pod 생성 및 확인
 
 ```bash
 # Pod 생성

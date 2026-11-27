@@ -29,7 +29,7 @@ ALLOW any-user to manage volume-attachments in TENANCY where request.principal.t
 
 ## 2. StorageClass
 
-## 2.1. StorageClass 정의 파일(YAML) 작성
+### 2.1. StorageClass 정의 파일(YAML) 작성
 - 기본으로 구성되어 있는 oci-bv는 paravirtualized 타입으로 지정되지 않음 → iSCSI 타입으로 Attach
 - paravirtualized 타입이 명시된 신규 StorageClass 생성 필요
 
@@ -48,7 +48,7 @@ allowVolumeExpansion: true
 ![image](OCI26_01.png)
 
 
-## 2.2. StorageClass 생성 및 상태 확인
+### 2.2. StorageClass 생성 및 상태 확인
 
 ```bash
 # StorageClass 생성
@@ -60,7 +60,7 @@ kubectl get sc
 ![image](OCI26_02.png)
 
 ## 3. PVC(Persistent Volume Claim)
-## 3.1. PVC 정의 파일(YAML) 작성
+### 3.1. PVC 정의 파일(YAML) 작성
 1. 사용할 볼륨의 크기와 특성 정의
 2. 파일명 : \<적절한 이름 입력\>  
    (여기서는 csi-bv-pvc.yaml)
@@ -80,7 +80,7 @@ spec:
 ```
 ![image](OCI26_03.png)
 
-## 3.2. PVC 생성 및 상태 확인
+### 3.2. PVC 생성 및 상태 확인
 
 ```bash
 # PVC 생성
@@ -106,7 +106,7 @@ mynginxclaim   Pending                                      oci-bv-paravirtualiz
 {{< /callout >}}
 
 ## 4. Pod
-## 4.1. 정의 파일(YAML) 작성
+### 4.1. 정의 파일(YAML) 작성
 1. 생성한 PVC를 마운트하여 사용할 파드 생성
 2. 파일명 : \<적절한 이름 입력\>  
    (여기서는 nginx-pod.yaml)
@@ -133,7 +133,7 @@ spec:
 ```
 ![image](OCI26_07.png)
 
-## 4.2. 파드 생성 및 확인
+### 4.2. 파드 생성 및 확인
 
 ```bash
 # 파드 생성
@@ -182,7 +182,7 @@ spec:
 - 파드가 위치한 노드에 자동 Attach
 {{< /callout >}}
 
-## 5.1. 볼륨 바인딩(PVC 상태) 확인
+### 5.1. 볼륨 바인딩(PVC 상태) 확인
 
 - Pending 상태가 Bound 상태로 변경되고, 생성된 Block Volume 확인 가능
 
@@ -192,7 +192,7 @@ kubectl get pvc
 
 ![image](OCI26_10.png)
 
-## 5.2. OCI Console 확인
+### 5.2. OCI Console 확인
 
 1. Block Volume 생성
    ![image](OCI26_11.png)

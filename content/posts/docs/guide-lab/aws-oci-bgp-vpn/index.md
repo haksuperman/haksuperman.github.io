@@ -51,9 +51,9 @@ lastmod: '2026-11-27T19:53:50+09:00'
 ---
 AWS와 OCI 사이의 BGP VPN 이중화 구성을 개요부터 연결 검증까지 한 문서로 정리했다. VPN 1과 VPN 2를 순서대로 구성한 뒤, 양방향 통신과 동적 라우팅 결과를 확인한다.
 
-## 구성 개요
+## 1. 구성 개요 {#구성-개요}
 
-### 목표
+### 1.1. 목표 {#목표}
 
 -   AWS와 OCI에서 VPN을 생성할 때, 자동으로 tunnel이 2개 생성
 -   두 클라우드의 VPN 구성 시, tunnel IP 를 Customer Gateway(AWS), CPE(OCI)로 지정해야 하기 때문에 하나의 터널만 구성(Up) 가능
@@ -61,7 +61,7 @@ AWS와 OCI 사이의 BGP VPN 이중화 구성을 개요부터 연결 검증까�
     -   AWS VPN1 tunnel 1 - OCI VPN1 tunnel 1
     -   AWS VPN2 tunnel 2 - OCI VPN2 tunnel 2
 
-### AWS-OCI 기본 Network 구성
+### 1.2. AWS-OCI 기본 Network 구성 {#aws-oci-기본-network-구성}
 
 **AWS**
 
@@ -75,9 +75,9 @@ AWS와 OCI 사이의 BGP VPN 이중화 구성을 개요부터 연결 검증까�
 -   Public Subnet : 10.0.0.0/24
 -   Private Subnet : 10.0.1.0/24
 
-## VPN 1 구성
+## 2. VPN 1 구성 {#vpn-1-구성}
 
-### AWS 임시 Customer Gateway와 Transit Gateway
+### 2.1. AWS 임시 Customer Gateway와 Transit Gateway {#aws-임시-customer-gateway와-transit-gateway}
 
 **임시 Customer Gateway**
 
@@ -433,7 +433,7 @@ Additional Notes and Questions
       http://docs.amazonwebservices.com/AmazonVPC/latest/NetworkAdminGuide
 ```
 
-### OCI CPE와 VPN
+### 2.2. OCI CPE와 VPN {#oci-cpe와-vpn}
 
 **CPE**
 
@@ -527,7 +527,7 @@ Tunnul2는 이용하지 않지만, 동일한 방법으로 구성
 4. Tunnel IP 및 PSK 확인
 ![image](MultiCloud03_16.png)
 
-### AWS Customer Gateway와 PSK
+### 2.3. AWS Customer Gateway와 PSK {#aws-customer-gateway와-psk}
 
 **Customer gateway**
 
@@ -577,7 +577,7 @@ AWS 측과 OCI 측의 PSK 유효 조건이 다름
 ⇒ OCI 측에서 지원하는 유효 문자가 더 적음(특수문자 불가) → OCI PSK를 AWS에 맞춤\
 {{< /callout >}}
 
-### 연결 결과 확인
+### 2.4. 연결 결과 확인 {#연결-결과-확인}
 
 **AWS VPN 및 BGP State**
 ![image](MultiCloud05_01.png)
@@ -585,9 +585,9 @@ AWS 측과 OCI 측의 PSK 유효 조건이 다름
 **OCI VPN 및 BGP State**
 ![image](MultiCloud05_02.png)
 
-## VPN 2 구성
+## 3. VPN 2 구성 {#vpn-2-구성}
 
-### AWS 임시 Customer Gateway와 VPN
+### 3.1. AWS 임시 Customer Gateway와 VPN {#aws-임시-customer-gateway와-vpn}
 
 **임시 Customer Gateway**
 
@@ -906,7 +906,7 @@ OCI 측 BGP ASN은 31898으로, 이를 변경할 수 있는 화면이 OCI Consol
         http://docs.amazonwebservices.com/AmazonVPC/latest/NetworkAdminGuide
     ```
 
-### OCI CPE와 VPN
+### 3.2. OCI CPE와 VPN {#oci-cpe와-vpn-1}
 
 **CPE**
 
@@ -1001,7 +1001,7 @@ tunnel 1은 이용하지 않지만, 동일한 방법으로 구성
 4. tunnel IP 및 PSK 확인
 ![image](MultiCloud07_17.png)
 
-### AWS Customer Gateway와 PSK
+### 3.3. AWS Customer Gateway와 PSK {#aws-customer-gateway와-psk-1}
 
 **Customer gateway**
 
@@ -1050,7 +1050,7 @@ AWS 측과 OCI 측의 PSK 유효 조건이 다름
 ⇒ OCI 측에서 지원하는 유효 문자가 더 적음(특수문자 불가) → OCI PSK를 AWS에 맞춤
 {{< /callout >}}
 
-### 연결 결과 확인
+### 3.4. 연결 결과 확인 {#연결-결과-확인-1}
 
 **AWS VPN 및 BGP State**
 ![image](MultiCloud09_01.png)
@@ -1058,13 +1058,13 @@ AWS 측과 OCI 측의 PSK 유효 조건이 다름
 **OCI VPN 및 BGP State**
 ![image](MultiCloud09_02.png)
 
-## 통신 확인
+## 4. 통신 확인 {#통신-확인}
 
 {{< callout type="info" >}}
 통신은 양 측 라우팅 테이블, 방화벽 설정이 완료된 것을 전제로 진행
 {{< /callout >}}
 
-### Ping
+### 4.1. Ping {#ping}
 
 **AWS → OCI**
 ![image](MultiCloud10_01.png)
@@ -1072,7 +1072,7 @@ AWS 측과 OCI 측의 PSK 유효 조건이 다름
 **OCI → AWS**
 ![image](MultiCloud10_02.png)
 
-### SSH
+### 4.2. SSH {#ssh}
 
 **AWS → OCI**
 ![image](MultiCloud10_03.png)
@@ -1080,19 +1080,19 @@ AWS 측과 OCI 측의 PSK 유효 조건이 다름
 **OCI → AWS**
 ![image](MultiCloud10_04.png)
 
-## 동적 라우팅과 회고
+## 5. 동적 라우팅과 회고 {#동적-라우팅과-회고}
 
-### OCI 측 DRG Route table
+### 5.1. OCI 측 DRG Route table {#oci-측-drg-route-table}
 
 -   AWS 측에서 광고 받아 서브넷 정보 동적으로 등록
 ![image](MultiCloud11_01.png)
 
-### AWS 측 Transit gateway Route table
+### 5.2. AWS 측 Transit gateway Route table {#aws-측-transit-gateway-route-table}
 
 -   OCI 측에서 광고 받아 서브넷 정보 동적으로 등록
 ![image](MultiCloud11_02.png)
 
-### 회고
+### 5.3. 회고 {#회고}
 
 -   정말 이중화라는 것은 끝도 없는 것 같다.. 세상에 장애 없는 시스템은 없고, 이를 어디까지 이중화 시키는지에 대한 고민이 당연하게도 필요하다. 예를 들어, 비용적인 부분을 고려하지 않는다면 멀티 리전을 넘어, 멀티 클라우드로까지 고려해 볼 수 있다. 하지만, 누구나 그렇듯 비용적인 부분이 항상 걸림돌이다.
     -   AWS 터널에 장애가 발생하면 어쩌나 -> 터널을 이중화하면 되지

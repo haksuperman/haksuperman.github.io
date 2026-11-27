@@ -17,7 +17,7 @@ aliases:
 - /posts/oci28/
 ---
 ## 1. 개요
-## 1.1. 프로비저닝 방식
+### 1.1. 프로비저닝 방식
 1. 동적 프로비저닝
    1. **새로운 스토리지 클래스(StorageClass)를 정의한 후, 생성한 스토리지 클래스 기반으로 새 PVC를 생성하는 방식**
    2. PVC를 생성할 때 CSI Volume Plugin이 **OCI 내에 새로운 File Storage와 이를 백엔드로 하는 PV를 동적으로 자동 생성**
@@ -32,7 +32,7 @@ aliases:
 - 기존에 사용 중이던 파일 시스템의 데이터를 K8s 파드에서 이어서 사용하거나, 인프라 관리자와 K8s 관리자의 역할을 분리해야 할 때 적합
 {{< /callout >}}
 
-## 1.2. 데이터 암호화
+### 1.2. 데이터 암호화
 
 - 저장 데이터 암호화 (Data At Rest)
   - 기본적으로 'Oracle 관리형 암호화 키'를 통해 암호화 수행
@@ -60,7 +60,7 @@ aliases:
   ![image](OCI28_04.png)
 
 ## 4. PV
-## 4.1. YAML 정의 파일(매니페스트) 작성
+### 4.1. YAML 정의 파일(매니페스트) 작성
 
 ```yaml
 apiVersion: v1
@@ -82,7 +82,7 @@ spec:
 
 ![image](OCI28_05.png)
 
-## 4.2. PV 생성 및 확인
+### 4.2. PV 생성 및 확인
 
 ```bash
 # PV 생성
@@ -100,7 +100,7 @@ kubectl get pv
 
 ## 5. PVC
 
-## 5.1. YAML 정의 파일(매니페스트) 작성
+### 5.1. YAML 정의 파일(매니페스트) 작성
 - 생성한 PV를 사용하기 위한 클레임(PVC) 생성
 - 동적 프로비저닝이 발생하지 않고 지정한 PV에 정확히 바인딩되도록 지정  
   (storageClassName 항목에 빈 값(““)을 입력해야 함)
@@ -127,7 +127,7 @@ spec.storageClassname 항목에 빈 값을 지정하지 않으면, Default stora
 ![image](OCI28_09.png)
 {{< /callout >}}
 
-## 5.2. PVC 생성 및 확인
+### 5.2. PVC 생성 및 확인
 
 ```bash
 # PVC 생성
@@ -145,7 +145,7 @@ PV와의 정상 연결은 `kubectl get pvc` 명령을 통해 생성한 PVC의 BO
 {{< /callout >}}
 
 ## 6. Pod
-## 6.1. YAML 정의 파일(매니페스트) 작성
+### 6.1. YAML 정의 파일(매니페스트) 작성
 
 ```yaml
 apiVersion: v1
@@ -167,7 +167,7 @@ spec:
 
 ![image](OCI28_12.png)
 
-## 6.2. Pod 생성 및 확인
+### 6.2. Pod 생성 및 확인
 
 ```bash
 # Pod 생성
