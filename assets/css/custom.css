@@ -59,29 +59,31 @@ body:has(.documentation-layout) {
 }
 
 .compact-toc {
-  border: 1px solid rgba(148, 163, 184, 0.3);
-  border-radius: 0.5rem;
   margin: 1.25rem 0 2rem;
-  padding: 0.75rem 1rem;
 }
 
-.compact-toc > summary {
-  cursor: pointer;
+.compact-toc .compact-toc__title {
+  color: #111827;
   font-size: 0.875rem;
   font-weight: 600;
+  line-height: 1.5;
+  margin: 0 0 1rem;
+}
+
+.dark .compact-toc .compact-toc__title {
+  color: #f3f4f6;
 }
 
 .compact-toc nav {
   max-height: min(50vh, 24rem);
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding-top: 0.5rem;
 }
 
 .compact-toc ul {
   list-style: none;
   margin: 0;
-  padding-inline-start: 1.125rem;
+  padding-inline-start: 1rem;
 }
 
 .compact-toc nav > ul {
@@ -89,20 +91,34 @@ body:has(.documentation-layout) {
 }
 
 .compact-toc li {
-  margin: 0.4rem 0;
+  margin: 0.5rem 0;
 }
 
 .compact-toc a {
-  color: inherit;
+  color: #6b7280;
+  display: inline-block;
   font-size: 0.875rem;
-  line-height: 1.6;
+  line-height: 1.5;
   overflow-wrap: anywhere;
   text-decoration: none;
+  width: 100%;
   word-break: keep-all;
 }
 
+.compact-toc nav > ul > li > a {
+  font-weight: 500;
+}
+
+.dark .compact-toc a {
+  color: #9ca3af;
+}
+
 .compact-toc a:hover {
-  color: var(--hx-color-primary-600);
+  color: #111827;
+}
+
+.dark .compact-toc a:hover {
+  color: #d1d5db;
 }
 
 @media screen and (min-width: 64rem) {
