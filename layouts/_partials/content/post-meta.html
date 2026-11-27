@@ -7,8 +7,8 @@
   <div class="post-meta" role="group" aria-label="Post information">
     <span>Published <time data-published datetime="{{ $published.Format $iso }}">{{ $published.Format $day }}</time></span>
     {{- if ne ($updated.Format $day) ($published.Format $day) }}
-      <span>Updated <time data-last-updated datetime="{{ $updated.Format $iso }}">{{ $updated.Format $day }}</time></span>
+      <span><span class="post-meta__separator" aria-hidden="true">·</span>Updated <time data-last-updated datetime="{{ $updated.Format $iso }}">{{ $updated.Format $day }}</time></span>
     {{- end }}
-    <span data-reading-time="{{ $minutes }}">{{ $minutes }} min read</span>
+    <span data-reading-time="{{ $minutes }}"><span class="post-meta__separator" aria-hidden="true">·</span>{{ $minutes }} min read</span>
   </div>
 {{- end -}}
