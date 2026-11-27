@@ -11,7 +11,7 @@ tags: ["OCI","PostgreSQL","Oracle Linux","TLS","psql"]
 
 ---
 
-# 1. 구성 개요
+## 1. 구성 개요
 
 ```
 Oracle Linux 9 Compute VM
@@ -38,7 +38,7 @@ OCI Database with PostgreSQL 엔드포인트는 인터넷에서 직접 접근할
 | DB NSG | `<DB_NSG>` |
 | CA 인증서 파일 | `/home/opc/.postgresql/oci-db-system-ca.pem` |
 
-# 2. 사전 준비 및 주의사항
+## 2. 사전 준비 및 주의사항
 
 - OCI Database with PostgreSQL DB System이 `ACTIVE` 상태여야 한다.
 - OL9 VM에 SSH 접속할 수 있어야 한다.
@@ -48,15 +48,15 @@ OCI Database with PostgreSQL 엔드포인트는 인터넷에서 직접 접근할
 - `verify-full`에서는 인증서의 호스트 이름 검증이 수행되므로, IP가 아니라 DB System 화면의 **FQDN**을 `host`로 사용한다.
 - 클라이언트 버전은 가능하면 DB 서버의 메이저 버전과 같거나 호환 가능한 버전을 사용한다.
 
-# 3. 네트워크 및 보안 규칙 확인
+## 3. 네트워크 및 보안 규칙 확인
 
-## 3.1 경로 확인
+### 3.1 경로 확인
 
 - 동일 VCN: 서브넷 간 로컬 라우팅 경로와 NSG/Security List를 확인한다.
 - 다른 VCN: Local Peering Gateway, DRG 또는 실제 구성에 맞는 경로와 양쪽 Route Table을 확인한다.
 - DB 엔드포인트는 인터넷 직접 접속 대상이 아니다. 이 실습은 DB로 사설 통신 가능한 OL9 VM에서 수행한다.
 
-## 3.2 권장 NSG 규칙
+### 3.2 권장 NSG 규칙
 
 Oracle은 애플리케이션 보안 요구사항을 서브넷 구조와 분리할 수 있는 NSG 사용을 권장한다.
 
@@ -84,7 +84,7 @@ Oracle은 애플리케이션 보안 요구사항을 서브넷 구조와 분리�
 
 Security List와 NSG를 함께 사용하는 환경에서는 실제 적용되는 모든 규칙을 확인한다. Stateful 규칙은 허용된 연결의 응답 트래픽을 자동 추적한다.
 
-# 4. 엔드포인트와 CA 인증서 준비
+## 4. 엔드포인트와 CA 인증서 준비
 
 OCI Console에서 다음 경로로 이동한다.
 
@@ -121,7 +121,7 @@ openssl x509   -in /home/opc/.postgresql/CaCertificate-psql17.pub   -noout -subj
 > OCI Database with PostgreSQL은 SSL 연결만 허용한다. 운영 수준의 검증에는 서버 인증서 체인과 호스트 이름을 모두 확인하는 `sslmode=verify-full`을 사용한다.
 
 
-# 5. Oracle Linux 9에 psql 설치
+## 5. Oracle Linux 9에 psql 설치
 
 먼저 OS와 사용 가능한 패키지를 확인한다.
 
@@ -144,9 +144,9 @@ psql --version
 
 환경에 따라 기본 패키지 버전이 DB System과 다를 수 있다. 조직에서 PostgreSQL 공식 PGDG 저장소 또는 별도 승인 저장소를 사용하는 경우에는 해당 표준에 맞는 버전 패키지를 설치한다. 이 VM에는 접속 검증을 위해 PostgreSQL **서버 데몬**을 설치하거나 기동할 필요가 없다.
 
-# 6. DNS와 TCP 5432 사전 점검
+## 6. DNS와 TCP 5432 사전 점검
 
-## 6.1 DNS 확인
+### 6.1 DNS 확인
 
 ```bash
 getent ahostsv4 <DB_ENDPOINT_FQDN>
@@ -156,7 +156,7 @@ getent ahostsv4 <DB_ENDPOINT_FQDN>
 
 결과가 없으면 VCN DNS, 사용자 지정 DNS, DHCP Options, 엔드포인트 FQDN 오타를 확인한다.
 
-## 6.2 TCP 포트 확인
+### 6.2 TCP 포트 확인
 
 추가 패키지 없이 Bash TCP 기능으로 점검하는 예시이다.
 
@@ -172,7 +172,7 @@ timeout 5 bash -c 'cat < /dev/null > /dev/tcp/<DB_ENDPOINT_FQDN>/5432'   && echo
 nc -vz -w 5 <DB_ENDPOINT_FQDN> 5432
 ```
 
-# 7. psql로 TLS 접속
+## 7. psql로 TLS 접속
 
 암호를 셸 명령행에 포함하지 않고 `-W`로 대화형 입력한다.
 
@@ -196,9 +196,9 @@ application_name=ol9-precheck"
 
 ![PostgreSQL 접속 및 SQL 실행 검증 화면 8](screenshot-08.png)
 
-# 8. SQL 실행 및 검증
+## 8. SQL 실행 및 검증
 
-## 8.1 기본 정보 확인
+### 8.1 기본 정보 확인
 
 ```sql
 SELECT current_database() AS database_name;
@@ -209,7 +209,7 @@ SELECT now() AS db_time;
 
 ![PostgreSQL 접속 및 SQL 실행 검증 화면 9](screenshot-09.png)
 
-## 8.2 현재 세션의 TLS 확인
+### 8.2 현재 세션의 TLS 확인
 
 ```sql
 SELECT
@@ -230,7 +230,7 @@ WHERE pid = pg_backend_pid();
 - `version`에 협상된 TLS 버전 표시
 - `cipher`와 `bits` 값 표시
 
-## 8.3 롤백 가능한 쓰기 SQL 검증
+### 8.3 롤백 가능한 쓰기 SQL 검증
 
 영구 객체를 남기지 않도록 트랜잭션과 임시 테이블을 사용한다.
 
@@ -259,7 +259,7 @@ ROLLBACK;
 DROP TABLE IF EXISTS ol9_connection_test;
 ```
 
-# 9. SQL 파일로 일괄 검증
+## 9. SQL 파일로 일괄 검증
 
 다음 내용을 `/home/opc/oci_pg_precheck.sql`로 저장한다.
 
@@ -311,7 +311,7 @@ echo $?
 
 ![PostgreSQL 접속 및 SQL 실행 검증 화면 12](screenshot-12.png)
 
-# 10. 오류 진단
+## 10. 오류 진단
 
 | 증상/메시지 | 주요 원인 | 확인 및 조치 |
 | --- | --- | --- |
@@ -343,7 +343,7 @@ openssl x509 -in /home/opc/.postgresql/oci-db-system-ca.pem -noout -subject -iss
 > 문제 해결을 위해 `sslmode=disable`로 낮추지 않는다. OCI Database with PostgreSQL은 비SSL 연결을 지원하지 않는다. 일시적으로 `require`를 사용해 인증서 문제와 네트워크 문제를 분리 진단할 수는 있지만, 최종 성공 판정은 반드시 `verify-full`로 수행한다.
 
 
-# 11. 공식 참고 문서
+## 11. 공식 참고 문서
 
 - [Oracle — Connecting to a Database in OCI Database with PostgreSQL](https://docs.oracle.com/en-us/iaas/Content/postgresql/connect-to-db.htm)
 - [Oracle — Configure Secure Socket Layer in OCI Database with PostgreSQL](https://docs.oracle.com/en/learn/oci-pgsql-ssl/index.html)

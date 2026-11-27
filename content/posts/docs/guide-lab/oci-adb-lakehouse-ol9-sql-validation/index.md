@@ -1,5 +1,5 @@
 ---
-title: "ADB(Lakehouse) — Oracle Linux 9 접속 및 SQL 실행 사전 검증"
+title: "OCI ADB(Lakehouse) — Oracle Linux 9 접속 및 SQL 실행 사전 검증"
 date: "2026-11-23T23:10:00+09:00"
 draft: false
 collection: docs
@@ -12,7 +12,7 @@ tags: ["OCI","Autonomous Database","Lakehouse","Oracle Linux","SQL*Plus"]
 
 ---
 
-# 1. 구성 개요
+## 1. 구성 개요
 
 ```
 Oracle Linux 9 Compute VM
@@ -37,7 +37,7 @@ Oracle Linux 9 Compute VM
 | TNS Alias | `<TNS_ALIAS>` |
 | Wallet 경로 | `/home/opc/adb_wallet/<ADB_NAME>` |
 
-# 2. 사전 준비 및 주의사항
+## 2. 사전 준비 및 주의사항
 
 - ADB가 `AVAILABLE` 상태여야 한다.
 - OL9 VM에 SSH 접속할 수 있어야 한다.
@@ -47,7 +47,7 @@ Oracle Linux 9 Compute VM
 - Wallet 파일과 암호를 문서·Git·공용 저장소에 노출하지 않는다.
 - `high`, `medium`, `low` 등의 TNS Alias 중 관리자가 지정한 서비스를 사용한다.
 
-# 3. Access Type별 네트워크 및 보안 규칙
+## 3. Access Type별 네트워크 및 보안 규칙
 
 ADB의 Access Type은 엔드포인트 종류와 OL9 VM의 접속 경로를 결정한다. 세 선택지 모두 인증서 기반 SSL/TLS를 사용하지만, Public/Private Endpoint와 접근 제어 방식이 다르다.
 
@@ -56,7 +56,7 @@ ADB의 Access Type은 엔드포인트 종류와 OL9 VM의 접속 경로를 결�
 > 이 가이드에서는 ADB Private Endpoint를 DB 서비스의 접속 지점으로 구성하므로 **DB용 Private Subnet을 선택한다.** 선택한 DB용 Subnet의 CIDR에서 Private Endpoint IP가 할당되며, OL9 VM은 OL9용 Subnet에서 VCN Local Routing을 통해 해당 Endpoint에 접속한다.
 
 
-## 3.1 Access Type 비교
+### 3.1 Access Type 비교
 
 | Access Type | ADB 엔드포인트 | 접근 제어 | OL9 VM의 대표 접속 경로 |
 | --- | --- | --- | --- |
@@ -71,7 +71,7 @@ ADB의 Access Type은 엔드포인트 종류와 OL9 VM의 접속 경로를 결�
 > 아래 3.2~3.4에서는 각 Access Type별 접근 방식과 확인 항목을 구분하여 설명한다.
 
 
-## 3.2 Secure access from everywhere
+### 3.2 Secure access from everywhere
 
 ADB에 Public Endpoint가 생성되고 모든 출발 IP가 허용된다. ADB ACL 조건은 없지만 OL9 VM에서 Public Endpoint까지의 네트워크 경로는 필요하다.
 
@@ -80,7 +80,7 @@ ADB에 Public Endpoint가 생성되고 모든 출발 IP가 허용된다. ADB ACL
 | Private Subnet | Service Gateway 또는 NAT Gateway | 없음 |
 | Public Subnet + VM Public IP | Internet Gateway | 없음 |
 
-### 필요한 네트워크 보안 설정
+#### 필요한 네트워크 보안 설정
 
 Public Endpoint가 사용자 VCN 안에 생성되는 방식이 아니므로 ADB Endpoint용 Ingress NSG/Security List는 작성하지 않는다.
 
@@ -93,7 +93,7 @@ Stateful Egress 규칙을 사용하는 경우 응답 트래픽을 위한 별도 
 
 보안상 접근 출발지를 제한해야 하는 운영 환경에서는 **Secure access from allowed IPs and VCNs only** 또는 **Private endpoint access only**를 검토한다.
 
-## 3.3 Secure access from allowed IPs and VCNs only
+### 3.3 Secure access from allowed IPs and VCNs only
 
 ADB에 Public Endpoint가 생성되며 ACL에 등록된 출발지만 허용된다.
 
@@ -113,7 +113,7 @@ Target:      Service Gateway
 Service Gateway가 없고 **0.0.0.0/0 → NAT Gateway**만 있다면 ADB에는 NAT Gateway의 공인 IP가 출발지로 보인다. 
 이 경우 같은 VCN의 VM이어도 VCN OCID가 아니라 NAT Gateway Public IP를 ACL에 허용해야 한다.
 
-### 필요한 네트워크 보안 설정
+#### 필요한 네트워크 보안 설정
 
 Public Endpoint 방식이므로 ADB Endpoint용 Ingress NSG/Security List는 작성하지 않는다. 
 ADB ACL 값과 OL9의 실제 Egress 경로가 서로 일치해야 한다.
@@ -126,7 +126,7 @@ ADB ACL 값과 OL9의 실제 Egress 경로가 서로 일치해야 한다.
 
 Stateful Egress 규칙을 사용하는 경우 응답 트래픽을 위한 별도 Ingress 규칙은 일반적으로 필요하지 않다.
 
-## 3.4 Private endpoint access only
+### 3.4 Private endpoint access only
 
 ADB에 선택한 VCN/Subnet의 Private Endpoint가 생성된다. 여기서 선택하는 Subnet은 접속을 허용할 클라이언트 Subnet이 아니라, **ADB Private Endpoint의 VNIC와 Private IP가 생성될 위치**다. 
 ADB Serverless 본체는 Oracle 관리 영역에 있으므로 사용자의 VCN 안에 별도로 선택할 “ADB 본체 Subnet”이 존재하는 것은 아니다.
@@ -152,7 +152,7 @@ Private Endpoint 생성 및 접속 전에 다음 항목을 구분하여 확인�
 | 접속 필수 | OL9 측 Egress와 ADB Endpoint 측 Ingress를 포함한 적용 보안 규칙에서 TCP 1522가 허용되는지 확인 | 허용 규칙이 없으면 VCN Local Routing이 있어도 접속할 수 없음 |
 | 보안 권장 | ADB Endpoint Ingress Source를 OL9 NSG 또는 필요한 Private IP/CIDR로 최소화 | 접속에 필요한 출발지만 허용하기 위한 최소 권한 설정 |
 
-### 필요한 네트워크 보안 설정
+#### 필요한 네트워크 보안 설정
 
 Private Endpoint는 선택한 DB용 Subnet의 VNIC에 연결되므로 Endpoint 측 Ingress와 OL9 측 Egress를 확인한다.
 
@@ -166,7 +166,7 @@ Private Endpoint는 선택한 DB용 Subnet의 VNIC에 연결되므로 Endpoint �
 > Stateful 규칙을 권장한다. TLS-only 구성은 실제 접속 문자열에 따라 1521 또는 1522를 사용하므로 Wallet의 `tnsnames.ora`에 기재된 포트를 기준으로 설정한다.
 
 
-## 3.5 현재 Access Type과 접속 경로 확인
+### 3.5 현재 Access Type과 접속 경로 확인
 
 1. ADB 상세 화면의 **Network → Access type**을 확인한다.
 2. Public Endpoint이면 OL9 Subnet Route Table의 Service/NAT/Internet Gateway 경로를 확인한다.
@@ -186,9 +186,9 @@ Private Endpoint는 선택한 DB용 Subnet의 VNIC에 연결되므로 Endpoint �
 > 새 Wallet의 `tnsnames.ora`에 현재 Access Type에 맞는 Endpoint hostname과 포트가 포함되어 있는지 확인하고, 이전 Endpoint 정보가 포함된 기존 Wallet은 계속 사용하지 않는다.
 
 
-# 4. Wallet과 접속 정보 준비
+## 4. Wallet과 접속 정보 준비
 
-## 4.1 OCI 콘솔에서 Wallet 다운로드
+### 4.1 OCI 콘솔에서 Wallet 다운로드
 
 1. **Oracle Database → Autonomous Database**
 2. `<ADB_DISPLAY_NAME>` 선택
@@ -200,7 +200,7 @@ Private Endpoint는 선택한 DB용 Subnet의 VNIC에 연결되므로 Endpoint �
     ![ADB 접속 및 SQL 실행 검증 화면 2](screenshot-02.png)
     
 
-## 4.2 Wallet 파일 전송 및 디렉터리 배치
+### 4.2 Wallet 파일 전송 및 디렉터리 배치
 
 다운로드한 Wallet ZIP 파일을 **안전한 방법으로 Oracle Linux 9 Compute VM의 `/home/opc/` 경로에 전송한 뒤**, 다음과 같이 Wallet 디렉터리를 생성하고 압축을 해제한다. 
 아래 명령은 Compute VM의 `opc` 계정에서 실행한다.
@@ -230,7 +230,7 @@ ls -la /home/opc/adb_wallet/<ADB_NAME>
 
 Wallet 유형에 따라 다른 파일도 포함될 수 있다. Wallet ZIP 및 암호는 외부에 노출하지 않는다.
 
-## 4.3 sqlnet.ora Wallet 위치 확인
+### 4.3 sqlnet.ora Wallet 위치 확인
 
 `sqlnet.ora`의 `WALLET_LOCATION` 설정이 실제 압축 해제 경로를 가리키는지 확인한다.
 
@@ -256,7 +256,7 @@ SSL_SERVER_DN_MATCH=yes
 > 사용하는 Oracle Client 버전과 Wallet 유형에 따라 경로 설정 방식이 다를 수 있으므로 다운로드된 `sqlnet.ora`의 기존 내용을 먼저 확인한다.
 
 
-## 4.4 TNS_ADMIN 환경변수 설정
+### 4.4 TNS_ADMIN 환경변수 설정
 
 ```bash
 export TNS_ADMIN=/home/opc/adb_wallet/<ADB_NAME>
@@ -279,7 +279,7 @@ echo 'export TNS_ADMIN=/home/opc/adb_wallet/<ADB_NAME>' >> ~/.bashrc
 > 별도의 systemd 서비스나 다른 계정으로 실행하는 프로그램은 해당 실행 환경에 별도로 설정해야 한다.
 
 
-## 4.5 ADB 접속 서비스명 확인
+### 4.5 ADB 접속 서비스명 확인
 
 ```bash
 grep -E '^[[:alnum:]_.-]+[[:space:]]*=' "$TNS_ADMIN/tnsnames.ora"
@@ -297,7 +297,7 @@ rm -i /home/opc/Wallet_<ADB_NAME>.zip
 
 원본 Wallet ZIP은 별도의 안전한 위치에 보관한다.
 
-# 5. Oracle Linux 9에 SQL*Plus 설치
+## 5. Oracle Linux 9에 SQL*Plus 설치
 
 ```bash
 cat /etc/oracle-release
@@ -324,9 +324,9 @@ sqlplus -v
 
 조직에서 승인한 저장소나 특정 Instant Client 버전이 있으면 그 표준을 따른다. DB 서버 소프트웨어는 VM에 설치하지 않는다.
 
-# 6. DNS와 TCP 1522 사전 점검
+## 6. DNS와 TCP 1522 사전 점검
 
-## 6.1 호스트와 포트 확인
+### 6.1 호스트와 포트 확인
 
 ```bash
 grep -Ei 'host|port|service_name'   "$TNS_ADMIN/tnsnames.ora"
@@ -352,7 +352,7 @@ grep -Ei 'host|port|service_name'   "$TNS_ADMIN/tnsnames.ora"
 > [Oracle 공식 문서 — Database Service Names for Autonomous AI Database](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/predefined-database-services-names.html)
 
 
-## 6.2 DNS 확인
+### 6.2 DNS 확인
 
 ```bash
 getent ahostsv4 <ADB_HOST>
@@ -360,7 +360,7 @@ getent ahostsv4 <ADB_HOST>
 
 ![ADB 접속 및 SQL 실행 검증 화면 14](screenshot-14.png)
 
-## 6.3 TCP 확인
+### 6.3 TCP 확인
 
 ```bash
 timeout 5 bash -c 'cat < /dev/null > /dev/tcp/<ADB_HOST>/1522'   && echo "TCP 1522 reachable"   || echo "TCP 1522 failed"
@@ -374,9 +374,9 @@ timeout 5 bash -c 'cat < /dev/null > /dev/tcp/<ADB_HOST>/1522'   && echo "TCP 15
 nc -vz -w 5 <ADB_HOST> 1522
 ```
 
-# 7. SQL*Plus로 mTLS 접속
+## 7. SQL*Plus로 mTLS 접속
 
-## 7.1 접속 전 최종 확인
+### 7.1 접속 전 최종 확인
 
 3번에서 구분한 Access Type에 따라 다음을 확인한다.
 
@@ -404,7 +404,7 @@ Access Type이나 Wallet을 변경했거나 DNS·네트워크 문제를 진단�
 > [Oracle 공식 문서 — ORA-12506](https://docs.oracle.com/en/error-help/db/ora-12506/)
 
 
-## 7.2 SQL*Plus 접속
+### 7.2 SQL*Plus 접속
 
 ```bash
 export TNS_ADMIN=/home/opc/adb_wallet/<ADB_NAME>
@@ -435,9 +435,9 @@ SELECT SYS_CONTEXT('USERENV', 'NETWORK_PROTOCOL') AS NETWORK_PROTOCOL FROM DUAL;
 
 mTLS 연결에서는 일반적으로 `NETWORK_PROTOCOL = tcps`로 표시된다.
 
-# 8. SQL 실행 및 검증
+## 8. SQL 실행 및 검증
 
-## 8.1 기본 정보
+### 8.1 기본 정보
 
 ```sql
 SELECT USER AS LOGIN_USER FROM DUAL;
@@ -448,7 +448,7 @@ SELECT 1 AS CONNECTION_TEST FROM DUAL;
 
 ![ADB 접속 및 SQL 실행 검증 화면 18](screenshot-18.png)
 
-## 8.2 보안 연결
+### 8.2 보안 연결
 
 ```sql
 SELECT
@@ -463,7 +463,7 @@ FROM DUAL;
 판정 기준은 `NETWORK_PROTOCOL = tcps`인지, `SERVICE_NAME`이 선택한 TNS 서비스와 일치하는지 확인하는 것이다. 
 `CLIENT_IP`는 Access Type과 실제 Gateway 경로에 따라 다르게 표시될 수 있으므로 고정된 성공 판정값으로 사용하지 않고, 실제 접속 경로를 확인하기 위한 참고·진단 값으로 기록한다.
 
-## 8.3 쓰기와 정리
+### 8.3 쓰기와 정리
 
 승인된 테스트 사용자에서만 실행한다.
 
@@ -497,7 +497,7 @@ DROP TABLE OL9_CONNECTION_TEST PURGE;
 
 테이블 생성 권한이 없는 계정은 읽기 SQL까지만 검증한다.
 
-# 9. SQL 파일로 일괄 검증
+## 9. SQL 파일로 일괄 검증
 
 `/home/opc/adb_precheck.sql`:
 
@@ -538,7 +538,7 @@ echo "sqlplus exit code: $sqlplus_rc"
 
 `0`이면 정상이다. 종료 코드는 `SQL>`가 아닌 Linux 셸 프롬프트에서 확인한다.
 
-# 10. 오류 진단
+## 10. 오류 진단
 
 | 증상/메시지 | 원인 | 조치 | 관련 문서 |
 | --- | --- | --- | --- |
@@ -553,7 +553,7 @@ echo "sqlplus exit code: $sqlplus_rc"
 | `ORA-01031` | 권한 부족 | 쓰기 검증 생략 또는 승인된 사용자·스키마 사용 | [Oracle ORA-01031](https://docs.oracle.com/error-help/db/ora-01031/) |
 | 종료 코드 `127` | Linux 셸에서 명령을 찾지 못함 | SQL 프롬프트가 아닌 셸 프롬프트에서 명령과 PATH 확인 | — |
 
-# 11. 공식 참고 문서
+## 11. 공식 참고 문서
 
 - [Oracle — Connect SQL*Plus with a Wallet (mTLS)](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/connect-sqlplus.html)
 - [Oracle — Configure Network Access with Private Endpoints](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/private-endpoints-autonomous.html)
