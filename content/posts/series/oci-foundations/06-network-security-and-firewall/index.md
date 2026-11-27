@@ -1,6 +1,6 @@
 ---
 title: Security List, Bastion Session과 서버 방화벽
-linkTitle: 06. Security List, Bastion Session과 서버 방화벽
+linkTitle: 07. Security List, Bastion Session과 서버 방화벽
 date: '2024-06-20T14:35:00+09:00'
 tags:
 - oci
@@ -14,7 +14,7 @@ sourceStatus: needs-review
 draft: false
 collection: series
 seriesId: oci-foundations
-seriesOrder: 60
+seriesOrder: 70
 aliases:
 - /series/oci-foundations/06-network-security-and-firewall/
 - /posts/oci09/

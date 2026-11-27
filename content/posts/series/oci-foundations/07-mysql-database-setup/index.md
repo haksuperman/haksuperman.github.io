@@ -1,6 +1,6 @@
 ---
 title: MySQL 데이터베이스 설치와 기본 구성
-linkTitle: 07. MySQL 데이터베이스 설치와 기본 구성
+linkTitle: 08. MySQL 데이터베이스 설치와 기본 구성
 date: '2024-06-20T21:25:00+09:00'
 tags:
 - oci
@@ -13,7 +13,7 @@ sourceStatus: needs-review
 draft: false
 collection: series
 seriesId: oci-foundations
-seriesOrder: 70
+seriesOrder: 80
 aliases:
 - /series/oci-foundations/07-mysql-database-setup/
 - /posts/oci10/

@@ -1,6 +1,6 @@
 ---
 title: VCN 주요 구성과 생성 실습
-linkTitle: 02. VCN 주요 구성과 생성 실습
+linkTitle: 03. VCN 주요 구성과 생성 실습
 date: '2024-06-16T19:17:00+09:00'
 tags:
 - oci
@@ -13,7 +13,7 @@ sourceStatus: needs-review
 draft: false
 collection: series
 seriesId: oci-foundations
-seriesOrder: 20
+seriesOrder: 30
 aliases:
 - /series/oci-foundations/02-vcn-foundations/
 - /posts/oci05/

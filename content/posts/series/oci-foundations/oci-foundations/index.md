@@ -1,6 +1,6 @@
 ---
 title: Oracle Cloud Infrastructure 기본 개념
-linkTitle: OCI 기본 개념
+linkTitle: 01. OCI 기본 개념
 date: '2024-06-12T20:41:00+09:00'
 tags:
 - oci
@@ -12,11 +12,12 @@ tags:
 - ad
 - fd
 draft: false
-collection: docs
-docCategory: theory-reference
 aliases:
 - /docs/theory-reference/oci-foundations/
 - /posts/oci03/
+collection: series
+seriesId: oci-foundations
+seriesOrder: 10
 ---
 ## 1. 물리적 아키텍처 개념(Physical Architecture Concepts)
 

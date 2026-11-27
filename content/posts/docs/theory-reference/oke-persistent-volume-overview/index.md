@@ -1,6 +1,6 @@
 ---
-title: OKE PersistentVolume 개요
-linkTitle: OKE PersistentVolume 개요
+title: OCI OKE PV
+linkTitle: OCI OKE PV
 date: '2026-05-27T21:50:00+09:00'
 tags:
 - oci

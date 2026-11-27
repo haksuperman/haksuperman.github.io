@@ -1,6 +1,6 @@
 ---
 title: Oracle Cloud 계정 생성과 2단계 인증
-linkTitle: 01. Oracle Cloud 계정 생성과 2단계 인증
+linkTitle: 02. Oracle Cloud 계정 생성과 2단계 인증
 date: '2024-06-15T22:18:00+09:00'
 tags:
 - oci
@@ -13,7 +13,7 @@ sourceStatus: needs-review
 draft: false
 collection: series
 seriesId: oci-foundations
-seriesOrder: 10
+seriesOrder: 20
 aliases:
 - /series/oci-foundations/01-account-creation-free-tier-mfa/
 - /posts/oci04/

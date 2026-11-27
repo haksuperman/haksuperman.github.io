@@ -1,6 +1,6 @@
 ---
-title: OKE Node Cycling 개요
-linkTitle: OKE Node Cycling
+title: OCI OKE Node Cycling 개요
+linkTitle: OCI OKE Node Cycling
 date: '2026-05-27T23:33:00+09:00'
 tags:
 - oci
@@ -10,11 +10,11 @@ tags:
 - oke
 - kubernetes
 draft: false
-collection: docs
-docCategory: theory-reference
 aliases:
 - /docs/theory-reference/oke-node-cycling/
 - /posts/oci29/
+collection: docs
+docCategory: guide-lab
 ---
 ## 1. Node Cycling 개념
 
