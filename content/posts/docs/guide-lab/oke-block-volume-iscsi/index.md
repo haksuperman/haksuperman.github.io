@@ -1,6 +1,6 @@
 ---
-title: 'OKE Block Volume 구성: iSCSI'
-linkTitle: OKE Block Volume — iSCSI
+title: 'OCI OKE Block Volume 구성: iSCSI'
+linkTitle: OCI OKE Block Volume — iSCSI
 date: '2026-05-27T22:02:00+09:00'
 tags:
 - oci

@@ -1,6 +1,6 @@
 ---
-title: OKE 클러스터 네트워크 구성
-linkTitle: OKE 네트워크 구성
+title: OCI OKE 클러스터 네트워크 구성
+linkTitle: OCI OKE 네트워크 구성
 date: '2026-01-04T18:36:00+09:00'
 tags:
 - oci

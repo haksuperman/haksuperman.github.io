@@ -1,6 +1,6 @@
 ---
-title: OKE File Storage 동적 프로비저닝
-linkTitle: OKE File Storage — 동적
+title: OCI OKE File Storage 동적 프로비저닝
+linkTitle: OCI OKE File Storage — 동적
 date: '2026-05-27T22:48:00+09:00'
 tags:
 - oci
