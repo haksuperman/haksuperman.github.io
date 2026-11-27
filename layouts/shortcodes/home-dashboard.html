@@ -1,9 +1,5 @@
 {{- $pages := where .Site.RegularPages "Section" "posts" -}}
-{{- $recent := slice -}}
-{{- range $pages -}}
-  {{- $updated := partial "content/lastmod.html" . -}}
-  {{- $recent = $recent | append (dict "page" . "updated" $updated "sortDate" $updated.Unix) -}}
-{{- end -}}
+{{- $recent := first 5 $pages.ByDate.Reverse -}}
 <div class="home-notebook">
   <header class="home-intro">
     <img class="home-intro__avatar" src="{{ "images/haksuperman.jpg" | relURL }}" alt="학수의 로봇 프로필 이미지">
@@ -37,20 +33,17 @@
   <div class="home-columns">
     <section class="home-section" aria-labelledby="recent-title">
       <div class="home-section__title">
-        <h2 id="recent-title">최근 갱신한 문서</h2>
+        <h2 id="recent-title">최근 작성 문서</h2>
       </div>
       <div class="home-recent-list">
-        {{- range first 5 (sort $recent "sortDate" "desc") }}
-          {{- $updated := .updated -}}
-          {{- with .page }}
+        {{- range $recent }}
           <a href="{{ .RelPermalink }}">
             <span class="home-recent-list__title">{{ .LinkTitle }}</span>
             <span class="home-recent-list__meta">
-              <time datetime="{{ $updated.Format "2006-01-02" }}">{{ $updated.Format "2006.01.02" }}</time>
+              <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time>
               <span>{{ if eq .Params.collection "series" }}Series{{ else }}Docs{{ end }}</span>
             </span>
           </a>
-          {{- end }}
         {{- end }}
       </div>
     </section>

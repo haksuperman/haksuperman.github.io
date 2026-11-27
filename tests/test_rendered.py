@@ -47,6 +47,11 @@ class RenderedWorkflowTests(unittest.TestCase):
             first_path = create("first", "series", series="kubernetes-cluster", order=10)
             last_path = create("last", "series", series="kubernetes-cluster", order=30)
             draft = create("draft", "series", series="kubernetes-cluster", order=20)
+            for path, date in ((doc_path, "2019-01-01T00:00:00+09:00"),
+                               (last_path, "2021-01-01T00:00:00+09:00")):
+                metadata, body = read_post(path)
+                metadata["date"] = date
+                write_post(path, metadata, body)
             metadata, body = read_post(draft)
             metadata["draft"] = True
             metadata["aliases"] = ["/study/sample/draft/"]
@@ -59,6 +64,13 @@ class RenderedWorkflowTests(unittest.TestCase):
             write_post(path, metadata, body + "\n![diagram](diagram.svg)\n")
             hugo(root)
             self.assertEqual(validate(root)["공개 글"], 3)
+            home = PageLinks((root / "public/index.html").read_text())
+            self.assertEqual(home.recent_posts, ["/posts/last/", "/posts/first/", "/posts/doc/"])
+            self.assertEqual(home.recent_dates, ["2021-01-01", "2020-01-01", "2019-01-01"])
+            initial = PageLinks((root / "public/posts/doc/index.html").read_text())
+            self.assertEqual(initial.published_dates, ["2019-01-01T00:00:00+09:00"])
+            self.assertEqual(initial.updated_dates, [])
+            self.assertGreaterEqual(int(initial.reading_minutes[0]), 1)
             legacy = root / "public/study/sample/doc/index.html"
             self.assertEqual(PageLinks(legacy.read_text()).redirects, ["/posts/doc/"])
             original_redirect = legacy.read_text()
@@ -128,6 +140,13 @@ class RenderedWorkflowTests(unittest.TestCase):
             path = first_path
             original = path.read_text()
             metadata, body = read_post(path)
+            metadata["lastmod"] = "2020-01-01T23:59:00+09:00"
+            write_post(path, metadata, body)
+            hugo(root)
+            validate(root)
+            same_day = PageLinks((root / "public/posts/first/index.html").read_text())
+            self.assertEqual(same_day.updated_dates, [])
+            self.assertEqual(same_day.published_dates, ["2020-01-01T00:00:00+09:00"])
             metadata["lastmod"] = "2025-12-01T09:00:00+09:00"
             write_post(path, metadata, body)
             hugo(root)
@@ -135,6 +154,11 @@ class RenderedWorkflowTests(unittest.TestCase):
             publication = json.loads((root / "public/content-index.json").read_text())["posts"]
             explicit = next(post for post in publication if post["slug"] == "first")
             self.assertEqual(explicit["lastmod"], "2025-12-01T09:00:00+09:00")
+            updated_page = PageLinks((root / "public/posts/first/index.html").read_text())
+            self.assertEqual(updated_page.updated_dates, ["2025-12-01T09:00:00+09:00"])
+            # A recently edited old article must not displace a newer article on the home page.
+            home = PageLinks((root / "public/index.html").read_text())
+            self.assertEqual(home.recent_posts, ["/posts/last/", "/posts/first/", "/posts/doc/"])
             path.write_text(original + "\n본문 수정 확인\n")
             subprocess.run(["git", "add", str(path.relative_to(root))], cwd=root, check=True)
             commit_env.update(GIT_AUTHOR_DATE="2026-01-16T12:00:00+09:00", GIT_COMMITTER_DATE="2026-01-16T12:00:00+09:00")

@@ -12,11 +12,12 @@
             <h1 class="hx:mb-0">{{ .Title }}</h1>
             {{ partial "components/page-context-menu" . }}
           </div>
+          {{ partial "content/post-meta.html" . }}
           {{ end }}
           {{ partial "content/compact-toc.html" . }}
           {{ .Content }}
         </div>
-        {{ partial "components/last-updated.html" . }}
+        {{ if ne .Section "posts" }}{{ partial "components/last-updated.html" . }}{{ end }}
         {{- if (site.Params.page.displayPagination | default true) -}}
           {{- partial "content/pager.html" . -}}
         {{- end -}}

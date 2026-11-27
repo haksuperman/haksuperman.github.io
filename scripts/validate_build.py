@@ -19,6 +19,10 @@ class PageLinks(HTMLParser):
         self.references, self.lists, self.breadcrumbs, self.pager = [], [], [], []
         self.redirects = []
         self.updated_dates = []
+        self.published_dates = []
+        self.reading_minutes = []
+        self.recent_posts, self.recent_dates = [], []
+        self._recent_depth = 0
         self.modified_dates = []
         self.sidebar_open = {}
         self._in_sidebar = False
@@ -28,6 +32,20 @@ class PageLinks(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
+        if tag == "div":
+            if self._recent_depth:
+                self._recent_depth += 1
+            elif "home-recent-list" in attrs.get("class", "").split():
+                self._recent_depth = 1
+        if self._recent_depth:
+            if tag == "a":
+                self.recent_posts.append(attrs.get("href", ""))
+            elif tag == "time":
+                self.recent_dates.append(attrs.get("datetime", ""))
+        if tag == "time" and "data-published" in attrs:
+            self.published_dates.append(attrs.get("datetime", ""))
+        if "data-reading-time" in attrs:
+            self.reading_minutes.append(attrs["data-reading-time"])
         if tag == "time" and "data-last-updated" in attrs:
             self.updated_dates.append(attrs.get("datetime", ""))
         if tag == "meta" and attrs.get("property") == "article:modified_time":
@@ -59,6 +77,8 @@ class PageLinks(HTMLParser):
                 self.pager.append((attrs.get("rel"), attrs["href"]))
 
     def handle_endtag(self, tag):
+        if tag == "div" and self._recent_depth:
+            self._recent_depth -= 1
         if tag == "li" and self._in_sidebar and self._sidebar_lists:
             self._sidebar_lists.pop()
         if tag == "aside":
@@ -118,14 +138,34 @@ def validate(root=ROOT, include_drafts=False):
                    for item in ET.parse(public / "sitemap.xml").findall("s:url", namespace)}
         for url, metadata in actual.items():
             page = parsed.get(public / url.lstrip("/") / "index.html")
+            published = as_time(metadata["date"])
             updated = as_time(metadata["lastmod"])
-            if (page is None or len(page.updated_dates) != 1 or len(page.modified_dates) != 1
-                    or as_time(page.updated_dates[0]) != updated
+            show_updated = published.date() != updated.date()
+            if (page is None or len(page.published_dates) != 1
+                    or as_time(page.published_dates[0]) != published):
+                errors.append(f"{url}: 화면의 작성일이 게시물 작성일과 다릅니다.")
+            if (page is None or len(page.reading_minutes) != 1
+                    or not page.reading_minutes[0].isdigit() or int(page.reading_minutes[0]) < 1):
+                errors.append(f"{url}: 예상 읽기 시간이 올바르지 않습니다.")
+            if (page is None or len(page.updated_dates) != int(show_updated) or len(page.modified_dates) != 1
+                    or (show_updated and as_time(page.updated_dates[0]) != updated)
                     or as_time(page.modified_dates[0]) != updated
                     or as_time(sitemap.get(url)) != updated):
                 errors.append(f"{url}: 화면·검색 정보·사이트맵의 수정일이 일치하지 않습니다.")
     except (OSError, ValueError, TypeError, KeyError, ET.ParseError) as error:
         errors.append(f"게시물 수정일 검사에 필요한 출력이 올바르지 않습니다: {error}")
+    home = parsed.get(public / "index.html")
+    recent_count = min(5, len(actual))
+    if (home is None or len(home.recent_posts) != recent_count
+            or len(set(home.recent_posts)) != recent_count or len(home.recent_dates) != recent_count
+            or any(url not in actual for url in home.recent_posts)):
+        errors.append("홈의 최근 작성 문서 목록이 공개 게시물과 일치하지 않습니다.")
+    else:
+        recent_dates = [as_time(actual[url]["date"]) for url in home.recent_posts]
+        expected_dates = sorted((as_time(item["date"]) for item in actual.values()), reverse=True)[:recent_count]
+        if (recent_dates != expected_dates
+                or home.recent_dates != [date.strftime("%Y-%m-%d") for date in recent_dates]):
+            errors.append("홈의 최근 작성 문서는 작성일 내림차순으로 정렬하고 작성일을 표시해야 합니다.")
     for collection in ("docs", "series"):
         for group in data[collection]:
             url = f"/{collection}/{group['id']}/"
