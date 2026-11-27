@@ -1,6 +1,6 @@
 ---
-title: OCI OKE File Storage 정적 프로비저닝
-linkTitle: OCI OKE File Storage — 정적
+title: OCI OKE PVC 구성 - File Storage (정적)
+linkTitle: OCI OKE PVC 구성 - File Storage (정적)
 date: '2026-05-27T23:13:00+09:00'
 tags:
 - oci

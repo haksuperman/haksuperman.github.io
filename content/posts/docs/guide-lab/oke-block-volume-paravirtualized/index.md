@@ -1,6 +1,6 @@
 ---
-title: 'OCI OKE Block Volume 구성: Paravirtualized'
-linkTitle: OCI OKE Block Volume — Paravirtualized
+title: OCI OKE PVC 구성 - Block Volume (Paravirtualized)
+linkTitle: OCI OKE PVC 구성 - Block Volume (Paravirtualized)
 date: '2026-05-27T22:31:00+09:00'
 tags:
 - oci

@@ -1,6 +1,6 @@
 ---
-title: 'OCI OKE Block Volume 구성: iSCSI'
-linkTitle: OCI OKE Block Volume — iSCSI
+title: OCI OKE PVC 구성 - Block Volume (iSCSI)
+linkTitle: OCI OKE PVC 구성 - Block Volume (iSCSI)
 date: '2026-05-27T22:02:00+09:00'
 tags:
 - oci
