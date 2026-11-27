@@ -1,6 +1,6 @@
 ---
-title: OCI OKE 클러스터 접속 환경 구성
-linkTitle: OCI OKE 접속 환경
+title: OCI OKE 클러스터 구축 - 3. 접속 환경
+linkTitle: OCI OKE 클러스터 구축 - 3. 접속 환경
 date: '2026-01-04T19:42:00+09:00'
 tags:
 - oci

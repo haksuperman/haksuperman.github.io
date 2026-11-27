@@ -1,6 +1,6 @@
 ---
-title: OCI OKE 클러스터 배포
-linkTitle: OCI OKE 클러스터 배포
+title: OCI OKE 클러스터 구축 - 2. 클러스터 배포
+linkTitle: OCI OKE 클러스터 구축 - 2. 클러스터 배포
 date: '2026-01-04T18:56:00+09:00'
 tags:
 - oci

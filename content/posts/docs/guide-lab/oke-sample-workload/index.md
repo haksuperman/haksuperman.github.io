@@ -1,6 +1,6 @@
 ---
-title: OCI OKE에 Sample 파드와 서비스 배포하기
-linkTitle: OCI OKE Sample 워크로드
+title: OCI OKE 클러스터 구축 - 4. Sample 워크로드
+linkTitle: OCI OKE 클러스터 구축 - 4. Sample 워크로드
 date: '2026-01-04T20:04:00+09:00'
 tags:
 - oci
