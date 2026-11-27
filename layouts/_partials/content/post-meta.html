@@ -4,11 +4,11 @@
   {{- $iso := "2006-01-02T15:04:05Z07:00" -}}
   {{- $day := "2006.01.02" -}}
   {{- $minutes := math.Max 1 .ReadingTime | int -}}
-  <div class="post-meta" role="group" aria-label="게시물 정보">
-    <span>작성 <time data-published datetime="{{ $published.Format $iso }}">{{ $published.Format $day }}</time></span>
+  <div class="post-meta" role="group" aria-label="Post information">
+    <span>Published <time data-published datetime="{{ $published.Format $iso }}">{{ $published.Format $day }}</time></span>
     {{- if ne ($updated.Format $day) ($published.Format $day) }}
-      <span>수정 <time data-last-updated datetime="{{ $updated.Format $iso }}">{{ $updated.Format $day }}</time></span>
+      <span>Updated <time data-last-updated datetime="{{ $updated.Format $iso }}">{{ $updated.Format $day }}</time></span>
     {{- end }}
-    <span data-reading-time="{{ $minutes }}">읽기 약 {{ $minutes }}분</span>
+    <span data-reading-time="{{ $minutes }}">{{ $minutes }} min read</span>
   </div>
 {{- end -}}
