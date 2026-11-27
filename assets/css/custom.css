@@ -22,6 +22,104 @@ nav img[src*="haksuperman"] {
   scrollbar-width: thin;
 }
 
+/* Docs and Series share the same reading layout and navigation widths. */
+body:has(.documentation-layout) {
+  --hextra-max-page-width: 104rem;
+  --hextra-max-navbar-width: 104rem;
+  --hextra-max-footer-width: 104rem;
+}
+
+.documentation-layout .hextra-sidebar-item > a {
+  min-width: 0;
+}
+
+.documentation-layout .hextra-sidebar-item > a > span {
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+
+.compact-toc {
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 0.5rem;
+  margin: 1.25rem 0 2rem;
+  padding: 0.75rem 1rem;
+}
+
+.compact-toc > summary {
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.compact-toc nav {
+  max-height: min(50vh, 24rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-top: 0.5rem;
+}
+
+.compact-toc ul {
+  list-style: none;
+  margin: 0;
+  padding-inline-start: 1.125rem;
+}
+
+.compact-toc nav > ul {
+  padding-inline-start: 0;
+}
+
+.compact-toc li {
+  margin: 0.4rem 0;
+}
+
+.compact-toc a {
+  color: inherit;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+  word-break: keep-all;
+}
+
+.compact-toc a:hover {
+  color: var(--hx-color-primary-600);
+}
+
+@media screen and (min-width: 64rem) {
+  .documentation-layout > .hextra-sidebar-container {
+    width: 18.75rem;
+  }
+}
+
+@media screen and (min-width: 80rem) {
+  .documentation-layout > .hextra-sidebar-container {
+    width: 20rem;
+  }
+}
+
+@media screen and (min-width: 90rem) {
+  .documentation-layout > .hextra-sidebar-container {
+    width: 22.5rem;
+  }
+
+  .compact-toc {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 89.999rem) {
+  .documentation-layout > .hextra-toc {
+    display: none;
+  }
+}
+
+@media print {
+  .compact-toc {
+    display: none;
+  }
+}
+
 article img {
   border-radius: 0.5rem;
 }

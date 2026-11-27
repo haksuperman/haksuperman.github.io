@@ -1,0 +1,9 @@
+{{- if and .IsPage .Fragments.Headings (ne .Params.toc false) -}}
+  {{- $toc := .TableOfContents -}}
+  {{- if strings.Contains (string $toc) "<a " -}}
+    <details class="compact-toc">
+      <summary>{{ (T "tableOfContents") | default "Table of contents" }}</summary>
+      {{ $toc }}
+    </details>
+  {{- end -}}
+{{- end -}}
